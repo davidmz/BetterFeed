@@ -45,6 +45,7 @@ docLoaded.then(function () {
     var sPage = document.querySelector(".content.settings");
     var checkBoxes = Array.prototype.slice.call(sPage.querySelectorAll("input[type='checkbox']"));
 
+    settingsStore.init();
     settingsStore.loadSettings().then(function (settings) {
         checkBoxes.forEach(function (box) {
             box.checked = settings[box.value];
