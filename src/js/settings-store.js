@@ -38,6 +38,7 @@ var settingsStorePage = {
                 localStorage['be-fe-next-update'] = now + 3600 * 1000;
                 var xhr = new XMLHttpRequest();
                 xhr.open('GET', 'https://api.github.com/repos/davidmz/BetterFeed/tags?page=1&&per_page=1');
+                xhr.responseType = "json";
                 xhr.onload = function () {
                     try {
                         var tags = this.response;
