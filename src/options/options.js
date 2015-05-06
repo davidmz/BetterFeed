@@ -1,3 +1,16 @@
+var getSettings = function (toApply) {
+    var settingsNames = [
+        "fix-names",
+        "fold-comments"
+    ];
+    toApply = toApply || {};
+    var settings = {};
+    settingsNames.forEach(function (name) {
+        settings[name] = (name in toApply) ? toApply[name] : true;
+    });
+    return settings;
+};
+
 var settingsStore = {
     init: function () {
         var self = this;
