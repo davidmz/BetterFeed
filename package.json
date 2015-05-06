@@ -1,0 +1,23 @@
+{
+    "name": "BetterFeed",
+    "version": "1.0.0",
+    "description": "FreeFeed new functions",
+    "author": "David Mzareulyan",
+    "license": "MIT",
+    "homepage": "https://github.com/davidmz/BetterFeed",
+    "devDependencies": {
+        "webpack": "latest",
+        "gulp": "latest",
+        "watchify": "latest",
+        "browserify": "latest",
+        "vinyl-source-stream": "latest",
+        "vinyl-buffer": "latest",
+        "gulp-uglify": "latest",
+        "style-loader": "latest",
+        "css-loader": "latest",
+        "less-loader": "latest"
+    },
+    "scripts": {
+        "build": "node build.js"
+    }
+}
