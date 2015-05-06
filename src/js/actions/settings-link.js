@@ -2,7 +2,7 @@ var h = require("../utils/html");
 require('../../less/lightbox.less');
 
 module.exports = function () {
-    var version = localStorage['be-fe-version'] || 11;
+    var version = localStorage['be-fe-version'];
     var sidebar = document.body.querySelector(".sidebar");
 
     if (!sidebar || !version) return;

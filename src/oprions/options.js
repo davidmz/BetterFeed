@@ -39,7 +39,8 @@ var docLoaded = new Promise(function (resolve) {
 ////////////////////////////
 
 docLoaded.then(function () {
-    document.querySelector(".version").appendChild(document.createTextNode("v. ????"));
+    var version = location.pathname.match(/BetterFeed\/([^\/]+)/)[1];
+    document.querySelector(".version").appendChild(document.createTextNode(version));
 
     var sPage = document.querySelector(".content.settings");
     var checkBoxes = Array.prototype.slice.call(sPage.querySelectorAll("input[type='checkbox']"));
