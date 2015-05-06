@@ -2,9 +2,9 @@ require('../less/main.less');
 
 var settingsStore = require("./settings-store");
 
-var actions = [];
-
-require("./actions/settings-link")();
+var actions = [
+    require("./actions/settings-link")
+];
 
 settingsStore.init();
 settingsStore.loadSettings()
