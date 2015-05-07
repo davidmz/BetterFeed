@@ -1,7 +1,8 @@
 var getSettings = function (toApply) {
     var settingsNames = [
         "fix-names",
-        "fold-comments"
+        "fold-comments",
+        "lightboxed-images"
     ];
     toApply = toApply || {};
     var settings = {};

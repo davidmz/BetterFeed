@@ -1,11 +1,14 @@
 /**
  * @param {Document|DocumentFragment|Element} node
  * @param {string} selector
- * @param {function(Node)} foo
+ * @param {function(Node)} [foo]
  */
 module.exports = function (node, selector, foo) {
-    var nodes = node.querySelectorAll(selector);
-    for (var i = 0, l = nodes.length; i < l; i++) {
-        foo(nodes[i]);
+    var nodes = Array.prototype.slice.call(node.querySelectorAll(selector));
+    if (foo) {
+        for (var i = 0, l = nodes.length; i < l; i++) {
+            foo(nodes[i]);
+        }
     }
+    return nodes;
 };
