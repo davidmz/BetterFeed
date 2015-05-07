@@ -15,7 +15,9 @@ module.exports = function (node) {
     forSelect(node, ".post-body", function (node) {
         var postAuthor = node.querySelector(".title a").href.substr(1);
         forSelect(node, ".comment:not(.be-fe-comment-from)", function (node) {
-            var author = node.querySelector(".author a").href.substr(1);
+            var authorLink = node.querySelector(".author a");
+            if (!authorLink) return;
+            var author = authorLink.href.substr(1);
             if (author == myLogin) {
                 node.classList.add("be-fe-comment-from-me");
             } else if (author == postAuthor) {
@@ -27,7 +29,9 @@ module.exports = function (node) {
 
     forSelect(node, ".comment:not(.be-fe-comment-from)", function (node) {
         var postAuthor = closestParent(node, ".post-body").querySelector(".title a").href.substr(1);
-        var author = node.querySelector(".author a").href.substr(1);
+        var authorLink = node.querySelector(".author a");
+        if (!authorLink) return;
+        var author = authorLink.href.substr(1);
         if (author == myLogin) {
             node.classList.add("be-fe-comment-from-me");
         } else if (author == postAuthor) {
