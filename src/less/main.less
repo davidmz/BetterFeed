@@ -1,6 +1,10 @@
-.be-fe-comments-fold-handle {
+.be-fe-in-comments-link {
     font-style:  italic;
     margin-left: 21px;
+}
+
+.be-fe-comments-fold-handle {
+    .be-fe-in-comments-link();
 }
 
 .be-fe-comment-folded { display: none; }
@@ -9,4 +13,12 @@
     .be-fe-comment-folded { display: block; }
     .be-fe-comments-fold-handle { display: none; }
 
+}
+
+.be-fe-bottom-comment-link {
+    .be-fe-in-comments-link();
+
+    .comment + & { display: none; }
+
+    &:first-child { display: none; }
 }

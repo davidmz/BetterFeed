@@ -2,7 +2,8 @@ var getSettings = function (toApply) {
     var settingsNames = [
         "fix-names",
         "fold-comments",
-        "lightboxed-images"
+        "lightboxed-images",
+        "bottom-comment-link"
     ];
     toApply = toApply || {};
     var settings = {};
