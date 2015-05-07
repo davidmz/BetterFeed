@@ -3,7 +3,8 @@ var getSettings = function (toApply) {
         "fix-names",
         "fold-comments",
         "lightboxed-images",
-        "bottom-comment-link"
+        "bottom-comment-link",
+        "colored-comment-icons"
     ];
     toApply = toApply || {};
     var settings = {};
