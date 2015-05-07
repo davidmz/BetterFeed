@@ -4,7 +4,8 @@ var getSettings = function (toApply) {
         "fold-comments",
         "lightboxed-images",
         "bottom-comment-link",
-        "colored-comment-icons"
+        "colored-comment-icons",
+        "at-links"
     ];
     toApply = toApply || {};
     var settings = {};
