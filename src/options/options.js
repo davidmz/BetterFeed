@@ -7,7 +7,8 @@ var getSettings = function (toApply) {
         "colored-comment-icons",
         "at-links",
         "comment-icons-click",
-        "animated-gif"
+        "animated-gif",
+        "textarea-fix"
     ];
     toApply = toApply || {};
     var settings = {};
