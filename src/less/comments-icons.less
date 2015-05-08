@@ -1,0 +1,21 @@
+.date.be-fe-iconized {
+    position: relative;
+
+    & .icon {
+        position: absolute;
+        top:      0;
+        left:     0;
+        z-index:  1;
+
+        &.be-fe-ico-bg {
+            z-index: 0;
+        }
+    }
+}
+
+.be-fe-ico-bg {
+    color: #fff;
+
+    .be-fe-comment-from-me & { color: #FFD87B; }
+    .be-fe-comment-from-post-author & { color: #ddd; }
+}

@@ -3,7 +3,8 @@ require('../less/main.less');
 var settingsStore = require("./settings-store");
 
 var actions = [
-    require("./actions/settings-link")
+    require("./actions/settings-link"),
+    require("./actions/comments-common")
 ];
 
 settingsStore.init();
