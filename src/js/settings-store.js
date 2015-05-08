@@ -6,7 +6,8 @@ var getSettings = function (toApply) {
         "bottom-comment-link",
         "colored-comment-icons",
         "at-links",
-        "comment-icons-click"
+        "comment-icons-click",
+        "animated-gif"
     ];
     toApply = toApply || {};
     var settings = {};

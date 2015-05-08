@@ -34,3 +34,21 @@
     border-radius: 0.25em;
     cursor:        default;
 }
+
+.p-attachment-url {
+    position: relative;
+    display:  inline-block;
+
+    &.be-fe-gif-ani::after {
+        content:          "▶ GIF";
+        position:         absolute;
+        bottom:           3px;
+        right:            4px;
+        background-color: #069;
+        color:            #eee;
+        font-weight:      bold;
+        padding:          0.1em 0.4em;
+        border-radius:    3px;
+        font-size:        11px;
+    }
+}
