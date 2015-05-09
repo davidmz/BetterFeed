@@ -79,7 +79,9 @@ docLoaded.then(function () {
         saveBtn.disabled = true;
         var settings = {};
         checkBoxes.forEach(function (box) { settings[box.value] = box.checked; });
-        settingsStore.saveSettings(settings).then(function () { saveBtn.disabled = false; });
+        settingsStore.saveSettings(settings).then(function () {
+            setTimeout(function () { saveBtn.disabled = false; }, 500);
+        });
     }, false);
 
     var refreshBtn = document.getElementById("check-updates");

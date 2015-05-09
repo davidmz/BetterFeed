@@ -5,9 +5,26 @@ require('../../less/lightbox.less');
 var lightBoxCont = h(".light-box-container.be-fe-settingsLB");
 var lightBox = h(".frf-co-light-box.hidden", h(".light-box-shadow", lightBoxCont));
 
+var startVersion = localStorage['be-fe-version'];
+
+setInterval(function () {
+    var setBlock = document.querySelector(".be-fe-settingsLink");
+    if (setBlock) {
+        if (localStorage['be-fe-version'] === startVersion) {
+            setBlock.classList.remove("be-fe-have-upgrade");
+        } else {
+            setBlock.classList.add("be-fe-have-upgrade");
+        }
+    }
+}, 2000);
+
+lightBox.addEventListener("click", function () {
+    lightBoxCont.innerHTML = "";
+    lightBox.classList.add("hidden");
+});
+
 module.exports = function (node) {
-    var version = localStorage['be-fe-version'];
-    if (!version) return;
+    if (!startVersion) return;
 
     node = node || document.body;
 
@@ -18,7 +35,7 @@ module.exports = function (node) {
     sidebar.appendChild(
         h(".box.be-fe-settingsLink",
             h("div", (link = h("a", "BetterFeed settings"))),
-            h("div", h("small", version))
+            h("div", h("small", startVersion), h("i.fa.fa-arrow-circle-up", {title: "Доступно обновление, перезагрузите страницу"}))
         )
     );
 
@@ -28,7 +45,7 @@ module.exports = function (node) {
         document.body.appendChild(lightBox);
         lightBoxCont.innerHTML = "";
         lightBoxCont.appendChild(h("iframe.light-box-iframe", {
-            src: 'https://cdn.rawgit.com/davidmz/BetterFeed/' + version + '/src/options/options.html',
+            src: 'https://cdn.rawgit.com/davidmz/BetterFeed/' + startVersion + '/src/options/options.html',
             frameborder: "0"
         }));
         lightBox.classList.remove("hidden");
