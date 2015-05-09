@@ -21,12 +21,12 @@ settingsStore.loadSettings()
                 for (i = 0, l = mutation.addedNodes.length; i < l; i++) {
                     node = mutation.addedNodes[i];
                     if (node.nodeType == Node.ELEMENT_NODE) {
-                        actions.forEach(function (act) { act(node); });
+                        actions.forEach(function (act) { act(node, settings); });
                     }
                 }
             });
         });
 
-        actions.forEach(function (act) { act(); });
+        actions.forEach(function (act) { act(undefined, settings); });
         observer.observe(document.body, {childList: true, subtree: true});
     });

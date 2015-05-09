@@ -1,6 +1,6 @@
 var forSelect = require("../utils/for-select");
 var closestParent = require("../utils/closest-parent");
-var UserType = require("../utils/user-type");
+var IAm = require("../utils/user-type");
 
 var myLogin = null;
 
@@ -18,27 +18,21 @@ module.exports = function (node) {
             var authorLink = node.querySelector(".author a");
             if (!authorLink) return;
             var author = authorLink.getAttribute("href").substr(1);
-            UserType.whoIs(author).then(function (type) {
-                if (type === UserType.ME) {
+            IAm.ready.then(function (iAm) {
+                var type = iAm.whoIs(author);
+                if (type === IAm.ME) {
                     node.classList.add("be-fe-comment-from-me");
-                } else if (type === UserType.FRIEND) {
+                } else if (type === IAm.FRIEND) {
                     node.classList.add("be-fe-comment-from-friend");
-                } else if (type === UserType.READER) {
+                } else if (type === IAm.READER) {
                     node.classList.add("be-fe-comment-from-reader");
-                } else if (type === UserType.STRANGER) {
+                } else if (type === IAm.STRANGER) {
                     // pass
                 }
             });
             if (author == postAuthor) {
                 node.classList.add("be-fe-comment-from-post-author");
             }
-            /*
-             if (author == myLogin) {
-             node.classList.add("be-fe-comment-from-me");
-             } else if (author == postAuthor) {
-             node.classList.add("be-fe-comment-from-post-author");
-             }
-             */
             node.classList.add("be-fe-comment-from");
             node.classList.add("be-fe-comment-from-u-" + author);
             node.dataset["author"] = author;

@@ -1,3 +1,26 @@
+function IAm() {
+    this.me = null;
+    this.friends = [];
+    this.readers = [];
+}
+
+IAm.ME = 1;
+IAm.FRIEND = 2;
+IAm.READER = 3;
+IAm.STRANGER = 4;
+
+IAm.prototype.whoIs = function (username) {
+    if (username === this.me) {
+        return IAm.ME;
+    } else if (this.friends.indexOf(username) !== -1) {
+        return IAm.FRIEND;
+    } else if (this.readers.indexOf(username) !== -1) {
+        return IAm.READER;
+    } else {
+        return IAm.STRANGER;
+    }
+};
+
 var whoAmIReq = new Promise(function (resolve, reject) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/v1/users/whoami');
@@ -8,19 +31,18 @@ var whoAmIReq = new Promise(function (resolve, reject) {
             reject(xhr.response.err);
             return;
         }
-        var res = {
-            me: xhr.response.users.username,
-            friends: xhr.response.subscribers.map(function (it) { return it.username; })
-        };
-        resolve(res);
+        var iAm = new IAm();
+        iAm.me = xhr.response.users.username;
+        iAm.friends = xhr.response.subscribers.map(function (it) { return it.username; });
+        resolve(iAm);
     };
     xhr.send();
 });
 
-var withReaders = whoAmIReq.then(function (inf) {
+IAm.ready = whoAmIReq.then(function (iAm) {
     return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/v1/users/' + inf.me + '/subscribers');
+        xhr.open('GET', '/v1/users/' + iAm.me + '/subscribers');
         xhr.responseType = 'json';
         xhr.setRequestHeader('X-Authentication-Token', localStorage["authToken"]);
         xhr.onload = function () {
@@ -28,32 +50,11 @@ var withReaders = whoAmIReq.then(function (inf) {
                 reject(xhr.response.err);
                 return;
             }
-            inf.readers = xhr.response.subscribers.map(function (it) { return it.username; });
-            resolve(inf);
+            iAm.readers = xhr.response.subscribers.map(function (it) { return it.username; });
+            resolve(iAm);
         };
         xhr.send();
     });
 });
 
-var UserType = {
-    ME: 1,
-    FRIEND: 2,
-    READER: 3,
-    STRANGER: 4,
-
-    whoIs: function (username) {
-        return withReaders.then(function (inf) {
-            if (username === inf.me) {
-                return UserType.ME;
-            } else if (inf.friends.indexOf(username) !== -1) {
-                return UserType.FRIEND;
-            } else if (inf.readers.indexOf(username) !== -1) {
-                return UserType.READER;
-            } else {
-                return UserType.STRANGER;
-            }
-        });
-    }
-};
-
-module.exports = UserType;
+module.exports = IAm;

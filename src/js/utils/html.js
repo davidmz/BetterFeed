@@ -1,3 +1,5 @@
+var isArray = require("./is-array");
+
 /**
  * h("tag.class", {attr: val}, child)
  * h("tag.class", child)
@@ -9,7 +11,7 @@
  *
  * @param {String} tagName - tag или tag.class1.class2 (поддерживаются только классы)
  * @param {Object} [attrs]
- * @param {Node|string} [children]
+ * @param {Node|string|Array} [children]
  * @return {HTMLElement}
  */
 module.exports = function (tagName, attrs, children) {
@@ -22,20 +24,26 @@ module.exports = function (tagName, attrs, children) {
     }
 
     var chStart = 1;
-    if (arguments.length > 1 && typeof attrs === "object" && !(attrs instanceof Node)) {
+    if (arguments.length > 1 && typeof attrs === "object" && !(attrs instanceof Node) && !isArray(attrs)) {
         for (k in attrs) if (attrs.hasOwnProperty(k)) el.setAttribute(k, attrs[k]);
         chStart = 2;
     }
 
     if (arguments.length > chStart) {
         for (i = chStart; i < arguments.length; i++) {
-            var ch = arguments[i];
-            if (ch instanceof Node) {
-                el.appendChild(ch);
-            } else if (typeof ch === "string") {
-                el.appendChild(document.createTextNode(ch));
-            }
+            append(el, arguments[i]);
         }
     }
     return el;
 };
+
+function append(el, it) {
+    if (it instanceof Node) {
+        el.appendChild(it);
+    } else if (isArray(it)) {
+        it.forEach(append.bind(null, el));
+    } else if (typeof it === "string") {
+        el.appendChild(document.createTextNode(it));
+    }
+
+}

@@ -8,7 +8,8 @@ var getSettings = function (toApply) {
         "at-links",
         "comment-icons-click",
         "animated-gif",
-        "textarea-fix"
+        "textarea-fix",
+        "where-this-post-from"
     ];
     toApply = toApply || {};
     var settings = {};
