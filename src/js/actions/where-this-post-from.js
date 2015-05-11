@@ -1,4 +1,4 @@
-var IAm = require("../utils/user-type");
+var IAm = require("../utils/i-am");
 var forSelect = require("../utils/for-select");
 var h = require("../utils/html");
 

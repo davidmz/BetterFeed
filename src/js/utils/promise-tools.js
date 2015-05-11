@@ -22,6 +22,11 @@ function promiseAll(promises) {
     });
 }
 
+function promiseResolve(value) {
+    return new Promise(function (resolve, reject) { resolve(value); });
+}
+
 module.exports = {
-    all: promiseAll
+    all: promiseAll,
+    resolve: promiseResolve
 };

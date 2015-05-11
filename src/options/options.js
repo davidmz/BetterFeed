@@ -9,7 +9,8 @@ var getSettings = function (toApply) {
         "comment-icons-click",
         "animated-gif",
         "textarea-fix",
-        "where-this-post-from"
+        "where-this-post-from",
+        "userpics-in-comments"
     ];
     toApply = toApply || {};
     var settings = {};

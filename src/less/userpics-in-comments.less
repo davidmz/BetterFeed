@@ -1,0 +1,33 @@
+.comments .comment a.date {
+    display:    inline-block;
+    width:      16px;
+    height:     20px;
+    transition: transform 0.2s;
+
+    &:hover {
+        transform:  scale(2);
+        transition: transform 0.2s 1s;
+        z-index:    1;
+    }
+}
+
+a.date {
+    border-bottom: 2px solid transparent;
+
+    .icon { display: none; }
+
+    .be-fe-userpic {
+        width:         16px;
+        height:        16px;
+        border-radius: 2px;
+    }
+
+    .be-fe-comment-from-reader & { border-bottom-color: #cccccc; }
+    .be-fe-comment-from-friend & { border-bottom-color: #53E1FF; }
+    .be-fe-comment-from-post-author & { border-bottom-color: #666666; }
+    .be-fe-comment-from-me & { border-bottom-color: #FFB811; }
+}
+
+.comments .comment {
+    min-height: 17px;
+}
