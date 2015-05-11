@@ -9,6 +9,7 @@ module.exports = function (node) {
         node.classList.add("be-fe-with-pic");
         var comment = node.parentNode;
         var username = comment.dataset["author"];
+        if (!username) return;
         var img = node.appendChild(new Image());
         img.className = "be-fe-userpic";
         uPics.getPic(username).then(function (picUrl) { img.src = picUrl; });
