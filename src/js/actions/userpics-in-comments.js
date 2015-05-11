@@ -2,7 +2,11 @@ require('../../less/userpics-in-comments.less');
 var forSelect = require("../utils/for-select");
 var uPics = require("../utils/userpics");
 
-module.exports = function (node) {
+module.exports = function (node, settings) {
+    if (!node && settings["colored-comment-icons"]) {
+        require('../../less/colored-userpics-in-comments.less');
+    }
+
     node = node || document.body;
 
     forSelect(node, ".comment a.date:not(.be-fe-with-pic)", function (node) {
