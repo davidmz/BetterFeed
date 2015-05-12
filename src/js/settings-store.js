@@ -33,15 +33,21 @@ var settingsStorePage = {
         var self = this;
         // мы во внедрённом скрипте
         window.addEventListener('message', function (event) {
-            if ("action" in event.data && event.data["action"] === "getSettings") {
+            if (typeof event.data !== "object" || !("action" in event.data)) {
+                return;
+            }
+
+            if (event.data["action"] === "getSettings") {
                 self.loadSettings().then(function (settings) {
                     event.source.postMessage(settings, event.origin);
                 });
             }
-            if ("action" in event.data && event.data["action"] === "saveSettings") {
+
+            if (event.data["action"] === "saveSettings") {
                 self.saveSettings(event.data["value"]);
             }
-            if ("action" in event.data && event.data["action"] === "checkUpdates") {
+
+            if (event.data["action"] === "checkUpdates") {
                 var now = Date.now();
                 var oldVersion = localStorage['be-fe-version'];
                 localStorage['be-fe-next-update'] = now + 3600 * 1000;
