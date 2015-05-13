@@ -16,11 +16,7 @@ module.exports = function (node, settings) {
             }
         })(window, document);
 
-        embedly('on', 'card.resize', function (iframe) {
-            if (iframe.offsetHeight > 600) {
-                iframe.style.maxWidth = Math.round(500 * parseInt(iframe.style.maxWidth) / iframe.offsetHeight) + "%";
-            }
-        });
+        embedly('on', 'card.rendered', function (iframe) { iframe.style.margin = "10px 0"; });
     }
 
     node = node || document.body;
@@ -34,7 +30,7 @@ module.exports = function (node, settings) {
             if (!/^https?:\/\//.test(link.getAttribute("href"))) return false;
             var bodyNext = node.querySelector(":scope > .body").nextSibling;
             node.insertBefore(
-                h(".be-fe-embeds", h("a.embedly-card", {href: link.href})),
+                h(".be-fe-embeds", h("a.embedly-card", {href: link.href, "data-card-width": "60%"})),
                 bodyNext
             );
             return true;
