@@ -10,7 +10,8 @@ var getSettings = function (toApply) {
         "animated-gif",
         "textarea-fix",
         "where-this-post-from",
-        "userpics-in-comments"
+        "userpics-in-comments",
+        "embed-ly"
     ];
     toApply = toApply || {};
     var settings = {};
