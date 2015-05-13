@@ -34,12 +34,15 @@ module.exports = function (node) {
         var c = node.firstChild;
         while (c) {
             if (c.nodeType == Node.TEXT_NODE && /[↑^]/.test(c.nodeValue)) {
-                var re = /↑+|\^+/g,
+                var re = /↑+|\^+W?/g,
                     str = c.nodeValue,
                     fr = document.createDocumentFragment(),
                     m, ptr = 0;
                 while ((m = re.exec(str)) !== null) {
                     var match = m[0], off = m.index;
+                    if (match === "^W") {
+                        continue;
+                    }
                     fr.appendChild(document.createTextNode(str.substr(ptr, off - ptr)));
                     ptr = off + match.length;
                     var a = fr.appendChild(h("span.be-fe-ups", match));
