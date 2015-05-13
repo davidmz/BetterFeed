@@ -15,6 +15,12 @@ module.exports = function (node, settings) {
                 s.parentNode.insertBefore(e, s);
             }
         })(window, document);
+
+        embedly('on', 'card.resize', function (iframe) {
+            if (iframe.offsetHeight > 550) {
+                iframe.style.maxWidth = Math.round(500 * 100 / iframe.offsetHeight) + "%";
+            }
+        });
     }
 
     node = node || document.body;
