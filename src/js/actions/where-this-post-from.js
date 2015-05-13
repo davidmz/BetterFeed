@@ -80,7 +80,7 @@ module.exports = function (node, settings) {
                         links.push(" and " + (users.length - 3) + " other");
                     }
 
-                    node.querySelector(".title > div").appendChild(h("span.be-fe-from-whom", " (from ", links, ")"));
+                    node.querySelector(".title > div").appendChild(h("span.be-fe-from-whom", " (via ", links, ")"));
                 }
             });
         });
