@@ -27,20 +27,23 @@ module.exports = function (node, settings) {
 
     if (!document.body.querySelector(".be-fe-hide-aliens-switcher")) {
         var chk = null;
-        document.body.querySelector(".box-header-timeline").appendChild(
-            h(".be-fe-hide-aliens-switcher",
-                h("label",
-                    (chk = h("input", {type: "checkbox"})),
-                    " hide non-friends posts (",
-                    h("span.be-fe-hide-aliens-counter", "0"),
-                    ")"
+        var timeLineHeader = document.body.querySelector(".box-header-timeline");
+        if (timeLineHeader) {
+            timeLineHeader.appendChild(
+                h(".be-fe-hide-aliens-switcher",
+                    h("label",
+                        (chk = h("input", {type: "checkbox"})),
+                        " hide non-friends posts (",
+                        h("span.be-fe-hide-aliens-counter", "0"),
+                        ")"
+                    )
                 )
-            )
-        );
-        chk.addEventListener("change", function () {
-            localStorage["be-fe.hide-alien-posts"] = chk.checked ? "1" : "";
-        });
+            );
+            chk.addEventListener("change", function () {
+                localStorage["be-fe.hide-alien-posts"] = chk.checked ? "1" : "";
+            });
 
-        chk.checked = !!localStorage["be-fe.hide-alien-posts"];
+            chk.checked = !!localStorage["be-fe.hide-alien-posts"];
+        }
     }
 };
