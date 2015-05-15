@@ -11,7 +11,9 @@ var getSettings = function (toApply) {
         "textarea-fix",
         "where-this-post-from",
         "userpics-in-comments",
-        "embed-ly"
+        "embed-ly",
+        "hide-aliens",
+        "hide"
     ];
     toApply = toApply || {};
     var settings = {};
@@ -48,6 +50,22 @@ var settingsStore = {
             window.parent.postMessage({action: "saveSettings", value: settings}, self.parentOrigin);
             setTimeout(resolve, 0);
         });
+    },
+
+    loadBanList: function () {
+        var self = this;
+        return new Promise(function (resolve) {
+            self.loadResolver = resolve;
+            window.parent.postMessage({action: "getBanList", value: null}, self.parentOrigin);
+        });
+    },
+
+    saveBanList: function (list) {
+        var self = this;
+        return new Promise(function (resolve) {
+            window.parent.postMessage({action: "saveBanList", value: list}, self.parentOrigin);
+            setTimeout(resolve, 0);
+        });
     }
 };
 
@@ -77,6 +95,10 @@ docLoaded.then(function () {
         sPage.previousElementSibling.classList.add("hidden");
     });
 
+    settingsStore.loadBanList().then(function (list) {
+        document.getElementById("ban-list").value = list.join(", ");
+    });
+
     document.getElementById("save-settings").addEventListener("click", function (e) {
         var saveBtn = e.target;
         saveBtn.disabled = true;
@@ -85,6 +107,9 @@ docLoaded.then(function () {
         settingsStore.saveSettings(settings).then(function () {
             setTimeout(function () { saveBtn.disabled = false; }, 500);
         });
+        var banList = document.getElementById("ban-list").value.toLowerCase().match(/\w+/g);
+        if (banList === null) banList = [];
+        settingsStore.saveBanList(banList);
     }, false);
 
     var refreshBtn = document.getElementById("check-updates");

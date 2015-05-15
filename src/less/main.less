@@ -79,3 +79,47 @@
 .be-fe-hide-aliens .be-fe-post-from-alien {
     display: none;
 }
+
+// Hide
+
+.be-fe-hide-cont {
+    position: relative;
+}
+
+.be-fe-hide-win {
+    position:      absolute;
+    left:          50%;
+    transform:     translateX(-50%);
+    white-space:   nowrap;
+    background:    #fff;
+    box-shadow:    0 3px 10px rgba(0, 0, 0, 0.5);
+    top:           1em;
+    padding:       1em 1em .5em;
+    border-radius: 2px;
+    border:        1px solid #999;
+    margin-top:    10px;
+
+    &::before, &::after {
+        content:       "";
+        position:      absolute;
+        top:           -10px;
+        left:          50%;
+        border-bottom: 10px solid #999;
+        border-left:   10px solid transparent;
+        border-right:  10px solid transparent;
+        margin-left:   -10px;
+    }
+
+    &::after {
+        top:           -9px;
+        border-bottom: 10px solid white;
+    }
+
+    ul {
+        padding-left: 1.2em;
+    }
+
+    li {
+        margin-bottom: 0.5em;
+    }
+}

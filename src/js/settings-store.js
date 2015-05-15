@@ -1,3 +1,5 @@
+var banList = require("./utils/ban-list");
+
 var getSettings = function (toApply) {
     var settingsNames = [
         "fix-names",
@@ -11,7 +13,9 @@ var getSettings = function (toApply) {
         "textarea-fix",
         "where-this-post-from",
         "userpics-in-comments",
-        "embed-ly"
+        "embed-ly",
+        "hide-aliens",
+        "hide"
     ];
     toApply = toApply || {};
     var settings = {};
@@ -46,6 +50,14 @@ var settingsStorePage = {
 
             if (event.data["action"] === "saveSettings") {
                 self.saveSettings(event.data["value"]);
+            }
+
+            if (event.data["action"] === "getBanList") {
+                event.source.postMessage(banList.get(), event.origin);
+            }
+
+            if (event.data["action"] === "saveBanList") {
+                banList.set(event.data["value"]);
             }
 
             if (event.data["action"] === "checkUpdates") {
