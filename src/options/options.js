@@ -1,3 +1,5 @@
+var isArray = Array.isArray || function (arr) { return Object.prototype.toString.call(arr) == '[object Array]'; };
+
 var getSettings = function (toApply) {
     var settingsNames = [
         "fix-names",
@@ -30,7 +32,7 @@ var settingsStore = {
         this.parentOrigin = "https://freefeed.net";
         window.addEventListener('message', function (event) {
             if (event.origin === self.parentOrigin && self.loadResolver !== null) {
-                self.loadResolver(getSettings(event.data));
+                self.loadResolver(isArray(event.data) ? event.data : getSettings(event.data));
                 self.loadResolver = null;
             }
         });
