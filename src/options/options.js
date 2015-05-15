@@ -88,15 +88,14 @@ docLoaded.then(function () {
 
     settingsStore.init();
     settingsStore.loadSettings().then(function (settings) {
-        checkBoxes.forEach(function (box) {
-            box.checked = settings[box.value];
+        settingsStore.loadBanList().then(function (list) {
+            checkBoxes.forEach(function (box) {
+                box.checked = settings[box.value];
+            });
+            sPage.classList.remove("hidden");
+            sPage.previousElementSibling.classList.add("hidden");
+            document.getElementById("ban-list").value = list.join(", ");
         });
-        sPage.classList.remove("hidden");
-        sPage.previousElementSibling.classList.add("hidden");
-    });
-
-    settingsStore.loadBanList().then(function (list) {
-        document.getElementById("ban-list").value = list.join(", ");
     });
 
     document.getElementById("save-settings").addEventListener("click", function (e) {
