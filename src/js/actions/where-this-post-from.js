@@ -31,10 +31,14 @@ module.exports = function (node, settings) {
 
             // пытаемся выяснить, почему мы это видим
             getPostInfo(postId).then(function (postInfo) {
+                var names = {};
                 var users = postInfo.users
-                        .map(function (uu) { return [uu.username, useScreenNames ? uu.screenName : uu.username]; })
+                        .map(function (uu) {
+                            names[uu.username] = useScreenNames ? uu.screenName : uu.username;
+                            return uu.username;
+                        })
                         .filter(function (u) {
-                            var type = iAm.whoIs(u[0]);
+                            var type = iAm.whoIs(u);
                             return (type === IAm.ME || type === IAm.FRIEND);
                         })
                         .filter(function (v, i, a) { return a.indexOf(v) === i;}) // http://stackoverflow.com/questions/1960473/unique-values-in-an-array#answer-14438954
@@ -52,14 +56,14 @@ module.exports = function (node, settings) {
                                     links.push(", ");
                                 }
                             }
-                            links.push(h("a.be-fe-nameFixed", {href: "/" + u[0]}, u[1]));
+                            links.push(h("a.be-fe-nameFixed", {href: "/" + u}, names[u]));
                         });
                     } else {
                         users.slice(0, 3).forEach(function (u, i) {
                             if (i > 0) {
                                 links.push(", ");
                             }
-                            links.push(h("a.be-fe-nameFixed", {href: "/" + u[0]}, u[1]));
+                            links.push(h("a.be-fe-nameFixed", {href: "/" + u}, names[u]));
                         });
                         links.push(" and " + (users.length - 3) + " other");
                     }
