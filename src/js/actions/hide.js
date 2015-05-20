@@ -43,7 +43,8 @@ module.exports = function (node, settings) {
                 win.style.display = (win.style.display == "none") ? "block" : "none";
             });
 
-            hideLink.parentNode.appendChild(
+            var ref = hideLink.nextSibling;
+            hideLink.parentNode.insertBefore(
                 h("span.be-fe-hide-cont",
                     handlerLink,
                     win = h(".be-fe-hide-win",
@@ -52,7 +53,7 @@ module.exports = function (node, settings) {
                             hideAllLink ? h("li", hideAllLink) : null
                         )
                     )
-                )
+                ), ref
             );
             win.style.display = "none";
         });
