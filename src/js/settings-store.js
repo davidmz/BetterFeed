@@ -3,7 +3,6 @@ var banList = require("./utils/ban-list");
 var getSettings = function (toApply) {
     var settingsNames = [
         "fix-names",
-        "fold-comments",
         "lightboxed-images",
         "bottom-comment-link",
         "colored-comment-icons",

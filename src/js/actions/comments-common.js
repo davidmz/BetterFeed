@@ -40,6 +40,9 @@ module.exports = function (node) {
     });
 
     forSelect(node, ".comment:not(.be-fe-comment-from)", function (node) {
+        var postBody = closestParent(node, ".post-body");
+        if (!postBody) return;
+
         var postAuthor = closestParent(node, ".post-body").querySelector(".title a").getAttribute("href").substr(1);
         var authorLink = node.querySelector(".author a");
         if (!authorLink) return;

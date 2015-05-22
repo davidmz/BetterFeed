@@ -5,7 +5,8 @@
  */
 module.exports = function (node, selector, foo) {
     if (node === null) return [];
-    var nodes = Array.prototype.slice.call(node.querySelectorAll(selector));
+    var nodeList = node.querySelectorAll(selector);
+    var nodes = nodeList ? Array.prototype.slice.call(nodeList) : [];
     if (foo) {
         for (var i = 0, l = nodes.length; i < l; i++) {
             foo(nodes[i]);

@@ -3,7 +3,6 @@ var isArray = Array.isArray || function (arr) { return Object.prototype.toString
 var getSettings = function (toApply) {
     var settingsNames = [
         "fix-names",
-        "fold-comments",
         "lightboxed-images",
         "bottom-comment-link",
         "colored-comment-icons",

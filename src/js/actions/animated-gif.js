@@ -3,7 +3,7 @@ var forSelect = require("../utils/for-select");
 module.exports = function (node) {
     node = node || document.body;
 
-    forSelect(node, "img[src^='https://freefeed.net/'][src$='.gif']:not(.be-fe-gif)", function (img) {
+    forSelect(node, "img.p-attachment-thumbnail[src^='https://freefeed.net/'][src$='.gif']:not(.be-fe-gif)", function (img) {
         img.classList.add("be-fe-gif");
         isAnimatedGif(img.src).then(function () {
             img.parentNode.classList.add("be-fe-gif-ani");
@@ -12,11 +12,12 @@ module.exports = function (node) {
             } else {
                 img.addEventListener("load", drawImage.bind(null, img));
             }
-        });
+        }, function () {});
     });
 };
 
 function drawImage(img) {
+    if (img.src.match(/^data:/)) return;
     var c = document.createElement('canvas');
     var w = c.width = img.width;
     var h = c.height = img.height;
@@ -49,13 +50,12 @@ function isAnimatedGif(src) {
             // * a static 2-byte sequence (\x00\x2C) (some variants may use \x00\x21 ?)
             // We read through the file til we reach the end of the file, or we've found
             // at least 2 frame headers
-            for (i = 0, len = length - 9; i < len, frames < 2; ++i) {
+            for (i = 0, len = length - 9; i < len && frames < 2; i++) {
                 if (arr[i] === 0x00 && arr[i + 1] === 0x21 &&
                     arr[i + 2] === 0xF9 && arr[i + 3] === 0x04 &&
                     arr[i + 8] === 0x00 &&
                     (arr[i + 9] === 0x2C || arr[i + 9] === 0x21)) {
                     frames++;
-                    if (frames > 1) break;
                 }
             }
 
