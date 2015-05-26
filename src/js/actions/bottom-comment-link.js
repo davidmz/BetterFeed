@@ -10,6 +10,8 @@ module.exports = function (node) {
         var post = closestParent(node, ".post-body");
         if (!post) return;
 
+        if (post.querySelector(".add-comment-block")) return;
+
         var link = node.cloneNode();
         link.innerHTML = "Add comment";
         var cont = h(".be-fe-bottom-comment-link", link);
