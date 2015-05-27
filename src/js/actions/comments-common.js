@@ -7,9 +7,11 @@ var myLogin = null;
 module.exports = function (node) {
     node = node || document.body;
 
-    var loggedLink = node.querySelector(".logged-user .author a");
-    if (loggedLink) {
-        myLogin = loggedLink.getAttribute("href").substr(1);
+    if (!myLogin) {
+        var loggedLink = node.querySelector(".logged-user .author a");
+        if (loggedLink) {
+            myLogin = loggedLink.getAttribute("href").substr(1);
+        }
     }
 
     forSelect(node, ".comment:not(.be-fe-comment-from)", function (node) {

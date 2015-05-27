@@ -135,7 +135,7 @@ var settingsStoreFrame = {
     }
 };
 
-if (location.hostname === "freefeed.net") { // Встроенный скрипт
+if (location.hostname === "freefeed.net" || location.hostname === "micropeppa.freefeed.net") { // Встроенный скрипт
     module.exports = settingsStorePage;
 
 } else if (window.parent) { // Фрейм настроек
