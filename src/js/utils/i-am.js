@@ -7,21 +7,25 @@ function IAm() {
     this.readers = [];
 }
 
-IAm.ME = 1;
-IAm.FRIEND = 2;
-IAm.READER = 3;
-IAm.STRANGER = 4;
+IAm.ME = 1 << 0;
+IAm.FRIEND = 1 << 1;
+IAm.READER = 1 << 2;
 
 IAm.prototype.whoIs = function (username) {
-    if (username === this.me) {
-        return IAm.ME;
-    } else if (this.friends.indexOf(username) !== -1) {
-        return IAm.FRIEND;
-    } else if (this.readers.indexOf(username) !== -1) {
-        return IAm.READER;
-    } else {
-        return IAm.STRANGER;
-    }
+    var flags = 0;
+    if (username === this.me) flags |= IAm.ME;
+    if (this.friends.indexOf(username) !== -1) flags |= IAm.FRIEND;
+    if (this.readers.indexOf(username) !== -1) flags |= IAm.READER;
+    return flags;
+};
+
+IAm.prototype.subscribed = function (username) {
+    if (this.friends.indexOf(username) === -1) this.friends.push(username);
+};
+
+IAm.prototype.unsubscribed = function (username) {
+    var p = this.friends.indexOf(username);
+    if (p !== -1) this.friends.splice(p, 1);
 };
 
 IAm.ready = api.get('/v1/users/whoami').then(function (resp) {

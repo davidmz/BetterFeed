@@ -29,10 +29,7 @@ module.exports = function (node, settings) {
             hideLink.innerHTML = "Hide this post";
             var hideAllLink = null;
 
-            if (aType == IAm.FRIEND) {
-                hideAllLink = h("a", "Unsubscribe from ", h("strong", postAuthor));
-                hideAllLink.addEventListener("click", unsubscribeFrom.bind(null, postAuthor));
-            } else if (aType != IAm.ME) {
+            if (!(aType & IAm.ME)) {
                 hideAllLink = h("a", "Hide all posts from ", h("strong", postAuthor));
                 hideAllLink.addEventListener("click", hideAllFrom.bind(null, postAuthor));
             }
@@ -58,10 +55,6 @@ module.exports = function (node, settings) {
             win.style.display = "none";
         });
     });
-
-    function unsubscribeFrom(user) {
-        return api.post("/v1/users/" + user + "/unsubscribe").then(cssHide.bind(null, user));
-    }
 
     function hideAllFrom(user) {
         banList.add(user);

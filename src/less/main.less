@@ -72,13 +72,7 @@
     display: none;
 }
 
-// Hide
-
-.be-fe-hide-cont {
-    position: relative;
-}
-
-.be-fe-hide-win {
+.downWin() {
     position:      absolute;
     left:          50%;
     transform:     translateX(-50%);
@@ -90,6 +84,7 @@
     border-radius: 2px;
     border:        1px solid #999;
     margin-top:    10px;
+    z-index:       10;
 
     &::before, &::after {
         content:       "";
@@ -106,6 +101,16 @@
         top:           -9px;
         border-bottom: 10px solid white;
     }
+}
+
+// Hide
+
+.be-fe-hide-cont {
+    position: relative;
+}
+
+.be-fe-hide-win {
+    .downWin();
 
     ul {
         padding-left: 1.2em;
@@ -152,4 +157,46 @@
         top:  4px;
         left: 4px;
     }
+}
+
+.be-fe-userinfo-wrapper {
+    position: relative;
+}
+
+.be-fe-userinfo-win {
+    .downWin();
+    min-width:   17em;
+    font-size:   13px;
+    line-height: 16px;
+}
+
+.be-fe-userinfo-pic {
+    float:         left;
+    border:        1px solid #999;
+    margin-bottom: 0.5em;
+    width:         75px;
+    height:        75px;
+}
+
+.be-fe-userinfo-info {
+    margin-left: 88px;
+    position:    relative;
+    height:      77px;
+}
+
+.be-fe-userinfo-screenName {
+    font-weight: bold;
+}
+
+.be-fe-userinfo-userName {
+    font-family: consolas, menlo, monaco, monospace;
+    font-size:   12px;
+}
+
+.be-fe-userinfo-relation {
+    font-style: italic;
+    position:   absolute;
+    bottom:     0;
+    left:       0;
+    font-size:  12px;
 }

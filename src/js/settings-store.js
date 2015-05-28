@@ -14,7 +14,8 @@ var getSettings = function (toApply) {
         "userpics-in-comments",
         "embed-ly",
         "hide-aliens",
-        "hide"
+        "hide",
+        "user-info"
     ];
     toApply = toApply || {};
     var settings = {};

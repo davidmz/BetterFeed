@@ -24,14 +24,12 @@ module.exports = function (node) {
         var author = authorLink.getAttribute("href").substr(1);
         IAm.ready.then(function (iAm) {
             var type = iAm.whoIs(author);
-            if (type === IAm.ME) {
+            if (type & IAm.ME) {
                 node.classList.add("be-fe-comment-from-me");
-            } else if (type === IAm.FRIEND) {
+            } else if (type & IAm.FRIEND) {
                 node.classList.add("be-fe-comment-from-friend");
-            } else if (type === IAm.READER) {
+            } else if (type & IAm.READER) {
                 node.classList.add("be-fe-comment-from-reader");
-            } else if (type === IAm.STRANGER) {
-                // pass
             }
         });
         if (author == postAuthor) {

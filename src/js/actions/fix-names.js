@@ -4,6 +4,7 @@ module.exports = function (node) {
     node = node || document.body;
 
     forSelect(node, ".post-body > .title a:not(.be-fe-nameFixed), .p-comment-body .author a:not(.be-fe-nameFixed), .p-timeline-user-like > a:not(.be-fe-nameFixed)", function (node) {
+        if (!node.hasAttribute("href")) return;
         node.classList.add("be-fe-nameFixed");
         var login = node.getAttribute("href").substr(1);
         var name = node.innerHTML;

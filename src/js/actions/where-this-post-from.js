@@ -24,8 +24,7 @@ module.exports = function (node, settings) {
         node.dataset["postAuthor"] = postAuthor;
 
         IAm.ready.then(function (iAm) {
-            var aType = iAm.whoIs(postAuthor);
-            if (aType === IAm.ME || aType === IAm.FRIEND) return;
+            if (iAm.whoIs(postAuthor) & (IAm.ME | IAm.FRIEND)) return;
 
             node.classList.add("be-fe-post-from-alien");
 
@@ -38,8 +37,7 @@ module.exports = function (node, settings) {
                             return uu.username;
                         })
                         .filter(function (u) {
-                            var type = iAm.whoIs(u);
-                            return (type === IAm.ME || type === IAm.FRIEND);
+                            return !!(iAm.whoIs(u) & (IAm.ME | IAm.FRIEND));
                         })
                         .filter(function (v, i, a) { return a.indexOf(v) === i;}) // http://stackoverflow.com/questions/1960473/unique-values-in-an-array#answer-14438954
                     ;
@@ -79,7 +77,7 @@ module.exports = function (node, settings) {
 function getPostInfo(postId) {
     return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/v1/posts/' + postId);
+        xhr.open('GET', '/v1/posts/' + postId + '?maxLikes=all');
         xhr.responseType = 'json';
         xhr.setRequestHeader('X-Authentication-Token', localStorage["authToken"]);
         xhr.onload = function () {
