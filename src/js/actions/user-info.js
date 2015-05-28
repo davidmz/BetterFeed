@@ -13,12 +13,19 @@ var timeToShow = 1000,
     defaultPic = "https://freefeed.net/img/default-userpic-75.png";
 
 function isNakedA(el) {
+    var link;
+    if (el.nodeName == "A") {
+        link = el;
+    } else if (el.nodeName == "IMG" && el.parentNode.nodeName == "A") {
+        link = el.parentNode;
+    } else {
+        return null;
+    }
     return (
-    el.nodeName == "A"
-    && el.hasAttribute("href")
-    && el.getAttribute("href").match(/^\/\w+$/)
-    && !closestParent(el, "." + wrapClass)
-    );
+    link.hasAttribute("href")
+    && link.getAttribute("href").match(/^\/\w+$/)
+    && !closestParent(link, "." + wrapClass)
+    ) ? link : null;
 }
 
 function isInWrapper(el) { return !!closestParent(el, "." + wrapClass, true); }
@@ -102,8 +109,9 @@ function unWrapLink(el) {
 }
 
 function linkMouseOver(e) {
-    if (isNakedA(e.target)) {
-        timerShow = setTimeout(wrapLink.bind(null, e.target), timeToShow);
+    var link = isNakedA(e.target);
+    if (link) {
+        timerShow = setTimeout(wrapLink.bind(null, link), timeToShow);
     }
     if (isInWrapper(e.target)) {
         clearTimeout(timerHide);
@@ -111,7 +119,8 @@ function linkMouseOver(e) {
 }
 
 function linkMouseOut(e) {
-    if (isNakedA(e.target)) {
+    var link = isNakedA(e.target);
+    if (link) {
         clearTimeout(timerShow);
     }
     if (isInWrapper(e.target)) {
