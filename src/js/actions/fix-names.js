@@ -1,6 +1,6 @@
 var forSelect = require("../utils/for-select");
 
-module.exports = function (node) {
+module.exports = function (node, settings) {
     node = node || document.body;
 
     forSelect(node, ".post-body > .title a:not(.be-fe-nameFixed), .p-comment-body .author a:not(.be-fe-nameFixed), .p-timeline-user-like > a:not(.be-fe-nameFixed)", function (node) {
@@ -9,11 +9,13 @@ module.exports = function (node) {
         var login = node.getAttribute("href").substr(1);
         var name = node.innerHTML;
         node.innerHTML = login;
-        node.setAttribute("title", name);
+        if (!settings["user-info"]) {
+            node.setAttribute("title", name);
+        }
     });
 
     // особый случай: список френдов
-    forSelect(node, ".p-timeline-subscription-user a:not(.be-fe-nameFixed)", function (node) {
+    forSelect(node, ".p-timeline-subscription-user a[href]:not(.be-fe-nameFixed)", function (node) {
         node.classList.add("be-fe-nameFixed");
         var login = node.getAttribute("href").substr(1);
         var name = "";
@@ -28,7 +30,7 @@ module.exports = function (node) {
             }
             c = c.nextSibling;
         }
-        if (name !== "") {
+        if (name !== "" && !settings["user-info"]) {
             node.setAttribute("title", name);
         }
     });
