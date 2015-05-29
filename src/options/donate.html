@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>BetterFeed, сказать спасибо</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="container">
+    <ul class="breadcrumb">
+        <li>
+            <strong>FriendFeed &amp;&nbsp;Co</strong>
+            <small class="version"></small>
+        </li>
+        <li><a href="options.html">Настройки</a></li>
+        <li><strong>Сказать спасибо</strong></li>
+        <li><a href="https://github.com/davidmz/BetterFeed" target="_blank"><i class="fa fa-github"></i> GitHub</a></li>
+    </ul>
+
+    <h2>Как сказать спасибо?</h2>
+
+    <p>
+        Если вы хотите (материально) поблагодарить разработчика BetterFeed, то сделать это можно так:
+    </p>
+    <iframe frameborder="0" allowtransparency="true" scrolling="no"
+            src="https://money.yandex.ru/embed/shop.xml?account=4100134767218&quickpay=shop&payment-type-choice=off&writer=seller&targets=%D0%A1%D0%BF%D0%B0%D1%81%D0%B8%D0%B1%D0%BE+%D0%B7%D0%B0+BetterFeed!&default-sum=&button-text=03&comment=on&hint=&successURL=https%3A%2F%2Ffreefeed.net%2F"
+            width="450" height="253"></iframe>
+    <p>
+        Когда команда FreeFeed-а откроет публичный сбор средств, я переведу ей половину собранной на тот момент суммы.
+    </p>
+</div>
+<script>
+    var version = location.pathname.match(/BetterFeed\/([^\/]+)/)[1];
+    document.querySelector(".version").appendChild(document.createTextNode(version));
+</script>
+</body>
+</html>
