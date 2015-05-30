@@ -7,7 +7,7 @@ module.exports = function (node) {
 };
 
 var quoteEventHandler = function (e) {
-    if (!e.target.matches(".comment .date") && !e.target.parentNode.matches(".comment .date") || e.button != 0) return;
+    if (!e.target.matches(".comment .date") && !(e.target.parentNode && e.target.parentNode.matches(".comment .date")) || e.button != 0) return;
     e.preventDefault();
     var caps = null;
 
