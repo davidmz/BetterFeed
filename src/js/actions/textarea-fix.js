@@ -1,4 +1,6 @@
 var closestParent = require("../utils/closest-parent");
+var forSelect = require("../utils/for-select");
+
 
 module.exports = function (node) {
     if (node === undefined) {
@@ -35,5 +37,13 @@ module.exports = function (node) {
             }
         });
     }
+
+    node = node || document.body;
+
+    forSelect(node, "textarea", function (node) {
+        if (node.scrollHeight > node.clientHeight && node.scrollHeight < 150) {
+            node.style.height = (node.scrollHeight + 3) + "px";
+        }
+    });
 };
 
