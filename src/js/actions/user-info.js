@@ -52,16 +52,18 @@ function showInfoWin(username, wrapper) {
                 inf.profilePictureLargeUrl = defaultPic;
             }
 
+            var isUser = (inf.type === "user"); // or "group"
+
             var role = iAm.whoIs(inf.username),
                 roleText;
             if (role & IAm.ME) {
                 roleText = "You";
             } else if (role & IAm.FRIEND) {
-                roleText = "Your friend";
+                roleText = isUser ? "Your friend" : "Your group";
             } else if (role & IAm.READER) {
                 roleText = "Your reader";
             } else {
-                roleText = "Stranger";
+                roleText = isUser ? "Stranger" : "Group";
             }
 
             if ((role & IAm.FRIEND) && (role & IAm.READER)) {
@@ -70,8 +72,12 @@ function showInfoWin(username, wrapper) {
 
             var actions = [];
             if (!(role & IAm.ME)) {
-                actions.push(h("span", h("a.a-subs", (role & IAm.FRIEND) ? "Unsubscribe" : "Subscribe")));
-                if (canHide) {
+                if (isUser) {
+                    actions.push(h("span", h("a.a-subs", (role & IAm.FRIEND) ? "Unsubscribe" : "Subscribe")));
+                } else {
+                    actions.push(h("span", h("a.a-subs", (role & IAm.FRIEND) ? "Leave group" : "Join group")));
+                }
+                if (canHide && isUser) {
                     var postsBanned = hideTools.postsBanList.contains(inf.username);
                     var commsBanned = hideTools.commsBanList.contains(inf.username);
                     actions.push(h("span", h("a.a-hide-posts", postsBanned ? "Show posts" : "Hide posts")));
