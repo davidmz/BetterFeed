@@ -4,13 +4,15 @@ var closestParent = require("../utils/closest-parent");
 var api = require("../utils/api");
 var promPlus = require("../utils/promise-tools");
 var IAm = require("../utils/i-am");
+var hideTools = require("../utils/hide-tools");
 
 var timeToShow = 1000,
     timeToHide = 500,
     wrapClass = "be-fe-userinfo-wrapper",
     timerShow = null,
     timerHide = null,
-    defaultPic = "https://freefeed.net/img/default-userpic-75.png";
+    defaultPic = "https://freefeed.net/img/default-userpic-75.png",
+    canHide = false;
 
 function isNakedA(el) {
     var link;
@@ -66,15 +68,15 @@ function showInfoWin(username, wrapper) {
                 roleText = "Your mutual friend";
             }
 
-            var action = null, actionLink = null;
-            if (role & IAm.FRIEND) {
-                action = h("div", "(", actionLink = h("a", {"data-sub": ""}, "unsubscribe"), ")");
-            } else if (!(role & IAm.ME)) {
-                action = h("div", "(", actionLink = h("a", {"data-sub": "1"}, "subscribe"), ")");
-            }
-
-            if (actionLink) {
-                actionLink.addEventListener("click", subscrClick.bind(actionLink, inf.username));
+            var actions = [];
+            if (!(role & IAm.ME)) {
+                actions.push(h("span", h("a.a-subs", (role & IAm.FRIEND) ? "Unsubscribe" : "Subscribe")));
+                if (canHide) {
+                    var postsBanned = hideTools.postsBanList.contains(inf.username);
+                    var commsBanned = hideTools.commsBanList.contains(inf.username);
+                    actions.push(h("span", h("a.a-hide-posts", postsBanned ? "Show posts" : "Hide posts")));
+                    actions.push(h("span", h("a.a-hide-comms", commsBanned ? "Show comms." : "Hide comms.")));
+                }
             }
 
             var infoWin = h(".be-fe-userinfo-win",
@@ -82,8 +84,14 @@ function showInfoWin(username, wrapper) {
                 h(".be-fe-userinfo-info",
                     h(".be-fe-userinfo-screenName", h("a.be-fe-nameFixed", {href: "/" + inf.username}, inf.screenName)),
                     h(".be-fe-userinfo-userName", inf.username),
-                    h(".be-fe-userinfo-relation", roleText, action)
-                )
+                    h(".be-fe-userinfo-relation", roleText)
+                ),
+                h(".be-fe-userinfo-actions", {
+                    "data-username": inf.username,
+                    "data-subscribed": (role & IAm.FRIEND) ? "1" : "",
+                    "data-posts-hidden": postsBanned ? "1" : "",
+                    "data-comms-hidden": commsBanned ? "1" : ""
+                }, actions)
             );
             var oldWin = wrapper.querySelector(".be-fe-userinfo-win");
             if (oldWin) oldWin.parentNode.removeChild(oldWin);
@@ -91,21 +99,50 @@ function showInfoWin(username, wrapper) {
         });
 }
 
-function subscrClick(username) {
-    var link = this;
-    var wrapper = closestParent(link, "." + wrapClass);
-    var doSubscribe = !!link.dataset["sub"];
-    api.post("/v1/users/" + username + "/" + (doSubscribe ? "subscribe" : "unsubscribe")).then(function (res) {
-        IAm.ready.then(function (iAm) { iAm[doSubscribe ? "subscribed" : "unsubscribed"](username); });
-        showInfoWin(username, wrapper);
-    });
-}
-
 function unWrapLink(el) {
     var w = closestParent(el, "." + wrapClass, true);
+    if (!w) return;
     var link = w.querySelector(":scope > a");
     w.parentNode.insertBefore(link, w);
     w.parentNode.removeChild(w);
+}
+
+function linkClick(e) {
+    if (e.target.nodeName !== "A") return;
+    var link = e.target;
+    var act = closestParent(link, ".be-fe-userinfo-actions");
+    if (!act) return;
+    var wrapper = closestParent(act, "." + wrapClass);
+    var username = act.dataset["username"];
+
+    if (link.classList.contains("a-subs")) {
+        if (act.dataset["subscribed"]) {
+            api.post("/v1/users/" + username + "/" + "unsubscribe").then(function (res) {
+                IAm.ready.then(function (iAm) { iAm.unsubscribed(username); });
+                showInfoWin(username, wrapper);
+            });
+        } else {
+            api.post("/v1/users/" + username + "/" + "subscribe").then(function (res) {
+                IAm.ready.then(function (iAm) { iAm.subscribed(username); });
+                showInfoWin(username, wrapper);
+            });
+        }
+    } else if (link.classList.contains("a-hide-posts")) {
+        if (act.dataset["postsHidden"]) {
+            hideTools.showPostsFrom(username);
+        } else {
+            hideTools.hidePostsFrom(username);
+        }
+        showInfoWin(username, wrapper);
+    } else if (link.classList.contains("a-hide-comms")) {
+        if (act.dataset["commsHidden"]) {
+            hideTools.showCommsFrom(username);
+        } else {
+            hideTools.hideCommsFrom(username);
+        }
+        showInfoWin(username, wrapper);
+    }
+
 }
 
 function linkMouseOver(e) {
@@ -128,11 +165,13 @@ function linkMouseOut(e) {
     }
 }
 
-module.exports = function (node) {
+module.exports = function (node, settings) {
 
     if (!node) {
         document.body.addEventListener("mouseover", linkMouseOver);
         document.body.addEventListener("mouseout", linkMouseOut);
+        document.body.addEventListener("click", linkClick);
+        canHide = settings["hide"];
     }
 
     node = node || document.body;

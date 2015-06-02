@@ -196,7 +196,6 @@
 
 .be-fe-userinfo-userName {
     font-family: consolas, menlo, monaco, monospace;
-    font-size:   12px;
 }
 
 .be-fe-userinfo-relation {
@@ -204,13 +203,62 @@
     position:   absolute;
     bottom:     0;
     left:       0;
-    font-size:  12px;
+}
+
+.be-fe-userinfo-actions {
+    font-size:   12px;
+    margin-top:  7px;
+    border-top:  1px solid #ccc;
+    padding-top: 2px;
+
+    &:empty {
+        display: none;
+    }
 
     a {
         font-weight: normal !important;
+    }
+
+    span::after {
+        content: " • ";
+        color:   #999;
+    }
+
+    span:last-child::after {
+        content: "";
     }
 }
 
 ul.tile-list li {
     overflow: visible;
+}
+
+.be-fe-comment-from {
+    position: relative;
+}
+
+.be-fe-comment-hidden .comment-text {
+    color: #999;
+}
+
+.be-fe-comment-hidden::after {
+    position:         absolute;
+    top:              0;
+    left:             0;
+    width:            100%;
+    height:           100%;
+    content:          "Hidden comment";
+    background-color: #F5F5F5;
+    box-sizing:       border-box;
+    padding:          2px;
+    color:            #ccc;
+    cursor:           default;
+    opacity:          1;
+    transition:       opacity 0.3s, visibility 0s;
+}
+
+.be-fe-comment-hidden:hover::after {
+    opacity:    0;
+    visibility: hidden;
+    transition: opacity 0.3s 2s, visibility 0s 2.3s;
 }

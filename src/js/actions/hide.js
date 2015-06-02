@@ -1,21 +1,19 @@
 var IAm = require("../utils/i-am");
-var api = require("../utils/api");
+var hideTools = require("../utils/hide-tools");
 var forSelect = require("../utils/for-select");
 var h = require("../utils/html");
 var closestParent = require("../utils/closest-parent");
-var banList = require("../utils/ban-list");
-
-var style = null;
 
 module.exports = function (node, settings) {
     if (!settings["where-this-post-from"]) return;
 
-    if (!node) {
-        style = document.head.appendChild(h("style.be-fe-banlist")).sheet;
-        banList.get().forEach(cssHide);
-    }
-
     node = node || document.body;
+
+    hideTools.commsBanList.get().forEach(function (user) {
+        forSelect(node, ".be-fe-comment-from-u-" + user + ":not(.be-fe-comment-hidden)", function (node) {
+            node.classList.add("be-fe-comment-hidden");
+        });
+    });
 
     forSelect(node, ".post-controls > .p-timeline-post-hide-action", function (hideLink) {
         var postNode = closestParent(hideLink, ".timeline-post-container");
@@ -31,7 +29,7 @@ module.exports = function (node, settings) {
 
             if (!(aType & IAm.ME)) {
                 hideAllLink = h("a", "Hide all posts from ", h("strong", postAuthor));
-                hideAllLink.addEventListener("click", hideAllFrom.bind(null, postAuthor));
+                hideAllLink.addEventListener("click", hideTools.hidePostsFrom.bind(hideTools, postAuthor));
             }
 
             var handlerLink = h("a", "Hide ", h("i.fa.fa-caret-down"));
@@ -55,13 +53,4 @@ module.exports = function (node, settings) {
             win.style.display = "none";
         });
     });
-
-    function hideAllFrom(user) {
-        banList.add(user);
-        cssHide(user);
-    }
-
-    function cssHide(user) {
-        style.insertRule(".be-fe-post-from-u-" + user + " { display: none; }", 0);
-    }
 };

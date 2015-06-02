@@ -1,5 +1,8 @@
 var isArray = Array.isArray || function (arr) { return Object.prototype.toString.call(arr) == '[object Array]'; };
 
+var postsBanListName = "be-fe.banList",
+    commsBanListName = "be-fe.banListComms";
+
 var getSettings = function (toApply) {
     var settingsNames = [
         "fix-names",
@@ -54,18 +57,18 @@ var settingsStore = {
         });
     },
 
-    loadBanList: function () {
+    loadBanList: function (name) {
         var self = this;
         return new Promise(function (resolve) {
             self.loadResolver = resolve;
-            window.parent.postMessage({action: "getBanList", value: null}, self.parentOrigin);
+            window.parent.postMessage({action: "getBanList", value: name}, self.parentOrigin);
         });
     },
 
-    saveBanList: function (list) {
+    saveBanList: function (name, list) {
         var self = this;
         return new Promise(function (resolve) {
-            window.parent.postMessage({action: "saveBanList", value: list}, self.parentOrigin);
+            window.parent.postMessage({action: "saveBanList", value: [name, list]}, self.parentOrigin);
             setTimeout(resolve, 0);
         });
     }
@@ -90,13 +93,16 @@ docLoaded.then(function () {
 
     settingsStore.init();
     settingsStore.loadSettings().then(function (settings) {
-        settingsStore.loadBanList().then(function (list) {
-            checkBoxes.forEach(function (box) {
-                box.checked = settings[box.value];
+        settingsStore.loadBanList(postsBanListName).then(function (postBanList) {
+            settingsStore.loadBanList(commsBanListName).then(function (commBanList) {
+                checkBoxes.forEach(function (box) {
+                    box.checked = settings[box.value];
+                });
+                sPage.classList.remove("hidden");
+                sPage.previousElementSibling.classList.add("hidden");
+                document.getElementById("ban-list-posts").value = postBanList.join(", ");
+                document.getElementById("ban-list-comms").value = commBanList.join(", ");
             });
-            sPage.classList.remove("hidden");
-            sPage.previousElementSibling.classList.add("hidden");
-            document.getElementById("ban-list").value = list.join(", ");
         });
     });
 
@@ -108,9 +114,12 @@ docLoaded.then(function () {
         settingsStore.saveSettings(settings).then(function () {
             setTimeout(function () { saveBtn.disabled = false; }, 500);
         });
-        var banList = document.getElementById("ban-list").value.toLowerCase().match(/\w+/g);
+        var banList = document.getElementById("ban-list-posts").value.toLowerCase().match(/\w+/g);
         if (banList === null) banList = [];
-        settingsStore.saveBanList(banList);
+        settingsStore.saveBanList(postsBanListName, banList);
+        banList = document.getElementById("ban-list-comms").value.toLowerCase().match(/\w+/g);
+        if (banList === null) banList = [];
+        settingsStore.saveBanList(commsBanListName, banList);
     }, false);
 
     var refreshBtn = document.getElementById("check-updates");

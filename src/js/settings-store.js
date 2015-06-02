@@ -1,4 +1,4 @@
-var banList = require("./utils/ban-list");
+var BanList = require("./utils/ban-list");
 
 var getSettings = function (toApply) {
     var settingsNames = [
@@ -42,6 +42,8 @@ var settingsStorePage = {
                 return;
             }
 
+            var list;
+
             if (event.data["action"] === "getSettings") {
                 self.loadSettings().then(function (settings) {
                     event.source.postMessage(settings, event.origin);
@@ -53,11 +55,13 @@ var settingsStorePage = {
             }
 
             if (event.data["action"] === "getBanList") {
-                event.source.postMessage(banList.get(), event.origin);
+                list = new BanList(event.data["value"]);
+                event.source.postMessage(list.get(), event.origin);
             }
 
             if (event.data["action"] === "saveBanList") {
-                banList.set(event.data["value"]);
+                list = new BanList(event.data["value"][0]);
+                list.set(event.data["value"][1]);
             }
 
             if (event.data["action"] === "checkUpdates") {
