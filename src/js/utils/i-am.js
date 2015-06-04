@@ -3,6 +3,7 @@ var uPics = require("./userpics");
 
 function IAm() {
     this.me = null;
+    this.myID = null;
     this.friends = [];
     this.readers = [];
 }
@@ -31,6 +32,7 @@ IAm.prototype.unsubscribed = function (username) {
 IAm.ready = api.get('/v1/users/whoami').then(function (resp) {
     var iAm = new IAm();
     iAm.me = resp.users.username;
+    iAm.myID = resp.users.id;
     uPics.setPic(resp.users.username, resp.users.profilePictureMediumUrl);
     iAm.friends = resp.subscribers.map(function (it) {
         uPics.setPic(it.username, it.profilePictureMediumUrl);

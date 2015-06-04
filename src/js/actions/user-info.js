@@ -59,7 +59,7 @@ function showInfoWin(username, wrapper) {
             if (role & IAm.ME) {
                 roleText = "You";
             } else if (role & IAm.FRIEND) {
-                roleText = isUser ? "Your friend" : "Your group";
+                roleText = isUser ? "Your friend" : "Group (you in)";
             } else if (role & IAm.READER) {
                 roleText = "Your reader";
             } else {
@@ -68,6 +68,10 @@ function showInfoWin(username, wrapper) {
 
             if ((role & IAm.FRIEND) && (role & IAm.READER)) {
                 roleText = "Your mutual friend";
+            }
+
+            if (!isUser && inf.administratorIds.indexOf(iAm.myID) !== -1) {
+                roleText = "Your group";
             }
 
             var actions = [];
