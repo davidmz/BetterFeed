@@ -18,7 +18,9 @@ module.exports = function (node, settings) {
         if (!authorLink) return;
 
         var postAuthor = authorLink.getAttribute("href").substr(1);
-        var postId = node.querySelector("a.datetime").getAttribute("href").match(/^\/.+?\/([\w-]+)/)[1];
+        var pp = node.querySelector("a.datetime").getAttribute("href").match(/^\/.+?\/([\w-]+)/);
+        if (!pp) return; // удивительный случай, когда у поста нет ID в HTML
+        var postId = pp[1];
 
         node.classList.add("be-fe-post-from-u-" + postAuthor);
         node.dataset["postAuthor"] = postAuthor;
