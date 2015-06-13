@@ -5,7 +5,7 @@ function get(path) {
         xhr.responseType = 'json';
         xhr.setRequestHeader('X-Authentication-Token', localStorage["authToken"]);
         xhr.onload = function () {
-            if ("err" in xhr.response) {
+            if (xhr.response && "err" in xhr.response) {
                 reject(xhr.response.err);
             } else {
                 resolve(xhr.response);
@@ -22,7 +22,7 @@ function put(path, body) {
         xhr.responseType = 'json';
         xhr.setRequestHeader('X-Authentication-Token', localStorage["authToken"]);
         xhr.onload = function () {
-            if ("err" in xhr.response) {
+            if (xhr.response && "err" in xhr.response) {
                 reject(xhr.response.err);
             } else {
                 resolve(xhr.response);
@@ -39,7 +39,7 @@ function post(path, body) {
         xhr.responseType = 'json';
         xhr.setRequestHeader('X-Authentication-Token', localStorage["authToken"]);
         xhr.onload = function () {
-            if ("err" in xhr.response) {
+            if (xhr.response && "err" in xhr.response) {
                 reject(xhr.response.err);
             } else {
                 resolve(xhr.response);

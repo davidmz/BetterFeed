@@ -1,4 +1,5 @@
 var IAm = require("../utils/i-am");
+var api = require("../utils/api");
 var forSelect = require("../utils/for-select");
 var h = require("../utils/html");
 
@@ -31,7 +32,7 @@ module.exports = function (node, settings) {
             node.classList.add("be-fe-post-from-alien");
 
             // пытаемся выяснить, почему мы это видим
-            getPostInfo(postId).then(function (postInfo) {
+            api.get('/v1/posts/' + postId + '?maxLikes=all').then(function (postInfo) {
                 var names = {};
                 var users = postInfo.users
                         .map(function (uu) {

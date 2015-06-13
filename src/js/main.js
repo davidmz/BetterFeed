@@ -1,5 +1,4 @@
-if (!/^\/(attachments|files)\//.test(location.pathname)) {
-
+function start() {
     require('../less/main.less');
 
     var settingsStore = require("./settings-store");
@@ -32,4 +31,14 @@ if (!/^\/(attachments|files)\//.test(location.pathname)) {
             actions.forEach(function (act) { act(undefined, settings); });
             observer.observe(document.body, {childList: true, subtree: true});
         });
+}
+
+if (!/^\/(attachments|files)\//.test(location.pathname)) {
+
+    if (!MutationObserver) {
+        console.error("Can not start BetterFeed: MutationObserver not supported");
+    } else {
+        start();
+    }
+
 }
