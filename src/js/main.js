@@ -35,8 +35,8 @@ function start() {
 
 if (!/^\/(attachments|files)\//.test(location.pathname)) {
 
-    if (!MutationObserver) {
-        console.error("Can not start BetterFeed: MutationObserver not supported");
+    if (!MutationObserver || !Promise) {
+        console.error("Can not start BetterFeed: MutationObserver & Promise not supported");
     } else if (!("__BetterFeed" in window)) {
         window.__BetterFeed = {};
         start();
