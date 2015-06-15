@@ -34,8 +34,15 @@ module.exports = function (node) {
     var link;
     sidebar.appendChild(
         h(".box.be-fe-settingsLink",
-            h("div", (link = h("a", "BetterFeed settings"))),
-            h("div", h("small", startVersion), h("i.fa.fa-arrow-circle-up", {title: "Доступно обновление, перезагрузите страницу"}))
+            h(".box-header-groups", "Дополнения"),
+            h(".box-body",
+                h("ul",
+                    h("li",
+                        link = h("a", "BetterFeed settings"),
+                        h("div", h("small", startVersion), h("i.fa.fa-arrow-circle-up", {title: "Доступно обновление, перезагрузите страницу"}))
+                    )
+                )
+            )
         )
     );
 

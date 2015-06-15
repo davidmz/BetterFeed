@@ -28,3 +28,14 @@ webpack({
         new webpack.BannerPlugin(head, {raw: true})
     ]
 }, function (err, stats) { if (err !== null) console.log(err);});
+
+webpack({
+    entry: './src/js/site-boot.js',
+    output: {
+        path: './build',
+        filename: 'better-feed.site.js'
+    },
+    plugins: [
+        new webpack.optimize.UglifyJsPlugin({})
+    ]
+}, function (err, stats) { if (err !== null) console.log(err);});
