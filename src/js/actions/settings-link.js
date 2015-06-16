@@ -39,7 +39,7 @@ module.exports = function (node) {
                 h("ul",
                     h("li",
                         link = h("a", "BetterFeed settings"),
-                        h("div", h("small", startVersion), h("i.fa.fa-arrow-circle-up", {title: "Доступно обновление, перезагрузите страницу"}))
+                        h("div", {style: "font-size: 11px"}, startVersion, h("i.fa.fa-arrow-circle-up", {title: "Доступно обновление, перезагрузите страницу"}))
                     )
                 )
             )
