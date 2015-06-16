@@ -1,7 +1,8 @@
 var isArray = Array.isArray || function (arr) { return Object.prototype.toString.call(arr) == '[object Array]'; };
 
 var postsBanListName = "be-fe.banList",
-    commsBanListName = "be-fe.banListComms";
+    commsBanListName = "be-fe.banListComms",
+    parentOrigin = window.parent.location.origin;
 
 var getSettings = function (toApply) {
     var settingsNames = [
@@ -32,7 +33,6 @@ var settingsStore = {
     init: function () {
         var self = this;
         this.loadResolver = null;
-        this.parentOrigin = "https://freefeed.net";
         window.addEventListener('message', function (event) {
             if (event.origin === self.parentOrigin && self.loadResolver !== null) {
                 self.loadResolver(isArray(event.data) ? event.data : getSettings(event.data));
@@ -45,14 +45,14 @@ var settingsStore = {
         var self = this;
         return new Promise(function (resolve) {
             self.loadResolver = resolve;
-            window.parent.postMessage({action: "getSettings", value: null}, self.parentOrigin);
+            window.parent.postMessage({action: "getSettings", value: null}, parentOrigin);
         });
     },
 
     saveSettings: function (settings) {
         var self = this;
         return new Promise(function (resolve) {
-            window.parent.postMessage({action: "saveSettings", value: settings}, self.parentOrigin);
+            window.parent.postMessage({action: "saveSettings", value: settings}, parentOrigin);
             setTimeout(resolve, 0);
         });
     },
@@ -61,14 +61,14 @@ var settingsStore = {
         var self = this;
         return new Promise(function (resolve) {
             self.loadResolver = resolve;
-            window.parent.postMessage({action: "getBanList", value: name}, self.parentOrigin);
+            window.parent.postMessage({action: "getBanList", value: name}, parentOrigin);
         });
     },
 
     saveBanList: function (name, list) {
         var self = this;
         return new Promise(function (resolve) {
-            window.parent.postMessage({action: "saveBanList", value: [name, list]}, self.parentOrigin);
+            window.parent.postMessage({action: "saveBanList", value: [name, list]}, parentOrigin);
             setTimeout(resolve, 0);
         });
     }
@@ -126,7 +126,7 @@ docLoaded.then(function () {
     refreshBtn.classList.remove("hidden");
     refreshBtn.addEventListener("click", function () {
         refreshBtn.disabled = true;
-        window.parent.postMessage({action: "checkUpdates", value: null}, "https://freefeed.net");
+        window.parent.postMessage({action: "checkUpdates", value: null}, parentOrigin);
     }, false);
 });
 
