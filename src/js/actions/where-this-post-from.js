@@ -23,11 +23,24 @@ module.exports = function (node, settings) {
         if (!pp) return; // удивительный случай, когда у поста нет ID в HTML
         var postId = pp[1];
 
+        var postTargets = [];
+        forSelect(node, ".title a", function (node) {
+            var u = node.getAttribute("href").substr(1);
+            if (u !== postAuthor) {
+                postTargets.push(u);
+            }
+        });
+
         node.classList.add("be-fe-post-from-u-" + postAuthor);
         node.dataset["postAuthor"] = postAuthor;
 
         IAm.ready.then(function (iAm) {
             if (iAm.whoIs(postAuthor) & (IAm.ME | IAm.FRIEND)) return;
+
+            // пост в мои группы?
+            if (postTargets.some(function (u) { return !!(iAm.whoIs(u) & IAm.FRIEND); })) {
+                return;
+            }
 
             node.classList.add("be-fe-post-from-alien");
 
