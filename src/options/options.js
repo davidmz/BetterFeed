@@ -39,7 +39,7 @@ var settingsStore = {
         var self = this;
         this.loadResolver = null;
         window.addEventListener('message', function (event) {
-            if (event.origin === self.parentOrigin && self.loadResolver !== null) {
+            if (event.origin === parentOrigin && self.loadResolver !== null) {
                 self.loadResolver(isArray(event.data) ? event.data : getSettings(event.data));
                 self.loadResolver = null;
             }
