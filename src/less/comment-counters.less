@@ -1,0 +1,26 @@
+.comments {
+    counter-reset: comments;
+}
+
+.comments .comment {
+    counter-increment: comments 1;
+
+    &::before {
+        content:    counter(comments) ".";
+        position:   absolute;
+        left:       -38px;
+        top:        0;
+        width:      32px;
+        text-align: right;
+        color:      #666;
+        visibility: hidden;
+        opacity:    0;
+        transition: opacity 0.3s, visibility 0s 0.3s;
+    }
+
+    &:hover::before {
+        visibility: visible;
+        opacity:    1;
+        transition: opacity 0.3s, visibility 0s;
+    }
+}

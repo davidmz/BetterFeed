@@ -15,7 +15,8 @@ var getSettings = function (toApply) {
         "embed-ly",
         "hide-aliens",
         "hide",
-        "user-info"
+        "user-info",
+        "comment-counters"
     ];
     toApply = toApply || {};
     var settings = {};

@@ -1,8 +1,6 @@
-var IAm = require("../utils/i-am");
 var hideTools = require("../utils/hide-tools");
 var forSelect = require("../utils/for-select");
 var h = require("../utils/html");
-var closestParent = require("../utils/closest-parent");
 
 module.exports = function (node, settings) {
     if (!settings["where-this-post-from"]) return;
