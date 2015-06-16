@@ -2,7 +2,12 @@ var isArray = Array.isArray || function (arr) { return Object.prototype.toString
 
 var postsBanListName = "be-fe.banList",
     commsBanListName = "be-fe.banListComms",
-    parentOrigin = window.parent.location.origin;
+    parentOrigin = "";
+
+var m = /[?&]origin=([^&]+)/.exec(location.search);
+if (m) {
+    parentOrigin = decodeURIComponent(m[1]);
+}
 
 var getSettings = function (toApply) {
     var settingsNames = [

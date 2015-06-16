@@ -52,7 +52,7 @@ module.exports = function (node) {
         document.body.appendChild(lightBox);
         lightBoxCont.innerHTML = "";
         lightBoxCont.appendChild(h("iframe.light-box-iframe", {
-            src: 'https://cdn.rawgit.com/davidmz/BetterFeed/' + startVersion + '/src/options/options.html',
+            src: 'https://cdn.rawgit.com/davidmz/BetterFeed/' + startVersion + '/src/options/options.html?origin=' + encodeURIComponent(location.origin),
             frameborder: "0"
         }));
         lightBox.classList.remove("hidden");
