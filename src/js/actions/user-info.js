@@ -25,7 +25,7 @@ function isNakedA(el) {
     }
     return (
     link.hasAttribute("href")
-    && link.getAttribute("href").match(/^\/\w+$/)
+    && link.getAttribute("href").match(/^\/([a-z0-9]+)(-[a-z0-9]+)*$/)
     && !closestParent(link, "." + wrapClass)
     ) ? link : null;
 }
