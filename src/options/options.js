@@ -25,7 +25,8 @@ var getSettings = function (toApply) {
         "hide-aliens",
         "hide",
         "user-info",
-        "comment-counters"
+        "comment-counters",
+        "new-lines"
     ];
     toApply = toApply || {};
     var settings = {};
