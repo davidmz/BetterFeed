@@ -41,17 +41,17 @@ actions.push(function (node) {
         button = null;
 
     var html = h("div",
-        h("h2.p-settings-betterfeed-header", "Дополнения"),
-        h("p", h("label", check = h("input", {type: "checkbox"}), " BetterFeed")),
+        h("h2.p-settings-betterfeed-header", "Add-ons:"),
+        h("p", h("label", check = h("input", {type: "checkbox"}), " Enable BetterFeed")),
         h("p",
-            "BetterFeed \u2014 это дополнение, улучшающее интерфейс FreeFeed-а (",
-            h("a", {href: "https://github.com/davidmz/BetterFeed", target: "_blank"}, "подробнее"),
+            "BetterFeed is an add-on that improves or dramatically alters stock interface of FreeFeed (",
+            h("a", {href: "https://github.com/davidmz/BetterFeed", target: "_blank"}, "details"),
             "). ",
             h("br"),
-            h("strong", "Важно:"),
-            " настройки BetterFeed хранятся в вашем браузере. Они не привязаны к FreeFeed-аккаунту и не переносятся автоматически между разными браузерами."
+            h("strong", "Important:"),
+            " BetterFeed settings are stored in your local browser. They are not tied to FreeFeed account and are not automatically synced between sessions in different browsers."
         ),
-        h("p", button = h("button.btn.btn-default", "Применить")),
+        h("p", button = h("button.btn.btn-default", "Apply")),
         h("hr")
     );
 

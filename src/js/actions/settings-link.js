@@ -34,7 +34,7 @@ module.exports = function (node) {
     var link;
     sidebar.appendChild(
         h(".box.be-fe-settingsLink",
-            h(".box-header-groups", "Дополнения"),
+            h(".box-header-groups", "Add-ons"),
             h(".box-body",
                 h("ul",
                     h("li",
