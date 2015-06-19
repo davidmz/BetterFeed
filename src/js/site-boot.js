@@ -41,7 +41,7 @@ actions.push(function (node) {
         button = null;
 
     var html = h("div",
-        h("h2.p-settings-betterfeed-header", "Add-ons:"),
+        h("h2.p-settings-betterfeed-header", "Add-ons"),
         h("p", h("label", check = h("input", {type: "checkbox"}), " Enable BetterFeed")),
         h("p",
             "BetterFeed is an add-on that improves or dramatically alters stock interface of FreeFeed (",
