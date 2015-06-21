@@ -29,8 +29,21 @@ module.exports = function (node, settings) {
         forSelect(node, ".text a").some(function (link) {
             if (!/^https?:\/\//.test(link.getAttribute("href"))) return false;
             var bodyNext = node.querySelector(":scope > .body").nextSibling;
+            var url = link.href;
+            var embed = h("a.embedly-card", {href: link.href, "data-card-width": "60%"});
+            if (
+                url.indexOf("https://docs.google.com/document/d/") === 0
+                || url.indexOf("https://docs.google.com/spreadsheets/d/") === 0
+                || url.indexOf("https://docs.google.com/presentation/d/") === 0
+            ) {
+                var docId = /\/d\/([^\/]+)/.exec(url)[1];
+                embed = h("a", {
+                    href: url,
+                    target: "_blank"
+                }, h("img.be-fe-gdoc", {src: "https://drive.google.com/thumbnail?id=" + docId + "&sz=w590-h354-p-k-nu"}));
+            }
             node.insertBefore(
-                h(".be-fe-embeds", h("a.embedly-card", {href: link.href, "data-card-width": "60%"})),
+                h(".be-fe-embeds", embed),
                 bodyNext
             );
             return true;
