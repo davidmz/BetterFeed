@@ -3,7 +3,7 @@ var forSelect = require("../utils/for-select");
 module.exports = function (node) {
     node = node || document.body;
 
-    forSelect(node, "img.p-attachment-thumbnail[src$='.gif'][src*='/thumbnails/']:not(.be-fe-gif)", function (img) {
+    forSelect(node, "img.p-attachment-thumbnail[src$='.gif'][src*='/attachments/']:not(.be-fe-gif)", function (img) {
         img.classList.add("be-fe-gif");
         isAnimatedGif(img.src).then(function () {
             img.parentNode.classList.add("be-fe-gif-ani");
