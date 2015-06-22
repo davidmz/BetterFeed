@@ -58,14 +58,17 @@
 }
 
 .light-box-container {
-    width:                   90%;
-    height:                  90%;
-    display:                 -webkit-flex;
-    display:                 flex;
-    -webkit-justify-content: center;
-    justify-content:         center;
-    -webkit-align-items:     center;
-    align-items:             center;
+    width:                      90%;
+    height:                     90%;
+    display:                    -webkit-flex;
+    display:                    flex;
+    -webkit-justify-content:    center;
+    justify-content:            center;
+    -webkit-align-items:        center;
+    align-items:                center;
+    // http://davidwalsh.name/scroll-iframes-ios
+    -webkit-overflow-scrolling: touch;
+    overflow-y:                 scroll;
 }
 
 .light-box-img {
