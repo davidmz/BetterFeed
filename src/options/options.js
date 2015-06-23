@@ -26,7 +26,8 @@ var getSettings = function (toApply) {
         "hide",
         "user-info",
         "comment-counters",
-        "new-lines"
+        "new-lines",
+        "fold-images"
     ];
     toApply = toApply || {};
     var settings = {};

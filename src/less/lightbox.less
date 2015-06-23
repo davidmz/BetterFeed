@@ -90,3 +90,24 @@
 .light-box-thumbnail {
     cursor: zoom-in !important;
 }
+
+.be-fe-fold-attach .be-fe-hidden-attach { display: none; }
+
+.be-fe-fold-attach.be-fe-fold-attach-opened .be-fe-hidden-attach { display: block; }
+
+.be-fe-fold-attach-arrow {
+    height:      175px;
+    line-height: 175px;
+    color:       #069;
+    float:       left;
+
+    i {
+        cursor:     pointer;
+        transition: transform 0.2s;
+    }
+}
+
+.be-fe-fold-attach-opened .be-fe-fold-attach-arrow i {
+    -webkit-transform: scaleX(-1);
+    transform:         scaleX(-1);
+}
