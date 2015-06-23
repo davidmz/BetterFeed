@@ -37,10 +37,10 @@ module.exports = function (node, settings) {
                 || url.indexOf("https://docs.google.com/presentation/d/") === 0
             ) {
                 var docId = /\/d\/([^\/]+)/.exec(url)[1];
-                embed = h("a", {
-                    href: url,
-                    target: "_blank"
-                }, h("img.be-fe-gdoc", {src: "https://drive.google.com/thumbnail?id=" + docId + "&sz=w590-h354-p-k-nu"}));
+                var img = h("img.be-fe-gdoc");
+                img.onerror = function () { img.style.display = "none"; };
+                img.src = "https://drive.google.com/thumbnail?id=" + docId + "&sz=w590-h354-p-k-nu";
+                embed = h("a", {href: url, target: "_blank"}, img);
             }
             node.insertBefore(
                 h(".be-fe-embeds", embed),
