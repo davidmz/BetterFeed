@@ -26,6 +26,7 @@ module.exports = function (node, settings) {
             if (comment.matches(".p-timeline-comment") && myLogin) {
                 username = myLogin;
                 comment.classList.add("be-fe-comment-from-me");
+                comment.classList.add("be-fe-comment-from");
             } else {
                 return;
             }
