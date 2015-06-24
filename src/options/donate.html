@@ -15,7 +15,7 @@
             <strong>FriendFeed &amp;&nbsp;Co</strong>
             <small class="version"></small>
         </li>
-        <li><a href="options.html">Настройки</a></li>
+        <li><a href="options.html" class="local-link">Настройки</a></li>
         <li><strong>Сказать спасибо</strong></li>
         <li><a href="https://github.com/davidmz/BetterFeed" target="_blank"><i class="fa fa-github"></i> GitHub</a></li>
     </ul>
@@ -32,6 +32,11 @@
 <script>
     var version = location.pathname.match(/BetterFeed\/([^\/]+)/)[1];
     document.querySelector(".version").appendChild(document.createTextNode(version));
+
+    var localLinks = document.querySelectorAll(".local-link");
+    for (var i = 0; i < localLinks.length; i++) {
+        localLinks[i].href += location.search;
+    }
 </script>
 </body>
 </html>

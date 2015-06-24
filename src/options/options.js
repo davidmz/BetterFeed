@@ -2,11 +2,17 @@ var isArray = Array.isArray || function (arr) { return Object.prototype.toString
 
 var postsBanListName = "be-fe.banList",
     commsBanListName = "be-fe.banListComms",
-    parentOrigin = "";
+    parentOrigin = "",
+    parentWindow = window.parent;
 
 var m = /[?&]origin=([^&]+)/.exec(location.search);
 if (m) {
     parentOrigin = decodeURIComponent(m[1]);
+}
+
+if (parentWindow === window) parentWindow = window.opener;
+if (!parentWindow) {
+    alert("Пожалуйста, откройте эту страницу по ссылке из FreeFeed-а.")
 }
 
 var getSettings = function (toApply) {
@@ -53,14 +59,14 @@ var settingsStore = {
         var self = this;
         return new Promise(function (resolve) {
             self.loadResolver = resolve;
-            window.parent.postMessage({action: "getSettings", value: null}, parentOrigin);
+            parentWindow.postMessage({action: "getSettings", value: null}, parentOrigin);
         });
     },
 
     saveSettings: function (settings) {
         var self = this;
         return new Promise(function (resolve) {
-            window.parent.postMessage({action: "saveSettings", value: settings}, parentOrigin);
+            parentWindow.postMessage({action: "saveSettings", value: settings}, parentOrigin);
             setTimeout(resolve, 0);
         });
     },
@@ -69,14 +75,14 @@ var settingsStore = {
         var self = this;
         return new Promise(function (resolve) {
             self.loadResolver = resolve;
-            window.parent.postMessage({action: "getBanList", value: name}, parentOrigin);
+            parentWindow.postMessage({action: "getBanList", value: name}, parentOrigin);
         });
     },
 
     saveBanList: function (name, list) {
         var self = this;
         return new Promise(function (resolve) {
-            window.parent.postMessage({action: "saveBanList", value: [name, list]}, parentOrigin);
+            parentWindow.postMessage({action: "saveBanList", value: [name, list]}, parentOrigin);
             setTimeout(resolve, 0);
         });
     }
@@ -95,6 +101,12 @@ var docLoaded = new Promise(function (resolve) {
 docLoaded.then(function () {
     var version = location.pathname.match(/BetterFeed\/([^\/]+)/)[1];
     document.querySelector(".version").appendChild(document.createTextNode(version));
+
+    var localLinks = document.querySelectorAll(".local-link");
+    for (var i = 0; i < localLinks.length; i++) {
+        localLinks[i].href += location.search;
+    }
+
 
     var sPage = document.querySelector(".content.settings");
     var checkBoxes = Array.prototype.slice.call(sPage.querySelectorAll("input[type='checkbox']"));
@@ -134,7 +146,7 @@ docLoaded.then(function () {
     refreshBtn.classList.remove("hidden");
     refreshBtn.addEventListener("click", function () {
         refreshBtn.disabled = true;
-        window.parent.postMessage({action: "checkUpdates", value: null}, parentOrigin);
+        parentWindow.postMessage({action: "checkUpdates", value: null}, parentOrigin);
     }, false);
 });
 
