@@ -33,7 +33,8 @@ var getSettings = function (toApply) {
         "user-info",
         "comment-counters",
         "new-lines",
-        "fold-images"
+        "fold-images",
+        "fold-texts"
     ];
     toApply = toApply || {};
     var settings = {};
