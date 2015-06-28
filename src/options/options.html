@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <style>
+        body {
+            padding-top:    50px;
+            padding-bottom: 110px;
+        }
+
         label {
             font-weight: normal;
         }
@@ -15,13 +20,34 @@
         p.shift {
             padding-left: 1.33em;
         }
+
+        footer {
+            padding-top: 30px;
+            background:  white;
+            background:  linear-gradient(to bottom, transparent, white 30px);
+        }
     </style>
     <script src="options.js"></script>
 </head>
 <body>
 
+<div class="navbar-fixed-top">
+    <div class="container">
+        <ul class="breadcrumb">
+            <li>
+                <strong>FriendFeed &amp;&nbsp;Co</strong>
+                <small class="version"></small>
+            </li>
+            <li><strong>Настройки</strong></li>
+            <li><a href="donate.html" class="local-link">Сказать спасибо</a></li>
+            <li><a href="https://github.com/davidmz/BetterFeed" target="_blank"><i class="fa fa-github"></i> GitHub</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
 <div class="container">
-    <ul class="breadcrumb">
+    <!--ul class="breadcrumb">
         <li>
             <strong>FriendFeed &amp;&nbsp;Co</strong>
             <small class="version"></small>
@@ -29,7 +55,7 @@
         <li><strong>Настройки</strong></li>
         <li><a href="donate.html" class="local-link">Сказать спасибо</a></li>
         <li><a href="https://github.com/davidmz/BetterFeed" target="_blank"><i class="fa fa-github"></i> GitHub</a></li>
-    </ul>
+    </ul-->
 
     <h2>Настройки</h2>
 
@@ -173,6 +199,11 @@
             </label>
         </p>
 
+    </div>
+</div>
+
+<footer class="navbar-fixed-bottom">
+    <div class="container">
         <p>
             <button id="save-settings" class="btn btn-default">
                 Сохранить настройки
@@ -186,6 +217,7 @@
             Обновите вкладки с FreeFeed-ом, чтобы изменения вступили в силу.
         </p>
     </div>
-</div>
+</footer>
+
 </body>
 </html>
