@@ -278,10 +278,21 @@ ul.tile-list li {
 .be-fe-folded-text {
     display:  block;
     overflow: hidden;
-    height:   93px;
+    height:   96px;
     position: relative;
 
-    &.text { height: 109px; }
+    &.text { height: 114px; }
+
+    &::after {
+        position:       absolute;
+        content:        "";
+        bottom:         0;
+        left:           0;
+        right:          0;
+        height:         2em;
+        background:     linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.7));
+        pointer-events: none;
+    }
 }
 
 .be-fe-folded-text-read-more {
@@ -289,15 +300,16 @@ ul.tile-list li {
     position:         absolute;
     bottom:           0;
     right:            0;
-    background-color: #E4E4E4;
-    padding:          0 0.4em;
+    background-color: #FFFFFF;
+    padding-left:     .4em;
     font-style:       italic;
-    border-radius:    4px;
+    z-index:          1;
+    color:            #555599;
     cursor:           pointer;
 
-    &:hover { background-color: #e4e4ff; }
+    &:hover { text-decoration: underline; }
 
-    &::after { content: "more\2026"; }
+    &::after { content: "Read more\2026"; }
 
     .be-fe-folded-text & { display: block; }
 }
