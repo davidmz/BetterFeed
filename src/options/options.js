@@ -24,7 +24,6 @@ var getSettings = function (toApply) {
         "at-links",
         "comment-icons-click",
         "animated-gif",
-        "textarea-fix",
         "where-this-post-from",
         "userpics-in-comments",
         "embed-ly",
@@ -33,7 +32,6 @@ var getSettings = function (toApply) {
         "user-info",
         "comment-counters",
         "new-lines",
-        "fold-images",
         "fold-texts"
     ];
     toApply = toApply || {};
