@@ -39,7 +39,8 @@ function wrapLink(el) {
     showInfoWin(el.getAttribute("href").substr(1), wrapper);
 }
 
-function showInfoWin(username, wrapper) {
+function showInfoWin(username, wrapper, reloadAlert) {
+    reloadAlert = !!reloadAlert;
     promPlus
         .all([api.get("/v1/users/" + username), IAm.ready])
         .then(function (resp) {
@@ -84,10 +85,14 @@ function showInfoWin(username, wrapper) {
                 if (canHide && isUser) {
                     var postsBanned = hideTools.postsBanList.contains(inf.username);
                     var commsBanned = hideTools.commsBanList.contains(inf.username);
+                    var userBlocked = iAm.isBanned(inf.id);
                     actions.push(h("span", h("a.a-hide-posts", postsBanned ? "Show posts" : "Hide posts")));
                     actions.push(h("span", h("a.a-hide-comms", commsBanned ? "Show comms." : "Hide comms.")));
+                    actions.push(h("span", h("a.a-block-user", userBlocked ? "Unblock" : "Block")));
                 }
             }
+
+            var reloadMsg = reloadAlert ? h(".be-fe-userinfo-alert", h("i.fa.fa-refresh"), " Reload page to apply!") : null;
 
             var infoWin = h(".be-fe-userinfo-win",
                 h("img.be-fe-userinfo-pic", {src: inf.profilePictureLargeUrl}),
@@ -97,11 +102,14 @@ function showInfoWin(username, wrapper) {
                     h(".be-fe-userinfo-relation", roleText)
                 ),
                 h(".be-fe-userinfo-actions", {
+                    "data-user-id": inf.id,
                     "data-username": inf.username,
                     "data-subscribed": (role & IAm.FRIEND) ? "1" : "",
                     "data-posts-hidden": postsBanned ? "1" : "",
-                    "data-comms-hidden": commsBanned ? "1" : ""
-                }, actions)
+                    "data-comms-hidden": commsBanned ? "1" : "",
+                    "data-user-blocked": userBlocked ? "1" : ""
+                }, actions),
+                reloadMsg
             );
             var oldWin = wrapper.querySelector(".be-fe-userinfo-win");
             if (oldWin) oldWin.parentNode.removeChild(oldWin);
@@ -124,15 +132,16 @@ function linkClick(e) {
     if (!act) return;
     var wrapper = closestParent(act, "." + wrapClass);
     var username = act.dataset["username"];
+    var userId = act.dataset["userId"];
 
     if (link.classList.contains("a-subs")) {
         if (act.dataset["subscribed"]) {
-            api.post("/v1/users/" + username + "/" + "unsubscribe").then(function (res) {
+            api.post("/v1/users/" + username + "/" + "unsubscribe").then(function () {
                 IAm.ready.then(function (iAm) { iAm.unsubscribed(username); });
                 showInfoWin(username, wrapper);
             });
         } else {
-            api.post("/v1/users/" + username + "/" + "subscribe").then(function (res) {
+            api.post("/v1/users/" + username + "/" + "subscribe").then(function () {
                 IAm.ready.then(function (iAm) { iAm.subscribed(username); });
                 showInfoWin(username, wrapper);
             });
@@ -149,6 +158,19 @@ function linkClick(e) {
             hideTools.showCommsFrom(username);
         } else {
             hideTools.hideCommsFrom(username);
+        }
+        showInfoWin(username, wrapper);
+    } else if (link.classList.contains("a-block-user")) {
+        if (act.dataset["userBlocked"]) {
+            api.post("/v1/users/" + username + "/" + "unban").then(function () {
+                IAm.ready.then(function (iAm) { iAm.unblocked(userId); });
+                showInfoWin(username, wrapper, true);
+            });
+        } else {
+            api.post("/v1/users/" + username + "/" + "ban").then(function () {
+                IAm.ready.then(function (iAm) { iAm.blocked(userId); });
+                showInfoWin(username, wrapper, true);
+            });
         }
         showInfoWin(username, wrapper);
     }
@@ -183,6 +205,4 @@ module.exports = function (node, settings) {
         document.body.addEventListener("click", linkClick);
         canHide = settings["hide"];
     }
-
-    node = node || document.body;
 };
