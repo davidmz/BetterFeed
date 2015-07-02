@@ -16,7 +16,14 @@ var quoteEventHandler = function (e) {
         var n = 1;
         p = p.nextElementSibling;
         while (p) {
-            if (p.classList.contains("ember-view")) n++;
+            if (p.classList.contains("ember-view")) {
+                n++;
+            } else if (p.classList.contains("more-comments")) {
+                var m = parseInt(p.textContent);
+                if (!isNaN(m)) {
+                    n += m;
+                }
+            }
             p = p.nextElementSibling;
         }
         caps = new Array(n + 1).join("^");

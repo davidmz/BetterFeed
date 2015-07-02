@@ -18,6 +18,7 @@ var getSettings = function (toApply) {
         "comment-counters",
         "new-lines",
         "fold-texts"
+        // "block-list"
     ];
     toApply = toApply || {};
     var settings = {};

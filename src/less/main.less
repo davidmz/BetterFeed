@@ -73,18 +73,19 @@
 }
 
 .downWin() {
-    position:      absolute;
-    left:          50%;
-    transform:     translateX(-50%);
-    white-space:   nowrap;
-    background:    #fff;
-    box-shadow:    0 3px 10px rgba(0, 0, 0, 0.5);
-    top:           1em;
-    padding:       1em 1em .5em;
-    border-radius: 2px;
-    border:        1px solid #999;
-    margin-top:    10px;
-    z-index:       10;
+    position:          absolute;
+    left:              50%;
+    -webkit-transform: translateX(-50%);
+    transform:         translateX(-50%);
+    white-space:       nowrap;
+    background:        #fff;
+    box-shadow:        0 3px 10px rgba(0, 0, 0, 0.5);
+    top:               1em;
+    padding:           1em 1em .5em;
+    border-radius:     2px;
+    border:            1px solid #999;
+    margin-top:        10px;
+    z-index:           10;
 
     &::before, &::after {
         content:       "";
@@ -314,3 +315,4 @@ ul.tile-list li {
     margin-top: 0.5em;
     color:      red;
 }
+

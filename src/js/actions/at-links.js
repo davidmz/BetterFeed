@@ -68,6 +68,11 @@ var getRefComment = function (comm, n) {
         comm = comm.previousElementSibling;
         if (!comm) {
             break
+        } else if (comm.classList.contains("more-comments")) {
+            var m = parseInt(comm.textContent);
+            if (!isNaN(m)) {
+                n -= m;
+            }
         } else if (comm.classList.contains("ember-view")) {
             n--;
             if (n == 0) {
