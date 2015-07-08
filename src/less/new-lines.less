@@ -1,4 +1,11 @@
 .comment .comment-text,
 .post-body .text {
-    white-space: pre-line;
+    display: block;
+
+    p {
+        margin-bottom: 0.4em;
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+    }
 }
