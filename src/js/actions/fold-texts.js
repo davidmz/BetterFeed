@@ -1,7 +1,7 @@
 var forSelect = require("../utils/for-select");
 var h = require("../utils/html");
 
-var triggerHeight = 120,
+var triggerHeight = 140,
     minHeight = 100;
 
 module.exports = function (node, settings) {
