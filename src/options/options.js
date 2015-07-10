@@ -99,8 +99,10 @@ var docLoaded = new Promise(function (resolve) {
 ////////////////////////////
 
 docLoaded.then(function () {
-    var version = location.pathname.match(/BetterFeed\/([^\/]+)/)[1];
-    document.querySelector(".version").appendChild(document.createTextNode(version));
+    var ver = location.pathname.match(/BetterFeed\/([^\/]+)/);
+    if (ver) {
+        document.querySelector(".version").appendChild(document.createTextNode(ver[1]));
+    }
 
     var localLinks = document.querySelectorAll(".local-link");
     for (var i = 0; i < localLinks.length; i++) {

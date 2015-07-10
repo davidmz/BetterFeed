@@ -1,4 +1,5 @@
 var h = require("../utils/html");
+var bfRoot = require("../utils/bf-root");
 require('../../less/lightbox.less');
 
 /** @type {Element} */
@@ -49,7 +50,7 @@ module.exports = function (node) {
     link.addEventListener("click", function (e) {
         e.preventDefault();
 
-        var url = 'https://cdn.rawgit.com/davidmz/BetterFeed/' + startVersion + '/src/options/options.html?origin=' + encodeURIComponent(location.origin);
+        var url = bfRoot + '/src/options/options.html?origin=' + encodeURIComponent(location.origin);
 
         if (/iPhone|iPad/.test(navigator.userAgent)) {
             window.open(url, "_blank");
