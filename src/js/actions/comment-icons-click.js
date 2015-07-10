@@ -47,5 +47,6 @@ var quoteEventHandler = function (e) {
         }
         ta.focus();
         ta.selectionStart = ta.selectionEnd = ta.value.length;
+        $(ta).change();
     }
 };
