@@ -2,7 +2,11 @@
     position:       relative;
     display:        inline-block;
     vertical-align: top;
-    width:          1.2em;
+    width:          1.3em;
+
+    .timeline-post-container .post-body > .body & {
+        width: 1.5em;
+    }
 }
 
 .be-fe-emo {
@@ -16,19 +20,21 @@
 
     &:hover {
         transform:  scale(2);
-        transition: transform 0.2s 1s;
+        transition: transform 0.2s 0.5s;
         z-index:    1;
     }
 
-    .comment-text & {
-        width:       16px;
-        height:      16px;
-        margin-left: -8px;
+    .comments & {
+        width:       20px;
+        height:      20px;
+        margin-left: -10px;
+        top:         -4px;
     }
 
-    .timeline-post-container .post-body & {
-        width:       18px;
-        height:      18px;
-        margin-left: -9px;
+    .timeline-post-container .post-body > .body & {
+        width:       22px;
+        height:      22px;
+        margin-left: -11px;
+        top:         -2px;
     }
 }
