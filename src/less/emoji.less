@@ -1,0 +1,34 @@
+.be-fe-emo-wrap {
+    position:       relative;
+    display:        inline-block;
+    vertical-align: top;
+    width:          1.2em;
+}
+
+.be-fe-emo {
+    position:    absolute;
+    top:         0;
+    left:        50%;
+    width:       24px;
+    height:      24px;
+    margin-left: -12px;
+    transition:  transform 0.2s;
+
+    &:hover {
+        transform:  scale(2);
+        transition: transform 0.2s 1s;
+        z-index:    1;
+    }
+
+    .comment-text & {
+        width:       16px;
+        height:      16px;
+        margin-left: -8px;
+    }
+
+    .timeline-post-container .post-body & {
+        width:       18px;
+        height:      18px;
+        margin-left: -9px;
+    }
+}

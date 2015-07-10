@@ -18,7 +18,8 @@ var getSettings = function (toApply) {
         "comment-counters",
         "new-lines",
         "fold-texts",
-        "direct-style"
+        "direct-style",
+        "emoji"
         // "block-list"
     ];
     toApply = toApply || {};
