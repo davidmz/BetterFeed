@@ -4,6 +4,7 @@ var uPics = require("./userpics");
 function IAm() {
     this.me = null;
     this.myID = null;
+    this.myScreenName = null;
     this.friends = [];
     this.readers = [];
     this.banIds = [];
@@ -47,6 +48,7 @@ IAm.ready = api.get('/v1/users/whoami').then(function (resp) {
     var iAm = new IAm();
     iAm.me = resp.users.username;
     iAm.myID = resp.users.id;
+    iAm.myScreenName = resp.users.screenName;
     uPics.setPic(resp.users.username, resp.users.profilePictureMediumUrl);
     iAm.friends = resp.subscribers.map(function (it) {
         uPics.setPic(it.username, it.profilePictureMediumUrl);

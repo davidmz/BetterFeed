@@ -19,13 +19,18 @@ var getSettings = function (toApply) {
         "new-lines",
         "fold-texts",
         "direct-style",
-        "emoji"
+        "emoji",
+        "not-you"
         // "block-list"
+    ];
+    // Настройки, выключенные по умолчанию
+    var offSettings = [
+        "not-you"
     ];
     toApply = toApply || {};
     var settings = {};
     settingsNames.forEach(function (name) {
-        settings[name] = (name in toApply) ? toApply[name] : true;
+        settings[name] = (name in toApply) ? toApply[name] : (offSettings.indexOf(name) === -1);
     });
     return settings;
 };
