@@ -108,5 +108,5 @@ function emoCheck(node, emo, alt, unicode) {
 function hexInt(n) {
     var s = n.toString(16);
     while (s.length < 4) s = "0" + s;
-    return s;
+    return s.toUpperCase();
 }
