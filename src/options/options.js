@@ -35,7 +35,8 @@ var getSettings = function (toApply) {
         "fold-texts",
         "direct-style",
         "emoji",
-        "not-you"
+        "not-you",
+        "confirm-delete"
     ];
     // Настройки, выключенные по умолчанию
     var offSettings = [

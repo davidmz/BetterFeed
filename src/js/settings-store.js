@@ -20,7 +20,8 @@ var getSettings = function (toApply) {
         "fold-texts",
         "direct-style",
         "emoji",
-        "not-you"
+        "not-you",
+        "confirm-delete"
         // "block-list"
     ];
     // Настройки, выключенные по умолчанию
