@@ -65,11 +65,17 @@ module.exports = function (node) {
 var getRefComment = function (comm, n) {
     var refComm = null;
     while (true) {
+        var m;
         comm = comm.previousElementSibling;
         if (!comm) {
             break
         } else if (comm.classList.contains("more-comments")) {
-            var m = parseInt(comm.textContent);
+            m = parseInt(comm.textContent);
+            if (!isNaN(m)) {
+                n -= m;
+            }
+        } else if (comm.classList.contains("more-coments-wrapper")) {
+            m = parseInt(comm.firstElementChild.textContent);
             if (!isNaN(m)) {
                 n -= m;
             }

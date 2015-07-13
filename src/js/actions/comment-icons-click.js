@@ -13,13 +13,18 @@ var quoteEventHandler = function (e) {
 
     if (e.metaKey || e.ctrlKey) {
         var p = closestParent(e.target, ".ember-view");
-        var n = 1;
+        var n = 1, m;
         p = p.nextElementSibling;
         while (p) {
             if (p.classList.contains("ember-view")) {
                 n++;
             } else if (p.classList.contains("more-comments")) {
-                var m = parseInt(p.textContent);
+                m = parseInt(p.textContent);
+                if (!isNaN(m)) {
+                    n += m;
+                }
+            } else if (p.classList.contains("more-coments-wrapper")) {
+                m = parseInt(p.firstElementChild.textContent);
                 if (!isNaN(m)) {
                     n += m;
                 }
