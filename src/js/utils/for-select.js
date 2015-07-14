@@ -3,7 +3,7 @@
  * @param {string} selector
  * @param {function(Node)} [foo]
  */
-module.exports = function (node, selector, foo) {
+module.exports = (node, selector, foo) => {
     if (node === null) return [];
     var nodeList = node.querySelectorAll(selector);
     var nodes = nodeList ? Array.prototype.slice.call(nodeList) : [];

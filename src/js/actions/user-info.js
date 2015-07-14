@@ -24,9 +24,9 @@ function isNakedA(el) {
         return null;
     }
     return (
-    link.hasAttribute("href")
-    && link.getAttribute("href").match(/^\/([a-z0-9]+)(-[a-z0-9]+)*$/)
-    && !closestParent(link, "." + wrapClass)
+        link.hasAttribute("href")
+        && link.getAttribute("href").match(/^\/([a-z0-9]+)(-[a-z0-9]+)*$/)
+        && !closestParent(link, "." + wrapClass)
     ) ? link : null;
 }
 
@@ -136,13 +136,13 @@ function linkClick(e) {
 
     if (link.classList.contains("a-subs")) {
         if (act.dataset["subscribed"]) {
-            api.post("/v1/users/" + username + "/" + "unsubscribe").then(function () {
-                IAm.ready.then(function (iAm) { iAm.unsubscribed(username); });
+            api.post(`/v1/users/${username}/unsubscribe`).then(() => {
+                IAm.ready.then((iAm) => iAm.unsubscribed(username));
                 showInfoWin(username, wrapper);
             });
         } else {
-            api.post("/v1/users/" + username + "/" + "subscribe").then(function () {
-                IAm.ready.then(function (iAm) { iAm.subscribed(username); });
+            api.post(`/v1/users/${username}/subscribe`).then(() => {
+                IAm.ready.then((iAm) => iAm.subscribed(username));
                 showInfoWin(username, wrapper);
             });
         }
@@ -162,13 +162,13 @@ function linkClick(e) {
         showInfoWin(username, wrapper);
     } else if (link.classList.contains("a-block-user")) {
         if (act.dataset["userBlocked"]) {
-            api.post("/v1/users/" + username + "/" + "unban").then(function () {
-                IAm.ready.then(function (iAm) { iAm.unblocked(userId); });
+            api.post(`/v1/users/${username}/unban`).then(() => {
+                IAm.ready.then((iAm) => iAm.unblocked(userId));
                 showInfoWin(username, wrapper, true);
             });
         } else {
-            api.post("/v1/users/" + username + "/" + "ban").then(function () {
-                IAm.ready.then(function (iAm) { iAm.blocked(userId); });
+            api.post(`/v1/users/${username}/ban`).then(() => {
+                IAm.ready.then((iAm) => iAm.blocked(userId));
                 showInfoWin(username, wrapper, true);
             });
         }

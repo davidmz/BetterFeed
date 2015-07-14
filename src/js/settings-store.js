@@ -22,6 +22,7 @@ var getSettings = function (toApply) {
         "emoji",
         "not-you",
         "confirm-delete"
+        // "show-group-admins"
         // "block-list"
     ];
     // Настройки, выключенные по умолчанию
@@ -30,7 +31,7 @@ var getSettings = function (toApply) {
     ];
     toApply = toApply || {};
     var settings = {};
-    settingsNames.forEach(function (name) {
+    settingsNames.forEach((name) => {
         settings[name] = (name in toApply) ? toApply[name] : (offSettings.indexOf(name) === -1);
     });
     return settings;

@@ -6,14 +6,13 @@ module.exports = function (node, settings) {
 
     node = node || document.body;
 
-    IAm.ready.then(function (iAm) {
-        forSelect(node, "a[href='/" + iAm.me + "']", function (node) {
+    IAm.ready.then((iAm) => {
+        forSelect(node, `a[href='/${iAm.me}']`, (node) => {
             if (node.innerHTML === "You") {
                 node.innerHTML = escapeHTML(iAm.myScreenName);
             }
         });
     });
-
 };
 
 function escapeHTML(s) {

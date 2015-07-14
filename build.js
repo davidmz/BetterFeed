@@ -10,7 +10,10 @@ webpack({
         filename: 'better-feed.min.js'
     },
     module: {
-        loaders: [{test: /\.less$/, loader: 'style-loader!css-loader!less-loader'}]
+        loaders: [
+            {test: /\.less$/, loader: 'style-loader!css-loader!less-loader'},
+            {test: /\.js$/, exclude: /(node_modules|bower_components)/, loader: 'babel'}
+        ]
     },
     plugins: [
         new webpack.optimize.UglifyJsPlugin({})

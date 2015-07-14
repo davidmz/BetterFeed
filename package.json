@@ -6,18 +6,21 @@
     "license": "MIT",
     "homepage": "https://github.com/davidmz/BetterFeed",
     "devDependencies": {
-        "webpack": "latest",
-        "gulp": "latest",
-        "watchify": "latest",
+        "babel-loader": "^5.3.1",
         "browserify": "latest",
-        "vinyl-source-stream": "latest",
-        "vinyl-buffer": "latest",
-        "gulp-uglify": "latest",
-        "style-loader": "latest",
         "css-loader": "latest",
-        "less-loader": "latest"
+        "gulp": "latest",
+        "gulp-uglify": "latest",
+        "less-loader": "latest",
+        "style-loader": "latest",
+        "vinyl-buffer": "latest",
+        "vinyl-source-stream": "latest",
+        "watchify": "latest",
+        "webpack": "latest"
     },
     "scripts": {
         "build": "node build.js"
+    },
+    "dependencies": {
     }
 }

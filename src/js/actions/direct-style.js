@@ -4,7 +4,7 @@ require('../../less/direct-style.less');
 module.exports = function (node, settings) {
     node = node || document.body;
 
-    forSelect(node, ".direct-post .title", function (title) {
+    forSelect(node, ".direct-post .title", (title) => {
         var addressees = forSelect(title, ".post-addressee");
         if (addressees.length == 0) {
             return;
@@ -18,9 +18,10 @@ module.exports = function (node, settings) {
         }
 
         addressees
-            .filter(function (a) {
+            .filter((a) => {
                 return (!a.classList.contains("post-addressee-direct") || a.getAttribute("href") != authorHref);
-            }).forEach(function (a, n, arr) {
+            })
+            .forEach((a, n, arr) => {
                 if (n > 0) {
                     p.appendChild(document.createTextNode((n === arr.length - 1) ? " and " : ", "));
                 }
