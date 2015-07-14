@@ -21,8 +21,8 @@ var getSettings = function (toApply) {
         "direct-style",
         "emoji",
         "not-you",
-        "confirm-delete"
-        // "show-group-admins"
+        "confirm-delete",
+        "show-group-admins"
         // "block-list"
     ];
     // Настройки, выключенные по умолчанию
