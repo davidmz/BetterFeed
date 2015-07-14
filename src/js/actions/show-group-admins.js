@@ -21,7 +21,6 @@ module.exports = function (node) {
                 .map((s) => s.username)
                 .forEach((username) => {
                     var a = document.querySelector(`.p-user-subscriber a[href="/${username}"]:not(.be-fe-group-admin)`);
-                    console.log(username, a);
                     if (a) {
                         a.classList.add("be-fe-group-admin");
                         a.appendChild(h(".be-fe-group-admin--crown", {title: "Administrator"}));
