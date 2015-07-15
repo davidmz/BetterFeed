@@ -123,6 +123,12 @@ function unWrapLink(el) {
     var link = w.querySelector(":scope > a");
     w.parentNode.insertBefore(link, w);
     w.parentNode.removeChild(w);
+
+    // MacOS Webkit rendering bug
+    if ("webkitTransform" in document.body.style) {
+        document.body.style.webkitTransform = "scale(1)";
+        setTimeout(() => { document.body.style.webkitTransform = ""; }, 0);
+    }
 }
 
 function linkClick(e) {
