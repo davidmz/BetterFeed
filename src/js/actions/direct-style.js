@@ -4,7 +4,7 @@ require('../../less/direct-style.less');
 module.exports = function (node, settings) {
     node = node || document.body;
 
-    forSelect(node, ".direct-post .title", (title) => {
+    forSelect(node, ".post-body > .title", (title) => {
         var addressees = forSelect(title, ".post-addressee");
         if (addressees.length == 0) {
             return;
