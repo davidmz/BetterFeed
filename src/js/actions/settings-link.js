@@ -1,5 +1,6 @@
 var h = require("../utils/html");
 var bfRoot = require("../utils/bf-root");
+var forSelect = require("../utils/for-select");
 require('../../less/lightbox.less');
 
 /** @type {Element} */
@@ -24,10 +25,38 @@ lightBox.addEventListener("click", function () {
     lightBox.classList.add("hidden");
 });
 
+function showSettings() {
+    var url = bfRoot + '/src/options/options.html?origin=' + encodeURIComponent(location.origin);
+
+    if (/iPhone|iPad/.test(navigator.userAgent)) {
+        window.open(url, "_blank");
+        return;
+    }
+
+    document.body.appendChild(lightBox);
+    lightBoxCont.innerHTML = "";
+    lightBoxCont.appendChild(h("iframe.light-box-iframe", {src: url, frameborder: "0"}));
+    lightBox.classList.remove("hidden");
+}
+
 module.exports = function (node) {
     if (!startVersion) return;
 
     node = node || document.body;
+
+    var inSettingsHeader = node.querySelector(".p-settings-betterfeed-header");
+    if (inSettingsHeader) {
+        var addOnsBlock = inSettingsHeader.parentNode;
+        if (!addOnsBlock.querySelector(".be-fe-settings-in-settings")) {
+            var sLink = h("a.be-fe-settings-in-settings", "configure settings");
+            addOnsBlock.insertBefore(
+                h("p.bg-success", {style: "padding: 1em"}, `BetterFeed enabled (${startVersion}) | `, sLink),
+                forSelect(addOnsBlock, ":scope > p")[1]
+            );
+            sLink.addEventListener("click", () => showSettings());
+        }
+    }
+
 
     var sidebar = node.querySelector(".sidebar");
     if (!sidebar || sidebar.querySelector(".be-fe-settingsLink")) return;
@@ -47,20 +76,6 @@ module.exports = function (node) {
         )
     );
 
-    link.addEventListener("click", function (e) {
-        e.preventDefault();
-
-        var url = bfRoot + '/src/options/options.html?origin=' + encodeURIComponent(location.origin);
-
-        if (/iPhone|iPad/.test(navigator.userAgent)) {
-            window.open(url, "_blank");
-            return;
-        }
-
-        document.body.appendChild(lightBox);
-        lightBoxCont.innerHTML = "";
-        lightBoxCont.appendChild(h("iframe.light-box-iframe", {src: url, frameborder: "0"}));
-        lightBox.classList.remove("hidden");
-    });
+    link.addEventListener("click", () => showSettings());
 };
 
