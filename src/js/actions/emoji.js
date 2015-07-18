@@ -31,7 +31,9 @@ function emojize(node) {
         c = node.firstChild;
         while (c) {
             n = c.nextSibling;
-            emojize(c);
+            if (!node.classList.contains("author")) {
+                emojize(c);
+            }
             c = n;
         }
     }
