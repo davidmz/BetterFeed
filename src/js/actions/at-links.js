@@ -74,7 +74,7 @@ var getRefComment = function (comm, n) {
             if (!isNaN(m)) {
                 n -= m;
             }
-        } else if (comm.classList.contains("more-coments-wrapper")) {
+        } else if (comm.classList.contains("more-comments-wrapper")) {
             m = parseInt(comm.firstElementChild.textContent);
             if (!isNaN(m)) {
                 n -= m;

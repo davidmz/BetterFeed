@@ -23,7 +23,7 @@ var quoteEventHandler = function (e) {
                 if (!isNaN(m)) {
                     n += m;
                 }
-            } else if (p.classList.contains("more-coments-wrapper")) {
+            } else if (p.classList.contains("more-comments-wrapper")) {
                 m = parseInt(p.firstElementChild.textContent);
                 if (!isNaN(m)) {
                     n += m;
