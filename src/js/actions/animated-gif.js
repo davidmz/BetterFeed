@@ -21,8 +21,14 @@ function drawImage(img) {
     var c = document.createElement('canvas');
     var w = c.width = img.width;
     var h = c.height = img.height;
-    c.getContext('2d').drawImage(img, 0, 0, w, h);
-    img.src = c.toDataURL();
+
+    var img2 = new Image();
+    img2.crossOrigin = "anonymous";
+    img2.onload = () => {
+        c.getContext('2d').drawImage(img2, 0, 0, w, h);
+        img.src = c.toDataURL();
+    };
+    img2.src = img.src;
 }
 
 // https://gist.github.com/lakenen/3012623
