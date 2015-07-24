@@ -20,7 +20,13 @@ module.exports = function (node) {
 
         var postAuthor = postBody.querySelector(".title a").getAttribute("href").substr(1);
         var authorLink = node.querySelector(".author a");
-        if (!authorLink) return;
+        if (!authorLink) {
+            if (node.classList.contains("p-timeline-comment")) {
+                node.classList.add("be-fe-comment-from");
+                node.classList.add("be-fe-comment-from-me");
+            }
+            return;
+        }
         var author = authorLink.getAttribute("href").substr(1);
         IAm.ready.then(function (iAm) {
             var type = iAm.whoIs(author);
