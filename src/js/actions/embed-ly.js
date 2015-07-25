@@ -39,7 +39,7 @@ module.exports = function (node, settings) {
                 var docId = /\/d\/([^\/]+)/.exec(url)[1];
                 var img = h("img.be-fe-gdoc");
                 img.onerror = function () { img.style.display = "none"; };
-                img.src = "https://drive.google.com/thumbnail?id=" + docId + "&sz=w590-h354-p-k-nu";
+                img.src = "https://drive.google.com/thumbnail?id=" + docId + "&sz=w590-h236-p";
                 embed = h("a", {href: url, target: "_blank"}, img);
             }
             node.insertBefore(

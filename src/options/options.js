@@ -37,7 +37,8 @@ var getSettings = function (toApply) {
         "emoji",
         "not-you",
         "confirm-delete",
-        "show-group-admins"
+        "show-group-admins",
+        "docs-preview"
     ];
     // Настройки, выключенные по умолчанию
     var offSettings = [
