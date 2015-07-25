@@ -54,6 +54,7 @@ function showInfoWin(username, wrapper, reloadAlert) {
             }
 
             var isUser = (inf.type === "user"); // or "group"
+            var isPrivate = (inf.isPrivate === "1");
 
             var role = iAm.whoIs(inf.username),
                 roleText;
@@ -78,7 +79,7 @@ function showInfoWin(username, wrapper, reloadAlert) {
             var actions = [];
             if (!(role & IAm.ME)) {
                 if (isUser) {
-                    actions.push(h("span", h("a.a-subs", (role & IAm.FRIEND) ? "Unsubscribe" : "Subscribe")));
+                    actions.push(h("span", h("a.a-subs", (role & IAm.FRIEND) ? "Unsubscribe" : (isPrivate ? "Request subs. " : "Subscribe"))));
                 } else {
                     actions.push(h("span", h("a.a-subs", (role & IAm.FRIEND) ? "Leave group" : "Join group")));
                 }
@@ -98,7 +99,10 @@ function showInfoWin(username, wrapper, reloadAlert) {
                 h("img.be-fe-userinfo-pic", {src: inf.profilePictureLargeUrl}),
                 h(".be-fe-userinfo-info",
                     h(".be-fe-userinfo-screenName", h("a.be-fe-nameFixed", {href: "/" + inf.username}, inf.screenName)),
-                    h(".be-fe-userinfo-userName", inf.username),
+                    h(".be-fe-userinfo-userName",
+                        isPrivate ? [h("i.fa.fa-lock", {title: "Private feed"}), " "] : null,
+                        inf.username
+                    ),
                     h(".be-fe-userinfo-relation", roleText)
                 ),
                 h(".be-fe-userinfo-actions", {
@@ -107,7 +111,8 @@ function showInfoWin(username, wrapper, reloadAlert) {
                     "data-subscribed": (role & IAm.FRIEND) ? "1" : "",
                     "data-posts-hidden": postsBanned ? "1" : "",
                     "data-comms-hidden": commsBanned ? "1" : "",
-                    "data-user-blocked": userBlocked ? "1" : ""
+                    "data-user-blocked": userBlocked ? "1" : "",
+                    "data-is-private": isPrivate ? "1" : ""
                 }, actions),
                 reloadMsg
             );
@@ -146,6 +151,8 @@ function linkClick(e) {
                 IAm.ready.then((iAm) => iAm.unsubscribed(username));
                 showInfoWin(username, wrapper);
             });
+        } else if (act.dataset["isPrivate"]) {
+            api.post(`/v1/users/${username}/sendRequest/`).then(() => alert("Request was sent."));
         } else {
             api.post(`/v1/users/${username}/subscribe`).then(() => {
                 IAm.ready.then((iAm) => iAm.subscribed(username));
