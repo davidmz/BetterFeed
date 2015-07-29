@@ -24,7 +24,7 @@ module.exports = function (node, settings) {
             }
 
             node.classList.add("be-fe-folded-text");
-            var link = h("a", "Read more\u2026");
+            var link = h("a.be-fe-folded-text-read-more-link", "Read more\u2026");
             var rm = node.appendChild(h(".be-fe-folded-text-read-more", link));
             if (cnt) {
                 rm.appendChild(cnt.cloneNode(true));
@@ -55,7 +55,7 @@ module.exports = function (node, settings) {
                     }
                     para.style.height = (l * lineHeight) + "px";
 
-                    var link = h("a", "Read more\u2026");
+                    var link = h("a.be-fe-folded-text-read-more-link", "Read more\u2026");
                     var rm = para.appendChild(h(".be-fe-folded-text-read-more", link));
                     link.addEventListener("click", function () {
                         node.classList.remove("be-fe-folded-text-nl");
