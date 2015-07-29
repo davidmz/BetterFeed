@@ -23,7 +23,8 @@ var getSettings = function (toApply) {
         "not-you",
         "confirm-delete",
         "show-group-admins",
-        "docs-preview"
+        "docs-preview",
+        "hide-repeated-comments-icons"
         // "block-list"
     ];
     // Настройки, выключенные по умолчанию

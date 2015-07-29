@@ -55,27 +55,42 @@
     </div>
 
     <div class="content settings hidden">
-        <p>
-            <label>
-                <input type="checkbox" value="fix-names">
-                Юзернеймы заменяются на логины пользователей.
-            </label>
-        </p>
 
-        <p>
-            <label>
-                <input type="checkbox" value="not-you">
-                Ссылка на собственный профиль показывается как скриннейм/юзернейм, а не как <em>You</em>.
-            </label>
-        </p>
+
+        <h3>Посты</h3>
 
         <p>
             <label>
                 <input type="checkbox" value="lightboxed-images">
-                Изображения по возможности открываются в «лайтбоксе» на странице FrF.
-                Ссылка из лайтбокса ведёт на страницу изображения.
+                Изображения, прикреплённые к посту, открываются в «лайтбоксе». Ссылка из лайтбокса ведёт на страницу
+                изображения.
             </label>
         </p>
+
+        <p>
+            <label>
+                <input type="checkbox" value="docs-preview">
+                Для прикреплённых документов (pdf, ppt, doc(x), xls(x), txt) показывается превью.
+            </label>
+        </p>
+
+        <p>
+            <label>
+                <input type="checkbox" value="animated-gif">
+                Вместо анимированных гифовых превьюшек показывается стоп-кадр.
+            </label>
+        </p>
+
+        <p>
+            <label>
+                <input type="checkbox" value="embed-ly">
+                Если в посте есть ссылки и нет прикреплённых файлов, то после тела поста добавляется краткое превью
+                страницы по
+                ссылке.
+            </label>
+        </p>
+
+        <h3>Комментарии</h3>
 
         <p>
             <label>
@@ -107,10 +122,34 @@
             </label>
         </p>
 
+
         <p>
             <label>
-                <input type="checkbox" value="animated-gif">
-                Вместо анимированных гифовых превьюшек показывается стоп-кадр.
+                <input type="checkbox" value="userpics-in-comments">
+                Облачко рядом с комментарием заменяется на юзерпик автора.
+            </label>
+        </p>
+
+        <p>
+            <label>
+                <input type="checkbox" value="comment-counters">
+                При наведении мыши на комментарий показывается его порядковый номер в посте.
+            </label>
+        </p>
+
+        <p>
+            <label>
+                <input type="checkbox" value="hide-repeated-comments-icons">
+                У последовательных комментариев одного автора скрывается иконка/юзерпик комментария.
+            </label>
+        </p>
+
+        <h3>Лента постов</h3>
+
+        <p>
+            <label>
+                <input type="checkbox" value="direct-style">
+                Сообщения-директы выделяются серым фоном.
             </label>
         </p>
 
@@ -139,42 +178,8 @@
             <textarea class="form-control" id="ban-list-comms"></textarea>
         </p>
 
-        <p>
-            <label>
-                <input type="checkbox" value="userpics-in-comments">
-                Облачко рядом с комментарием заменяется на юзерпик автора.
-            </label>
-        </p>
 
-        <p>
-            <label>
-                <input type="checkbox" value="embed-ly">
-                Если в посте есть ссылки и нет аттачей, то после тела поста добавляется краткое превью страницы по
-                ссылке.
-            </label>
-        </p>
-
-        <p>
-            <label>
-                <input type="checkbox" value="docs-preview">
-                Для аттачей-документов (pdf, ppt, doc(x), xls(x), txt) показывается превью.
-            </label>
-        </p>
-
-        <p>
-            <label>
-                <input type="checkbox" value="user-info">
-                При наведении мыши на пользователя показывается окошко с краткой информацией о нём
-                и возможностью подписаться/отписаться, захайдить/расхайдить, забанить/разбанить.
-            </label>
-        </p>
-
-        <p>
-            <label>
-                <input type="checkbox" value="comment-counters">
-                При наведении мыши на комментарий показывается его порядковый номер в посте.
-            </label>
-        </p>
+        <h3>Тексты</h3>
 
         <p>
             <label>
@@ -192,15 +197,33 @@
 
         <p>
             <label>
-                <input type="checkbox" value="direct-style">
-                Сообщения-директы выделяются серым фоном.
+                <input type="checkbox" value="emoji">
+                В постах и комментариях показываются emoji (вводятся в формате `:emoji:` или как unicode-символы).
+            </label>
+        </p>
+
+
+        <h3>Прочее</h3>
+
+        <p>
+            <label>
+                <input type="checkbox" value="fix-names">
+                Юзернеймы заменяются на логины пользователей.
             </label>
         </p>
 
         <p>
             <label>
-                <input type="checkbox" value="emoji">
-                В постах и комментариях показываются emoji (вводятся в формате `:emoji:` или как unicode-символы).
+                <input type="checkbox" value="not-you">
+                Ссылка на собственный профиль показывается как скриннейм/юзернейм, а не как <em>You</em>.
+            </label>
+        </p>
+
+        <p>
+            <label>
+                <input type="checkbox" value="user-info">
+                При наведении мыши на пользователя показывается окошко с краткой информацией о нём
+                и возможностью подписаться/отписаться, захайдить/расхайдить, забанить/разбанить.
             </label>
         </p>
 

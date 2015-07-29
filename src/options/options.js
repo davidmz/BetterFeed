@@ -38,7 +38,8 @@ var getSettings = function (toApply) {
         "not-you",
         "confirm-delete",
         "show-group-admins",
-        "docs-preview"
+        "docs-preview",
+        "hide-repeated-comments-icons"
     ];
     // Настройки, выключенные по умолчанию
     var offSettings = [

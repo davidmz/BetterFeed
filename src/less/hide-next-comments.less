@@ -1,0 +1,25 @@
+.be-fe-next-comment > a.date {
+    border-bottom: none;
+    transform:     none !important;
+
+    & > * {
+        display: none;
+    }
+    &::after {
+        content:          '';
+        position:         absolute;
+        top:              35%;
+        left:             50%;
+        width:            4px;
+        height:           4px;
+        background-color: #CCC;
+        margin-left:      -2px;
+        margin-top:       -2px;
+        border-radius:    50%;
+    }
+
+    &:hover::after {
+        background-color: #999;
+    }
+}
+
