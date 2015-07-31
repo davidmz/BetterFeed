@@ -380,11 +380,13 @@ body.transition-active:before {
     }
 }
 
-.be-fe-group-admin {
+.be-fe-group-admin,
+.be-fe-mutual-friend {
     position: relative;
 }
 
-.be-fe-group-admin--crown {
+.be-fe-group-admin--crown,
+.be-fe-mutual-friend--crown {
     position:          absolute;
     top:               -11px;
     right:             17px;
@@ -394,6 +396,13 @@ body.transition-active:before {
     background-size:   100%;
     -webkit-transform: rotate(45deg);
     transform:         rotate(45deg);
+}
+
+.be-fe-mutual-friend--crown {
+    right:             19px;
+    background-image:  url("https://cdn.rawgit.com/davidmz/BetterFeed/v1.23.0/images/emoji/basic/star.png");
+    -webkit-transform: none;
+    transform:         none;
 }
 
 .embedly-card > div {
