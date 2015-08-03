@@ -85,16 +85,21 @@ module.exports = function (node) {
                         h("a", {href: url, target: "_blank"}, "View on VIMEO")
                     )
                 );
-            } else if (
-                url.indexOf("https://docs.google.com/document/d/") === 0
-                || url.indexOf("https://docs.google.com/spreadsheets/d/") === 0
-                || url.indexOf("https://docs.google.com/presentation/d/") === 0
-            ) {
-                var docId = /\/d\/([^\/]+)/.exec(url)[1];
+            } else if ((m = /^https:\/\/docs\.google\.com\/(document|spreadsheets|presentation|drawings)\/d\/([^\/]+)/.exec(url)) !== null) {
+                // var docType = m[1];
+                var docId = m[2];
                 var img = h("img.be-fe-gdoc");
                 img.onerror = function () { img.style.display = "none"; };
                 img.src = "https://drive.google.com/thumbnail?id=" + docId + "&sz=w590-h236-p";
                 embed = h("a", {href: url, target: "_blank"}, img);
+
+            } else if ((m = /^https:\/\/itunes\.apple\.com\/app\/id(\d+)/.exec(url)) !== null) {
+                embed = h(`iframe`, {
+                    src: `https://widgets.itunes.apple.com/widget.html?c=us&brc=FFFFFF&blc=FFFFFF&trc=FFFFFF&tlc=FFFFFF&d=&t=&m=software&e=software,iPadSoftware&w=325&h=300&ids=${m[1]}&wt=discovery&partnerId=&affiliate_id=&at=&ct=`,
+                    frameborder: "0"
+                });
+                embed.style.cssText = "overflow-x:hidden;overflow-y:hidden;width:325px;height: 300px;border:0px";
+
             } else {
                 embed = h("a.embedly-card", {href: link.href, "data-card-width": "60%"});
             }
