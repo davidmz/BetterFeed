@@ -61,7 +61,8 @@ module.exports = function (node) {
                     h(`.be-fe-embed-video-wrapper`,
                         h(`iframe`, {
                             src: `https://www.youtube.com/embed/${id}?rel=0&hd=1&fs=1`,
-                            frameborder: "0"
+                            frameborder: "0",
+                            allowfullscreen: ""
                         })
                     ),
                     h(`.be-fe-embed-byline`,
@@ -76,7 +77,8 @@ module.exports = function (node) {
                     h(`.be-fe-embed-video-wrapper`,
                         h(`iframe`, {
                             src: `https://player.vimeo.com/video/${id}`,
-                            frameborder: "0"
+                            frameborder: "0",
+                            allowfullscreen: ""
                         })
                     ),
                     h(`.be-fe-embed-byline`,
