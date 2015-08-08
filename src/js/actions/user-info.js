@@ -72,7 +72,7 @@ function showInfoWin(username, wrapper, reloadAlert) {
                 roleText = "Your mutual friend";
             }
 
-            if (!isUser && inf.administratorIds.indexOf(iAm.myID) !== -1) {
+            if (!isUser && inf.administrators.indexOf(iAm.myID) !== -1) {
                 roleText = "Your group";
             }
 

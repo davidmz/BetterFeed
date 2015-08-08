@@ -51,10 +51,8 @@ function decorateGroupAdmins(userName, node) {
             var inf = resp[0].users, subscr = resp[1];
             if (!inf.id || inf.type !== "group") return;
 
-            var admIds = ("administratorIds" in inf) ? inf.administratorIds : inf.administrators;
-
             subscr.subscribers
-                .filter((s) => (admIds.indexOf(s.id) !== -1))
+                .filter((s) => (inf.administrators.indexOf(s.id) !== -1))
                 .map((s) => s.username)
                 .forEach((username) => {
                     var a = document.querySelector(`.p-user-subscriber a[href="/${username}"]:not(.be-fe-group-admin)`);
