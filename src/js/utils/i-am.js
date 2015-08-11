@@ -44,25 +44,31 @@ IAm.prototype.unblocked = function (userId) {
     if (p !== -1) this.banIds.splice(p, 1);
 };
 
-IAm.ready = api.get('/v1/users/whoami').then(function (resp) {
-    var iAm = new IAm();
-    iAm.me = resp.users.username;
-    iAm.myID = resp.users.id;
-    iAm.myScreenName = resp.users.screenName;
-    uPics.setPic(resp.users.username, resp.users.profilePictureMediumUrl);
-    iAm.friends = resp.subscribers.map(function (it) {
-        uPics.setPic(it.username, it.profilePictureMediumUrl);
-        return it.username;
-    });
-    iAm.banIds = resp.users.banIds;
+IAm.ready = null;
 
-    return api.get('/v1/users/' + iAm.me + '/subscribers').then(function (resp) {
-        iAm.readers = resp.subscribers.map(function (it) {
+IAm.update = () => {
+    IAm.ready = api.get('/v1/users/whoami').then(function (resp) {
+        var iAm = new IAm();
+        iAm.me = resp.users.username;
+        iAm.myID = resp.users.id;
+        iAm.myScreenName = resp.users.screenName;
+        uPics.setPic(resp.users.username, resp.users.profilePictureMediumUrl);
+        iAm.friends = resp.subscribers.map(function (it) {
             uPics.setPic(it.username, it.profilePictureMediumUrl);
             return it.username;
         });
-        return iAm;
+        iAm.banIds = resp.users.banIds;
+
+        return api.get('/v1/users/' + iAm.me + '/subscribers').then(function (resp) {
+            iAm.readers = resp.subscribers.map(function (it) {
+                uPics.setPic(it.username, it.profilePictureMediumUrl);
+                return it.username;
+            });
+            return iAm;
+        });
     });
-});
+};
+
+IAm.update();
 
 module.exports = IAm;

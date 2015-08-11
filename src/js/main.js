@@ -5,7 +5,8 @@ function start() {
 
     var actions = [
         require("./actions/settings-link"),
-        require("./actions/comments-common")
+        require("./actions/comments-common"),
+        require("./actions/iam-common")
     ];
 
     settingsStore.init();
