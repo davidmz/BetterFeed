@@ -10,6 +10,7 @@ module.exports = function (node, settings) {
     node = node || document.body;
 
     var useScreenNames = !settings["fix-names"];
+    var useScreenNamesAndLogins = (useScreenNames && settings["show-usernames"]);
 
     forSelect(node, ".timeline-post-container:not(.be-fe-where-from)", function (node) {
         node.classList.add("be-fe-where-from");
@@ -70,19 +71,29 @@ module.exports = function (node, settings) {
                                     links.push(", ");
                                 }
                             }
-                            links.push(h("a.be-fe-nameFixed", {href: "/" + u}, names[u]));
+                            let ht = [names[u]];
+                            if (useScreenNamesAndLogins && names[u] !== u) {
+                                ht.push(h("$", " ", h("span.be-fe-username", "(", u, ")")))
+                            }
+                            links.push(h("a.be-fe-nameFixed", {href: "/" + u}, ht));
                         });
                     } else {
                         users.slice(0, 3).forEach(function (u, i) {
                             if (i > 0) {
                                 links.push(", ");
                             }
-                            links.push(h("a.be-fe-nameFixed", {href: "/" + u}, names[u]));
+                            let ht = [names[u]];
+                            if (useScreenNamesAndLogins && names[u] !== u) {
+                                ht.push(h("$", " ", h("span.be-fe-username", "(", u, ")")))
+                            }
+                            links.push(h("a.be-fe-nameFixed", {href: "/" + u}, ht));
                         });
                         links.push(" and " + (users.length - 3) + " other");
                     }
 
-                    node.querySelector(".title > div").appendChild(h("span.be-fe-from-whom", " (via ", links, ")"));
+                    node.querySelector(".title > div").appendChild(h("span.be-fe-from-whom", " via ", links));
+                } else {
+                    node.querySelector(".title > div").appendChild(h("span.be-fe-from-whom", " via somebody"));
                 }
             });
         });

@@ -40,7 +40,8 @@ var getSettings = function (toApply) {
         "show-group-admins",
         "docs-preview",
         "hide-repeated-comments-icons",
-        "datetime"
+        "datetime",
+        "show-usernames"
     ];
     // Настройки, выключенные по умолчанию
     var offSettings = [

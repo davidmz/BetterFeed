@@ -18,7 +18,7 @@ function isNakedA(el) {
     var link;
     if (el.nodeName == "A") {
         link = el;
-    } else if (el.nodeName == "IMG" && el.parentNode.nodeName == "A") {
+    } else if ((el.nodeName == "IMG" || el.classList.contains("be-fe-username") ) && el.parentNode.nodeName == "A") {
         link = el.parentNode;
     } else {
         return null;

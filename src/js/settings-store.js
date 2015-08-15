@@ -25,7 +25,8 @@ var getSettings = function (toApply) {
         "show-group-admins",
         "docs-preview",
         "hide-repeated-comments-icons",
-        "datetime"
+        "datetime",
+        "show-usernames"
         // "block-list"
     ];
     // Настройки, выключенные по умолчанию

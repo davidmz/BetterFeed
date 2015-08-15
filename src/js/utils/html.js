@@ -6,6 +6,7 @@ var isArray = require("./is-array");
  * h("tag.class", {attr: val})
  * h("tag.class")
  * h(".class") // div
+ * h("$") // document fragment
  *
  * Класс, заданный через атрибуты, перекрывает классы из строки тегов
  *
@@ -18,9 +19,14 @@ module.exports = function (tagName, attrs, children) {
     var i, k;
     var tagParts = tagName.split(".");
     var tn = tagParts.shift() || "div";
-    var el = document.createElement(tn);
-    if (tagParts.length > 0) {
-        el.className = tagParts.join(" ");
+    var el;
+    if (tn === "$") {
+        el = document.createDocumentFragment();
+    } else {
+        el = document.createElement(tn);
+        if (tagParts.length > 0) {
+            el.className = tagParts.join(" ");
+        }
     }
 
     var chStart = 1;
