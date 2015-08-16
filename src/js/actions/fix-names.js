@@ -21,7 +21,7 @@ module.exports = function (node, settings) {
         if (!node.hasAttribute("href")) return;
         node.classList.add("be-fe-nameFixed");
         var login = node.getAttribute("href").substr(1);
-        var name = node.innerHTML;
+        var name = node.textContent;
         var h;
         if (showLoginOnly) {
             h = escapeHTML(login);
