@@ -405,8 +405,12 @@ body.transition-active:before {
     transform:         none;
 }
 
-.embedly-card-hug > div {
-    display: none !important;
+.embedly-card-hug {
+    margin: 5px 0 !important;
+
+    & > div {
+        display: none !important;
+    }
 }
 
 .post-body .general-attachments .attachment {
