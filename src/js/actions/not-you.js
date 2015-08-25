@@ -9,7 +9,7 @@ module.exports = function (node, settings) {
 
     IAm.ready.then((iAm) => {
         forSelect(node, `a[href='/${iAm.me}']`, (node) => {
-            if (node.firstElementChild && node.firstElementChild.nodeName == "IMG") return;
+            if (node.firstElementChild && (node.firstElementChild.nodeName == "IMG" || node.firstElementChild.nodeName == "DIV")) return;
             var h = escapeHTML(iAm.myScreenName);
             if (settings["show-usernames"] && iAm.me !== iAm.myScreenName) {
                 h += ` <span class="be-fe-username">(${escapeHTML(iAm.me)})</span>`;
