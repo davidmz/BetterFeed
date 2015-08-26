@@ -30,5 +30,25 @@ module.exports = function (node) {
                 node.firstChild
             );
         }
+
+        if (fileExt === "mp4") {
+            let v = h("video");
+            v.addEventListener("loadedmetadata", () => {
+                var sw = v.videoWidth;
+                var sh = v.videoHeight;
+                var max = Math.max(sw, sh);
+                if (max > 400) {
+                    sw *= 400 / max;
+                    sh *= 400 / max;
+                }
+                v.width = sw;
+                v.height = sh;
+                v.controls = true;
+
+                node.classList.add("be-fe-with-preview");
+                node.insertBefore(h(".be-fe-video-view-wrapper", v), node.firstChild);
+            });
+            v.src = link.href;
+        }
     });
 };
