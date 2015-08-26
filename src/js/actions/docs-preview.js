@@ -44,6 +44,7 @@ module.exports = function (node) {
                 v.width = sw;
                 v.height = sh;
                 v.controls = true;
+                v.loop = true;
 
                 node.classList.add("be-fe-with-preview");
                 node.insertBefore(h(".be-fe-video-view-wrapper", v), node.firstChild);
