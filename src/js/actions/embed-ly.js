@@ -102,13 +102,47 @@ module.exports = function (node) {
                 });
                 embed.style.cssText = "overflow-x:hidden;overflow-y:hidden;width:325px;height: 300px;border:0px";
 
+            } else if ((m = /^https?:\/\/coub\.com\/view\/([^\/?#]+)/.exec(url)) !== null) {
+                let id = m[1];
+                embed = new Promise((resolve) => {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('GET', `https://davidmz.me/oembed/coub/oembed.json?url=${encodeURIComponent(url)}`);
+                    xhr.responseType = 'json';
+                    xhr.onload = function () {
+                        var width = parseInt(xhr.response.width);
+                        var height = parseInt(xhr.response.height);
+                        if (width > 450) {
+                            height = Math.round(height * 450 / width);
+                            width = 450;
+                        }
+                        resolve(
+                            h("div",
+                                h("iframe", {
+                                    src: `https://coub.com/embed/${id}?muted=false&autostart=false&originalSize=false&hideTopBar=false&startWithHD=true`,
+                                    allowfullscreen: "true",
+                                    frameborder: "0",
+                                    style: `width: ${width}px; height: ${height}px;`
+                                }),
+                                h(`.be-fe-embed-byline`,
+                                    h("a", {href: url, target: "_blank"}, "View on COUB")
+                                )
+                            )
+                        );
+                    };
+                    xhr.send();
+                });
+
             } else {
                 embed = h("a.embedly-card", {href: link.href, "data-card-width": "60%"});
             }
-            node.insertBefore(
-                h(".be-fe-embeds", embed),
-                bodyNext
-            );
+
+            if ("then" in embed) {
+                embed.then(el => {
+                    node.insertBefore(h(".be-fe-embeds", el), bodyNext);
+                });
+            } else {
+                node.insertBefore(h(".be-fe-embeds", embed), bodyNext);
+            }
             return true;
         });
     });
