@@ -1,6 +1,18 @@
-var BanList = require("./utils/ban-list");
+/**
+ * Структура настроек:
+ * localStorage["bfSettings"] = {
+ *      "user-id": {
+ *          "actions": {"fix-names": true, …},
+ *          …other settings
+ *      }
+ * };
+ *
+ */
 
-var getSettings = function (toApply) {
+import userId from "./utils/current-user-id.js";
+import hideTools from "./utils/hide-tools.js";
+
+var getSettingsActions = function (toApply) {
     var settingsNames = [
         "fix-names",
         "lightboxed-images",
@@ -44,7 +56,7 @@ var getSettings = function (toApply) {
 
 var settingsStoreZero = {
     init: function () {},
-    loadSettings: function () { return new Promise(function (resolve) { setTimeout(function () { resolve(getSettings()); }, 0); }); },
+    loadSettings: function () { return new Promise(function (resolve) { setTimeout(function () { resolve(getSettingsActions()); }, 0); }); },
     saveSettings: function (settings) { return new Promise(function (resolve) { setTimeout(resolve, 0); }); }
 };
 
@@ -106,15 +118,27 @@ var settingsStorePage = {
                 xhr.send();
             }
         });
+
+        // переход со старой системы настроек
+        if (!("bfSettings" in localStorage)) {
+            let settings = {};
+            settings[userId] = {
+                actions: getSettingsActions(JSON.parse(localStorage['ffc-sac-settings'])),
+                banPosts: hideTools.postsBanList.get(),
+                banComms: hideTools.commsBanList.get(),
+                hideAlienPosts: (localStorage["be-fe.hide-alien-posts"] === "1")
+            };
+            localStorage["bfSettings"] = JSON.stringify(settings);
+        }
     },
 
     loadSettings: function () {
         return new Promise(function (resolve) {
             var settings;
             try {
-                settings = getSettings(JSON.parse(localStorage['ffc-sac-settings']));
+                settings = getSettingsActions(JSON.parse(localStorage['ffc-sac-settings']));
             } catch (e) {
-                settings = getSettings();
+                settings = getSettingsActions();
             }
             resolve(settings);
         });
@@ -133,7 +157,7 @@ var settingsStoreFrame = {
         this.parentOrigin = "https://freefeed.net";
         window.addEventListener('message', function (event) {
             if (event.origin === self.parentOrigin && self.loadResolver !== null) {
-                self.loadResolver(getSettings(event.data));
+                self.loadResolver(getSettingsActions(event.data));
                 self.loadResolver = null;
             }
         });

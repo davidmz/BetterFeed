@@ -1,3 +1,5 @@
+import userId from "./utils/current-user-id.js";
+
 function start() {
     require('../less/main.less');
 
@@ -38,6 +40,8 @@ if (!/^\/(attachments|files)\//.test(location.pathname)) {
 
     if (!MutationObserver || !Promise) {
         console.error("Can not start BetterFeed: MutationObserver & Promise not supported");
+    } else if (userId === null) {
+        console.error("Can not start BetterFeed: user not logged in");
     } else if (!("__BetterFeed" in window)) {
         window.__BetterFeed = {};
         start();
