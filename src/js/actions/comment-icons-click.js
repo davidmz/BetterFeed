@@ -1,4 +1,5 @@
-var closestParent = require("../utils/closest-parent");
+import closestParent from "../utils/closest-parent";
+import matches from "../utils/matches.js";
 
 module.exports = function (node) {
     if (node === undefined) {
@@ -7,7 +8,7 @@ module.exports = function (node) {
 };
 
 var quoteEventHandler = function (e) {
-    if (!e.target.matches(".comment .date") && !(e.target.parentNode && e.target.parentNode.matches(".comment .date")) || e.button != 0) return;
+    if (!matches(e.target, ".comment .date") && !(e.target.parentNode && matches(e.target.parentNode, ".comment .date")) || e.button != 0) return;
     e.preventDefault();
     var caps = null;
 

@@ -1,18 +1,23 @@
-var IAm = require("../utils/i-am");
-var api = require("../utils/api");
-var forSelect = require("../utils/for-select");
-var h = require("../utils/html");
+import IAm from "../utils/i-am";
+import api from "../utils/api";
+import forSelect from "../utils/for-select";
+import h from "../utils/html";
 
-module.exports = function (node, settings) {
+/**
+ *
+ * @param {HTMLElement|null} node
+ * @param {Settings} settings
+ */
+export default function (node, settings) {
     // включаемся только на френдленте
     if (location.pathname !== "/") return;
 
     node = node || document.body;
 
-    var useScreenNames = !settings["fix-names"];
-    var useScreenNamesAndLogins = (useScreenNames && settings["show-usernames"]);
+    var useScreenNames = !settings.flag("fix-names");
+    var useScreenNamesAndLogins = (useScreenNames && settings.flag("show-usernames"));
 
-    forSelect(node, ".timeline-post-container:not(.be-fe-where-from)", function (node) {
+    forSelect(node, ".timeline-post-container:not(.be-fe-where-from)", node => {
         node.classList.add("be-fe-where-from");
 
         // автор поста
@@ -25,7 +30,7 @@ module.exports = function (node, settings) {
         var postId = pp[1];
 
         var postTargets = [];
-        forSelect(node, ".title a", function (node) {
+        forSelect(node, ".title a", node => {
             var u = node.getAttribute("href").substr(1);
             if (u !== postAuthor) {
                 postTargets.push(u);
@@ -35,7 +40,7 @@ module.exports = function (node, settings) {
         node.classList.add("be-fe-post-from-u-" + postAuthor);
         node.dataset["postAuthor"] = postAuthor;
 
-        IAm.ready.then(function (iAm) {
+        IAm.ready.then(iAm => {
             if (iAm.whoIs(postAuthor) & (IAm.ME | IAm.FRIEND)) return;
 
             // пост в мои группы?
@@ -46,24 +51,22 @@ module.exports = function (node, settings) {
             node.classList.add("be-fe-post-from-alien");
 
             // пытаемся выяснить, почему мы это видим
-            api.get('/v1/posts/' + postId + '?maxLikes=all').then(function (postInfo) {
+            api.get('/v1/posts/' + postId + '?maxLikes=all').then(postInfo => {
                 var names = {};
                 var users = postInfo.users
-                        .map(function (uu) {
+                        .map(uu => {
                             names[uu.username] = useScreenNames ? uu.screenName : uu.username;
                             return uu.username;
                         })
-                        .filter(function (u) {
-                            return !!(iAm.whoIs(u) & (IAm.ME | IAm.FRIEND));
-                        })
-                        .filter(function (v, i, a) { return a.indexOf(v) === i;}) // http://stackoverflow.com/questions/1960473/unique-values-in-an-array#answer-14438954
+                        .filter(u => !!(iAm.whoIs(u) & (IAm.ME | IAm.FRIEND)))
+                        .filter((v, i, a) => a.indexOf(v) === i) // http://stackoverflow.com/questions/1960473/unique-values-in-an-array#answer-14438954
                     ;
 
                 if (users.length > 0) {
                     var links = [];
                     if (users.length < 5) {
                         // просто показываем всех
-                        users.forEach(function (u, i) {
+                        users.forEach((u, i) => {
                             if (i > 0) {
                                 if (i == users.length - 1) {
                                     links.push(" and ");
@@ -78,7 +81,7 @@ module.exports = function (node, settings) {
                             links.push(h("a.be-fe-nameFixed", {href: "/" + u}, ht));
                         });
                     } else {
-                        users.slice(0, 3).forEach(function (u, i) {
+                        users.slice(0, 3).forEach((u, i) => {
                             if (i > 0) {
                                 links.push(", ");
                             }
@@ -102,12 +105,12 @@ module.exports = function (node, settings) {
 
 
 function getPostInfo(postId) {
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve, reject) => {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', '/v1/posts/' + postId + '?maxLikes=all');
         xhr.responseType = 'json';
         xhr.setRequestHeader('X-Authentication-Token', localStorage["authToken"]);
-        xhr.onload = function () {
+        xhr.onload = () => {
             if ("err" in xhr.response) {
                 reject(xhr.response.err);
                 return;

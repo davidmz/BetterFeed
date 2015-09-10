@@ -1,7 +1,12 @@
-var fixer = require("./fix-names");
+import fixer from "./fix-names";
 
-module.exports = function (node, settings) {
-    if (!settings["fix-names"]) {
+/**
+ *
+ * @param {HTMLElement|null} node
+ * @param {Settings} settings
+ */
+export default function (node, settings) {
+    if (!settings.flag("fix-names")) {
         fixer(node, settings);
     }
 };

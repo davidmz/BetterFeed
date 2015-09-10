@@ -1,11 +1,17 @@
 require('../../less/userpics-in-comments.less');
-var forSelect = require("../utils/for-select");
-var uPics = require("../utils/userpics");
+import forSelect from "../utils/for-select";
+import uPics from "../utils/userpics";
+import matches from "../utils/matches.js";
 
 var myLogin = null;
 
-module.exports = function (node, settings) {
-    if (!node && settings["colored-comment-icons"]) {
+/**
+ *
+ * @param {HTMLElement|null} node
+ * @param {Settings} settings
+ */
+export default function (node, settings) {
+    if (!node && settings.flag("colored-comment-icons")) {
         require('../../less/colored-userpics-in-comments.less');
     }
 
@@ -18,12 +24,12 @@ module.exports = function (node, settings) {
         }
     }
 
-    forSelect(node, ".comment a.date:not(.be-fe-with-pic)", function (node) {
+    forSelect(node, ".comment a.date:not(.be-fe-with-pic)", node => {
         node.classList.add("be-fe-with-pic");
         var comment = node.parentNode;
         var username = comment.dataset["author"];
         if (!username) {
-            if (comment.matches(".p-timeline-comment") && myLogin) {
+            if (matches(comment, ".p-timeline-comment") && myLogin) {
                 username = myLogin;
                 comment.classList.add("be-fe-comment-from-me");
                 comment.classList.add("be-fe-comment-from");
@@ -33,6 +39,6 @@ module.exports = function (node, settings) {
         }
         var img = node.appendChild(new Image());
         img.className = "be-fe-userpic";
-        uPics.getPic(username).then(function (picUrl) { img.src = picUrl; });
+        uPics.getPic(username).then(picUrl => img.src = picUrl);
     });
 };

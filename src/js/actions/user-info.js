@@ -4,15 +4,18 @@ var closestParent = require("../utils/closest-parent");
 var api = require("../utils/api");
 var promPlus = require("../utils/promise-tools");
 var IAm = require("../utils/i-am");
-var hideTools = require("../utils/hide-tools");
+import Hider from "../utils/hide-tools.js";
 
-var timeToShow = 1000,
+const timeToShow = 1000,
     timeToHide = 500,
     wrapClass = "be-fe-userinfo-wrapper",
-    timerShow = null,
+    defaultPic = "https://freefeed.net/img/default-userpic-75.png";
+
+var timerShow = null,
     timerHide = null,
-    defaultPic = "https://freefeed.net/img/default-userpic-75.png",
-    canHide = false;
+    canHide = false,
+    settings = null,
+    hideTools = null;
 
 function isNakedA(el) {
     var link;
@@ -84,8 +87,8 @@ function showInfoWin(username, wrapper, reloadAlert) {
                     actions.push(h("span", h("a.a-subs", (role & IAm.FRIEND) ? "Leave group" : "Join group")));
                 }
                 if (canHide && isUser) {
-                    var postsBanned = hideTools.postsBanList.contains(inf.username);
-                    var commsBanned = hideTools.commsBanList.contains(inf.username);
+                    var postsBanned = settings.banPosts.has(inf.username);
+                    var commsBanned = settings.banComms.has(inf.username);
                     var userBlocked = iAm.isBanned(inf.id);
                     actions.push(h("span", h("a.a-hide-posts", postsBanned ? "Show posts" : "Hide posts")));
                     actions.push(h("span", h("a.a-hide-comms", commsBanned ? "Show comms." : "Hide comms.")));
@@ -210,12 +213,18 @@ function linkMouseOut(e) {
     }
 }
 
-module.exports = function (node, settings) {
-
+/**
+ *
+ * @param {HTMLElement|null} node
+ * @param {Settings} stngs
+ */
+export default function (node, stngs) {
     if (!node) {
+        settings = stngs;
+        hideTools = new Hider(stngs);
         document.body.addEventListener("mouseover", linkMouseOver);
         document.body.addEventListener("mouseout", linkMouseOut);
         document.body.addEventListener("click", linkClick);
-        canHide = settings["hide"];
+        canHide = stngs.flag("hide");
     }
 };

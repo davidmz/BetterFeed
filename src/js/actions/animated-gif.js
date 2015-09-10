@@ -1,18 +1,18 @@
-var forSelect = require("../utils/for-select");
+import forSelect from "../utils/for-select";
 
-module.exports = function (node) {
+export default function (node, settings) {
     node = node || document.body;
 
-    forSelect(node, "img.p-attachment-thumbnail[src$='.gif'][src*='/attachments/']:not(.be-fe-gif)", function (img) {
+    forSelect(node, "img.p-attachment-thumbnail[src$='.gif'][src*='/attachments/']:not(.be-fe-gif)", img => {
         img.classList.add("be-fe-gif");
-        isAnimatedGif(img.src).then(function () {
+        isAnimatedGif(img.src).then(() => {
             img.parentNode.classList.add("be-fe-gif-ani");
             if (img.complete) {
                 drawImage(img);
             } else {
-                img.addEventListener("load", drawImage.bind(null, img));
+                img.addEventListener("load", () => drawImage(img));
             }
-        }, function () {});
+        }, () => {});
     });
 };
 
@@ -33,11 +33,11 @@ function drawImage(img) {
 
 // https://gist.github.com/lakenen/3012623
 function isAnimatedGif(src) {
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve, reject) => {
         var request = new XMLHttpRequest();
         request.open('GET', src, true);
         request.responseType = 'arraybuffer';
-        request.addEventListener('load', function () {
+        request.addEventListener('load', () => {
             var arr = new Uint8Array(request.response),
                 i, len, length = arr.length, frames = 0;
 

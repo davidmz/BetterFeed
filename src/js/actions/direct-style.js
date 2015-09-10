@@ -1,7 +1,12 @@
-var forSelect = require("../utils/for-select");
+import forSelect from "../utils/for-select";
 require('../../less/direct-style.less');
 
-module.exports = function (node, settings) {
+/**
+ *
+ * @param {HTMLElement|null} node
+ * @param {Settings} settings
+ */
+export default function (node, settings) {
     node = node || document.body;
 
     forSelect(node, ".direct-post > .title", (title) => {
@@ -18,7 +23,7 @@ module.exports = function (node, settings) {
         }
 
         addressees
-            .filter((a) => {
+            .filter(a => {
                 return (!a.classList.contains("post-addressee-direct") || a.getAttribute("href") != authorHref);
             })
             .forEach((a, n, arr) => {
@@ -26,7 +31,7 @@ module.exports = function (node, settings) {
                     p.appendChild(document.createTextNode((n === arr.length - 1) ? " and " : ", "));
                 }
                 p.appendChild(a);
-                if (settings["fix-names"] && a.getAttribute("href") === authorHref) {
+                if (settings.flag("fix-names") && a.getAttribute("href") === authorHref) {
                     p.appendChild(document.createTextNode("\u2019" + ((authorHref.substr(-1) !== "s") ? "s" : "") + " feed"));
                 }
             });

@@ -21,6 +21,22 @@ webpack({
 }, function (err, stats) { if (err !== null) console.log(err);});
 
 webpack({
+    entry: './src/js/options.js',
+    output: {
+        path: './build',
+        filename: 'options.min.js'
+    },
+    module: {
+        loaders: [
+            {test: /\.js$/, exclude: /(node_modules|bower_components)/, loader: 'babel'}
+        ]
+    },
+    plugins: [
+        new webpack.optimize.UglifyJsPlugin({})
+    ]
+}, function (err, stats) { if (err !== null) console.log(err);});
+
+webpack({
     entry: './src/bootstrap.js',
     output: {
         path: './build',

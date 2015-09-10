@@ -1,26 +1,33 @@
-var h = require("../utils/html");
+import h from "../utils/html";
 
-setInterval(function () {
-    var hideAliens = !!localStorage["be-fe.hide-alien-posts"];
-    var chk = document.body.querySelector(".be-fe-hide-aliens-switcher input");
-    var posts = document.body.querySelector(".posts");
-    var counter = document.body.querySelector(".be-fe-hide-aliens-counter");
+/**
+ *
+ * @param {HTMLElement|null} node
+ * @param {Settings} settings
+ */
+export default function (node, settings) {
+    if (!settings.flag("where-this-post-from")) return;
 
-    if (chk && chk.checked !== hideAliens) chk.checked = hideAliens;
-    if (posts && posts.classList.contains("be-fe-hide-aliens") !== hideAliens) {
-        if (hideAliens) {
-            posts.classList.add("be-fe-hide-aliens");
-        } else {
-            posts.classList.remove("be-fe-hide-aliens");
-        }
+    if (node === undefined) {
+        setInterval(function () {
+            var hideAliens = settings.hideAlienPosts;
+            var chk = document.body.querySelector(".be-fe-hide-aliens-switcher input");
+            var posts = document.body.querySelector(".posts");
+            var counter = document.body.querySelector(".be-fe-hide-aliens-counter");
+
+            if (chk && chk.checked !== hideAliens) chk.checked = hideAliens;
+            if (posts && posts.classList.contains("be-fe-hide-aliens") !== hideAliens) {
+                if (hideAliens) {
+                    posts.classList.add("be-fe-hide-aliens");
+                } else {
+                    posts.classList.remove("be-fe-hide-aliens");
+                }
+            }
+            if (counter && posts) {
+                counter.innerHTML = posts.querySelectorAll(".be-fe-post-from-alien").length;
+            }
+        }, 500);
     }
-    if (counter && posts) {
-        counter.innerHTML = posts.querySelectorAll(".be-fe-post-from-alien").length;
-    }
-}, 500);
-
-module.exports = function (node, settings) {
-    if (!settings["where-this-post-from"]) return;
 
     // включаемся только на френдленте
     if (location.pathname !== "/") return;
@@ -39,11 +46,11 @@ module.exports = function (node, settings) {
                     )
                 )
             );
-            chk.addEventListener("change", function () {
-                localStorage["be-fe.hide-alien-posts"] = chk.checked ? "1" : "";
+            chk.checked = settings.hideAlienPosts;
+            chk.addEventListener("change", () => {
+                settings.hideAlienPosts = chk.checked;
+                settings.save();
             });
-
-            chk.checked = !!localStorage["be-fe.hide-alien-posts"];
         }
     }
 };

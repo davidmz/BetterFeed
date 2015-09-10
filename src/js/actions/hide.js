@@ -1,15 +1,19 @@
-var hideTools = require("../utils/hide-tools");
-var forSelect = require("../utils/for-select");
-var h = require("../utils/html");
+import forSelect from "../utils/for-select";
+import h from "../utils/html";
 
-module.exports = function (node, settings) {
-    if (!settings["where-this-post-from"]) return;
+/**
+ *
+ * @param {HTMLElement|null} node
+ * @param {Settings} settings
+ */
+export default function (node, settings) {
+    if (!settings.flag("where-this-post-from")) return;
 
     node = node || document.body;
 
-    hideTools.commsBanList.get().forEach(function (user) {
-        forSelect(node, ".be-fe-comment-from-u-" + user + ":not(.be-fe-comment-hidden)", function (node) {
+    for (let user of settings.banComms) {
+        forSelect(node, `.be-fe-comment-from-u-${user}:not(.be-fe-comment-hidden)`, node => {
             node.classList.add("be-fe-comment-hidden");
         });
-    });
+    }
 };

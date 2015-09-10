@@ -1,14 +1,19 @@
-var forSelect = require("../utils/for-select");
-var h = require("../utils/html");
+import forSelect from "../utils/for-select";
+import h from "../utils/html";
 
-var triggerHeight = 140,
+const triggerHeight = 140,
     minHeight = 100;
 
-module.exports = function (node, settings) {
+/**
+ *
+ * @param {HTMLElement|null} node
+ * @param {Settings} settings
+ */
+export default function (node, settings) {
     node = node || document.body;
 
-    if (!settings["new-lines"]) {
-        forSelect(node, ".p-timeline-post .comment-text, .p-timeline-post .body .text", function (node) {
+    if (!settings.flag("new-lines")) {
+        forSelect(node, ".p-timeline-post .comment-text, .p-timeline-post .body .text", node => {
             if (node.offsetHeight < triggerHeight) return;
             var isComment = node.classList.contains("comment-text");
 
@@ -29,20 +34,18 @@ module.exports = function (node, settings) {
             if (cnt) {
                 rm.appendChild(cnt.cloneNode(true));
             }
-            link.addEventListener("click", function () {
-                node.classList.remove("be-fe-folded-text");
-            });
+            link.addEventListener("click", () => node.classList.remove("be-fe-folded-text"));
         });
 
     } else {
-        forSelect(node, ".p-timeline-post .comment-text, .p-timeline-post .body .text", function (node) {
+        forSelect(node, ".p-timeline-post .comment-text, .p-timeline-post .body .text", node => {
             if (node.offsetHeight < triggerHeight) return;
             var isComment = node.classList.contains("comment-text");
 
             var lineHeight = isComment ? 16 : 19;
             node.classList.add("be-fe-folded-text-nl");
             var clipPara = null;
-            forSelect(node, ":scope > p", function (para) {
+            forSelect(node, ":scope > p", para => {
                 if (!clipPara && para.offsetTop + para.offsetHeight > triggerHeight) {
                     clipPara = para;
                     para.classList.add("be-fe-folded-text-para");
@@ -57,7 +60,7 @@ module.exports = function (node, settings) {
 
                     var link = h("a.be-fe-folded-text-read-more-link", "Read more\u2026");
                     var rm = para.appendChild(h(".be-fe-folded-text-read-more", link));
-                    link.addEventListener("click", function () {
+                    link.addEventListener("click", () => {
                         node.classList.remove("be-fe-folded-text-nl");
                         clipPara.style.height = "auto";
                     });

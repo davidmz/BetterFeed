@@ -1,14 +1,19 @@
-var forSelect = require("../utils/for-select");
-var escapeHTML = require("../utils/escape-html");
-var h = require("../utils/html");
+import forSelect from "../utils/for-select";
+import escapeHTML from "../utils/escape-html";
+import h from "../utils/html";
 
 var myLogin = null;
 
-module.exports = function (node, settings) {
+/**
+ *
+ * @param {HTMLElement|null} node
+ * @param {Settings} settings
+ */
+export default function (node, settings) {
     node = node || document.body;
 
     // показывать только логины (иначе скриннеймы и логины в скобках)
-    var showLoginOnly = settings["fix-names"];
+    var showLoginOnly = settings.flag("fix-names");
 
     if (!myLogin) {
         var loggedLink = node.querySelector(".logged-user .author a");
@@ -17,7 +22,7 @@ module.exports = function (node, settings) {
         }
     }
 
-    forSelect(node, ".post-body > .title a:not(.be-fe-nameFixed), .p-comment-body .author a:not(.be-fe-nameFixed), .p-timeline-user-like > a:not(.be-fe-nameFixed)", (node) => {
+    forSelect(node, ".post-body > .title a:not(.be-fe-nameFixed), .p-comment-body .author a:not(.be-fe-nameFixed), .p-timeline-user-like > a:not(.be-fe-nameFixed)", node => {
         if (!node.hasAttribute("href")) return;
         node.classList.add("be-fe-nameFixed");
         var login = node.getAttribute("href").substr(1);
@@ -27,18 +32,18 @@ module.exports = function (node, settings) {
             h = escapeHTML(login);
         } else {
             h = escapeHTML(name);
-            if (login !== name && !(login === myLogin && !settings["not-you"])) {
+            if (login !== name && !(login === myLogin && !settings.flag("not-you"))) {
                 h += ` <span class="be-fe-username">(${escapeHTML(login)})</span>`;
             }
         }
         node.innerHTML = h;
-        if (!settings["user-info"] && showLoginOnly) {
+        if (!settings.flag("user-info") && showLoginOnly) {
             node.setAttribute("title", name);
         }
     });
 
     // особый случай: списки подписчиков/подписанных
-    forSelect(node, ".p-timeline-subscription-user, .p-timeline-sunsctiption-group, .p-user-subscriber", (node) => {
+    forSelect(node, ".p-timeline-subscription-user, .p-timeline-sunsctiption-group, .p-user-subscriber", node => {
         forSelect(node, "a[href]:not(.be-fe-nameFixed)", (node) => {
             node.classList.add("be-fe-nameFixed");
             var login = node.getAttribute("href").substr(1);
@@ -58,7 +63,7 @@ module.exports = function (node, settings) {
                 }
                 c = c.nextSibling;
             }
-            if (name !== "" && !settings["user-info"] && showLoginOnly) {
+            if (name !== "" && !settings.flag("user-info") && showLoginOnly) {
                 node.setAttribute("title", name);
             }
         });
