@@ -17,6 +17,7 @@ export default class Messenger {
 
             if (action === responseAction && this.__responders.has(requestId)) {
                 this.__responders.get(requestId)(value);
+                this.__responders.delete(requestId);
 
             } else if (this.__listeners.has(action)) {
                 let resp = this.__listeners.get(action)(value);
