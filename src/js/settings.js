@@ -1,3 +1,5 @@
+import setToArray from "./utils/set-to-array.js";
+
 /**
  * Структура настроек:
  * localStorage["bfSettings"] = {
@@ -110,8 +112,8 @@ export default class Settings {
         let s = safeJSONParse(localStorage[LS_KEY], {});
         s[this.userId] = {
             flags: this.flags,
-            banPosts: [...this.banPosts],
-            banComms: [...this.banComms],
+            banPosts: setToArray(this.banPosts),
+            banComms: setToArray(this.banComms),
             hideAlienPosts: this.hideAlienPosts
         };
         localStorage[LS_KEY] = JSON.stringify(s);
