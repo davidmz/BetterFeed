@@ -16,9 +16,7 @@ export default class {
     constructor(settings) {
         this.settings = settings;
         docLoaded.then(() => {
-            for (let user of this.settings.banPosts) {
-                style.insertRule(`.be-fe-post-from-u-${user} { display: none; }`, 0);
-            }
+            this.settings.banPosts.forEach(user => style.insertRule(`.be-fe-post-from-u-${user} { display: none; }`, 0));
         });
     }
 
@@ -45,11 +43,11 @@ export default class {
     hideCommsFrom(user) {
         this.settings.banComms.add(user);
         this.settings.save();
-        for (let u of this.settings.banComms) {
+        this.settings.banComms.forEach(u => {
             forSelect(document.body, `.be-fe-comment-from-u-${u}:not(.be-fe-comment-hidden)`, node => {
                 node.classList.add("be-fe-comment-hidden");
             });
-        }
+        });
     }
 
     showCommsFrom(user) {

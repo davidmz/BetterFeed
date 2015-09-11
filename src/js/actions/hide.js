@@ -11,9 +11,9 @@ export default function (node, settings) {
 
     node = node || document.body;
 
-    for (let user of settings.banComms) {
+    settings.banComms.forEach(user => {
         forSelect(node, `.be-fe-comment-from-u-${user}:not(.be-fe-comment-hidden)`, node => {
             node.classList.add("be-fe-comment-hidden");
         });
-    }
+    });
 };

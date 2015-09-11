@@ -22,11 +22,11 @@ function start() {
         require("./actions/iam-common")
     ];
 
-    for (let name of flagNames) {
+    flagNames.forEach(name => {
         if (settings.flag(name)) {
             actions.push(require("./actions/" + name));
         }
-    }
+    });
 
     var observer = new MutationObserver(mutations => {
         mutations.forEach(mutation => {

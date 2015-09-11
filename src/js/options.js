@@ -37,9 +37,7 @@ docLoaded.then(() => {
         var btn = e.target;
         btn.disabled = true;
 
-        for (let box of checkBoxes) {
-            settings.setFlag(box.value, box.checked);
-        }
+        checkBoxes.forEach(box => settings.setFlag(box.value, box.checked));
 
         var banList = document.getElementById("ban-list-posts").value.toLowerCase().match(/\w+/g);
         if (banList === null) banList = [];
@@ -54,9 +52,8 @@ docLoaded.then(() => {
 
     msg.send(parentWindow, parentOrigin, "getSettings").then(sData => {
         settings = new Settings(undefined, sData);
-        for (let box of checkBoxes) {
-            box.checked = settings.flag(box.value);
-        }
+        checkBoxes.forEach(box => box.checked = settings.flag(box.value));
+
         document.getElementById("ban-list-posts").value = [...settings.banPosts].join(", ");
         document.getElementById("ban-list-comms").value = [...settings.banComms].join(", ");
         sPage.classList.remove("hidden");
