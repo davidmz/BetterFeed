@@ -86,13 +86,15 @@ function showInfoWin(username, wrapper, reloadAlert) {
                 } else {
                     actions.push(h("span", h("a.a-subs", (role & IAm.FRIEND) ? "Leave group" : "Join group")));
                 }
-                if (canHide && isUser) {
+                if (canHide) {
                     var postsBanned = settings.banPosts.has(inf.username);
-                    var commsBanned = settings.banComms.has(inf.username);
-                    var userBlocked = iAm.isBanned(inf.id);
                     actions.push(h("span", h("a.a-hide-posts", postsBanned ? "Show posts" : "Hide posts")));
-                    actions.push(h("span", h("a.a-hide-comms", commsBanned ? "Show comms." : "Hide comms.")));
-                    actions.push(h("span", h("a.a-block-user", userBlocked ? "Unblock" : "Block")));
+                    if (isUser) {
+                        var commsBanned = settings.banComms.has(inf.username);
+                        var userBlocked = iAm.isBanned(inf.id);
+                        actions.push(h("span", h("a.a-hide-comms", commsBanned ? "Show comms." : "Hide comms.")));
+                        actions.push(h("span", h("a.a-block-user", userBlocked ? "Unblock" : "Block")));
+                    }
                 }
             }
 

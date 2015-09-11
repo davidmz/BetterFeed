@@ -21,23 +21,25 @@ export default function (node, settings) {
         node.classList.add("be-fe-where-from");
 
         // автор поста
-        var authorLink = node.querySelector(":scope > .avatar > a");
+        var authorLink = node.querySelector(".title a.post-author");
         if (!authorLink) return;
 
         var postAuthor = authorLink.getAttribute("href").substr(1);
+        node.classList.add("be-fe-post-from-u-" + postAuthor);
+
         var pp = node.querySelector("a.datetime").getAttribute("href").match(/^\/.+?\/([\w-]+)/);
         if (!pp) return; // удивительный случай, когда у поста нет ID в HTML
         var postId = pp[1];
 
         var postTargets = [];
-        forSelect(node, ".title a", node => {
-            var u = node.getAttribute("href").substr(1);
+        forSelect(node, ".title a", a => {
+            var u = a.getAttribute("href").substr(1);
             if (u !== postAuthor) {
                 postTargets.push(u);
+                node.classList.add("be-fe-post-from-u-" + u);
             }
         });
 
-        node.classList.add("be-fe-post-from-u-" + postAuthor);
         node.dataset["postAuthor"] = postAuthor;
 
         IAm.ready.then(iAm => {
