@@ -42,7 +42,7 @@ export default function (node, settings) {
             if (node.offsetHeight < triggerHeight) return;
             var isComment = node.classList.contains("comment-text");
 
-            var lineHeight = isComment ? 16 : 19;
+            var lineHeight = isComment ? 18 : 21;
             node.classList.add("be-fe-folded-text-nl");
             var clipPara = null;
             forSelect(node, ":scope > p", para => {
