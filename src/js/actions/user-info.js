@@ -4,6 +4,7 @@ var closestParent = require("../utils/closest-parent");
 var api = require("../utils/api");
 var promPlus = require("../utils/promise-tools");
 var IAm = require("../utils/i-am");
+import { arrHas } from "../utils/array-set.js";
 import Hider from "../utils/hide-tools.js";
 
 const timeToShow = 1000,
@@ -87,10 +88,10 @@ function showInfoWin(username, wrapper, reloadAlert) {
                     actions.push(h("span", h("a.a-subs", (role & IAm.FRIEND) ? "Leave group" : "Join group")));
                 }
                 if (canHide) {
-                    var postsBanned = settings.banPosts.has(inf.username);
+                    var postsBanned = arrHas(settings.banPosts, inf.username);
                     actions.push(h("span", h("a.a-hide-posts", postsBanned ? "Show posts" : "Hide posts")));
                     if (isUser) {
-                        var commsBanned = settings.banComms.has(inf.username);
+                        var commsBanned = arrHas(settings.banComms, inf.username);
                         var userBlocked = iAm.isBanned(inf.id);
                         actions.push(h("span", h("a.a-hide-comms", commsBanned ? "Show comms." : "Hide comms.")));
                         actions.push(h("span", h("a.a-block-user", userBlocked ? "Unblock" : "Block")));

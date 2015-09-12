@@ -1,4 +1,4 @@
-import setToArray from "./utils/set-to-array.js";
+import { arrHas } from "./utils/array-set.js";
 
 /**
  * Структура настроек:
@@ -13,7 +13,7 @@ import setToArray from "./utils/set-to-array.js";
 
 const LS_KEY = "bfSettings";
 
-export const flagNames = new Set([
+export const flagNames = [
     "fix-names",
     "lightboxed-images",
     "bottom-comment-link",
@@ -39,12 +39,12 @@ export const flagNames = new Set([
     "hide-repeated-comments-icons",
     "datetime",
     "show-usernames"
-]);
+];
 
 // Настройки, выключенные по умолчанию
-const offNames = new Set([
+const offNames = [
     "not-you"
-]);
+];
 
 export default class Settings {
     constructor(userId, sData) {
@@ -63,8 +63,8 @@ export default class Settings {
             if (!localStorage.hasOwnProperty(LS_KEY) && localStorage.hasOwnProperty("ffc-sac-settings")) {
 
                 this.flags = JSON.parse(localStorage["ffc-sac-settings"]);
-                this.banPosts = new Set(safeJSONParse(localStorage["be-fe.banList"], []));
-                this.banComms = new Set(safeJSONParse(localStorage["be-fe.banListComms"], []));
+                this.banPosts = safeJSONParse(localStorage["be-fe.banList"], []);
+                this.banComms = safeJSONParse(localStorage["be-fe.banListComms"], []);
                 this.hideAlienPosts = (localStorage["be-fe.hide-alien-posts"] === "1");
                 this.save();
 
@@ -74,8 +74,8 @@ export default class Settings {
                 let s = ss.hasOwnProperty(this.userId) ? ss[this.userId] : {};
 
                 this.flags = s.hasOwnProperty("flags") ? s.flags : {};
-                this.banPosts = new Set(s.hasOwnProperty("banPosts") ? s.banPosts : []);
-                this.banComms = new Set(s.hasOwnProperty("banComms") ? s.banComms : []);
+                this.banPosts = s.hasOwnProperty("banPosts") ? s.banPosts : [];
+                this.banComms = s.hasOwnProperty("banComms") ? s.banComms : [];
                 this.hideAlienPosts = s.hasOwnProperty("banComms") ? !!s.hideAlienPosts : false;
 
             }
@@ -88,13 +88,13 @@ export default class Settings {
      * @return {Boolean}
      */
     flag(name) {
-        if (!flagNames.has(name)) return false;
+        if (!arrHas(flagNames, name)) return false;
 
         if (this.flags.hasOwnProperty(name)) {
             return this.flags[name];
         }
 
-        return !offNames.has(name);
+        return !arrHas(offNames, name);
     }
 
     /**
@@ -103,7 +103,7 @@ export default class Settings {
      * @param {Boolean} value
      */
     setFlag(name, value) {
-        if (flagNames.has(name)) {
+        if (arrHas(flagNames, name)) {
             this.flags[name] = !!value;
         }
     }
@@ -112,8 +112,8 @@ export default class Settings {
         let s = safeJSONParse(localStorage[LS_KEY], {});
         s[this.userId] = {
             flags: this.flags,
-            banPosts: setToArray(this.banPosts),
-            banComms: setToArray(this.banComms),
+            banPosts: this.banPosts,
+            banComms: this.banComms,
             hideAlienPosts: this.hideAlienPosts
         };
         localStorage[LS_KEY] = JSON.stringify(s);

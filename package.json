@@ -1,25 +1,27 @@
 {
-    "name": "BetterFeed",
-    "version": "1.0.0",
-    "description": "FreeFeed new functions",
-    "author": "David Mzareulyan",
-    "license": "MIT",
-    "homepage": "https://github.com/davidmz/BetterFeed",
-    "devDependencies": {
-        "babel-loader": "^5.3.1",
-        "browserify": "latest",
-        "css-loader": "latest",
-        "gulp": "latest",
-        "gulp-uglify": "latest",
-        "less-loader": "latest",
-        "style-loader": "latest",
-        "vinyl-buffer": "latest",
-        "vinyl-source-stream": "latest",
-        "watchify": "latest",
-        "webpack": "latest"
-    },
-    "scripts": {
-        "build": "node build.js"
-    },
-    "dependencies": {}
+  "name": "BetterFeed",
+  "version": "1.0.0",
+  "description": "FreeFeed new functions",
+  "author": "David Mzareulyan",
+  "license": "MIT",
+  "homepage": "https://github.com/davidmz/BetterFeed",
+  "devDependencies": {
+    "babel-loader": "^5.3.1",
+    "browserify": "latest",
+    "css-loader": "latest",
+    "gulp": "latest",
+    "gulp-uglify": "latest",
+    "less-loader": "latest",
+    "style-loader": "latest",
+    "vinyl-buffer": "latest",
+    "vinyl-source-stream": "latest",
+    "watchify": "latest",
+    "webpack": "latest"
+  },
+  "scripts": {
+    "build": "node build.js"
+  },
+  "dependencies": {
+    "babel": "^5.8.23"
+  }
 }

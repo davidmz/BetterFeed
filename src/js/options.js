@@ -2,7 +2,6 @@ import Settings  from "./settings.js";
 import Messenger from "./utils/message-rpc.js";
 import docLoaded from "./utils/doc-loaded.js";
 import forSelect from "./utils/for-select.js";
-import setToArray from "./utils/set-to-array.js";
 
 const parentWindow = (window.parent === window) ? window.opener : window.parent;
 
@@ -42,11 +41,11 @@ docLoaded.then(() => {
 
         var banList = document.getElementById("ban-list-posts").value.toLowerCase().match(/\w+/g);
         if (banList === null) banList = [];
-        settings.banPosts = new Set(banList);
+        settings.banPosts = banList;
 
         banList = document.getElementById("ban-list-comms").value.toLowerCase().match(/\w+/g);
         if (banList === null) banList = [];
-        settings.banComms = new Set(banList);
+        settings.banComms = banList;
 
         msg.send(parentWindow, parentOrigin, "saveSettings", settings).then(() => btn.disabled = false);
     });
@@ -55,8 +54,8 @@ docLoaded.then(() => {
         settings = new Settings(undefined, sData);
         checkBoxes.forEach(box => box.checked = settings.flag(box.value));
 
-        document.getElementById("ban-list-posts").value = setToArray(settings.banPosts).join(", ");
-        document.getElementById("ban-list-comms").value = setToArray(settings.banComms).join(", ");
+        document.getElementById("ban-list-posts").value = settings.banPosts.join(", ");
+        document.getElementById("ban-list-comms").value = settings.banComms.join(", ");
         sPage.classList.remove("hidden");
         sPage.previousElementSibling.classList.add("hidden");
     });

@@ -2,6 +2,7 @@ import forSelect from "../utils/for-select";
 import h from "../utils/html";
 import docLoaded from "./doc-loaded";
 import Settings from "../settings.js";
+import { arrAdd, arrDel } from "./array-set.js";
 
 var style = null;
 
@@ -9,7 +10,7 @@ docLoaded.then(() => {
     style = document.head.appendChild(h("style.be-fe-banlist")).sheet;
 });
 
-export default class {
+export default class Hider {
     /**
      * @param {Settings} settings
      */
@@ -21,14 +22,14 @@ export default class {
     }
 
     hidePostsFrom(user) {
-        this.settings.banPosts.add(user);
+        arrAdd(this.settings.banPosts, user);
         this.settings.save();
         style.insertRule(`.be-fe-post-from-u-${user} { display: none; }`, 0);
     }
 
 
     showPostsFrom(user) {
-        this.settings.banPosts.delete(user);
+        arrDel(this.settings.banPosts, user);
         this.settings.save();
         const selector = `.be-fe-post-from-u-${user}`;
         Array.prototype.slice.call(style.rules).some((rule, n) => {
@@ -41,7 +42,7 @@ export default class {
     }
 
     hideCommsFrom(user) {
-        this.settings.banComms.add(user);
+        arrAdd(this.settings.banComms, user);
         this.settings.save();
         this.settings.banComms.forEach(u => {
             forSelect(document.body, `.be-fe-comment-from-u-${u}:not(.be-fe-comment-hidden)`, node => {
@@ -51,7 +52,7 @@ export default class {
     }
 
     showCommsFrom(user) {
-        this.settings.banComms.delete(user);
+        arrDel(this.settings.banComms, user);
         this.settings.save();
         forSelect(document.body, `.be-fe-comment-from-u-${user}.be-fe-comment-hidden`, node => {
             node.classList.remove("be-fe-comment-hidden");
