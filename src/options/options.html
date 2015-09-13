@@ -61,7 +61,7 @@
 
         <p>
             <label>
-                <input type="checkbox" value="lightboxed-images">
+                <input type="checkbox" value="lightboxed-images" id="lightboxed-images">
                 Изображения, прикреплённые к посту, открываются в «лайтбоксе». Ссылка из лайтбокса ведёт на страницу
                 изображения.
             </label>
@@ -69,24 +69,23 @@
 
         <p>
             <label>
-                <input type="checkbox" value="docs-preview">
-                Для прикреплённых документов (pdf, ppt, doc(x), xls(x), txt) показывается превью.
+                <input type="checkbox" value="animated-gif" id="animated-gif">
+                Вместо анимированных GIF-превьюшек показывается стоп-кадр.
             </label>
         </p>
 
         <p>
             <label>
-                <input type="checkbox" value="animated-gif">
-                Вместо анимированных гифовых превьюшек показывается стоп-кадр.
+                <input type="checkbox" value="docs-preview" id="docs-preview">
+                Для прикреплённых файлов (pdf, ppt, doc(x), xls(x), txt) показывается превью.
             </label>
         </p>
 
         <p>
             <label>
-                <input type="checkbox" value="embed-ly">
-                Если в посте есть ссылки и нет прикреплённых файлов, то после тела поста добавляется краткое превью
-                страницы по
-                ссылке.
+                <input type="checkbox" value="embed-ly" id="embed-ly">
+                Если в посте есть ссылки и нет прикреплённых файлов, то после тела поста добавляется превью
+                сайта по ссылке.
             </label>
         </p>
 
@@ -94,52 +93,52 @@
 
         <p>
             <label>
-                <input type="checkbox" value="bottom-comment-link">
-                Ссылка 'Add comment' под комментариями к посту.
-            </label>
-        </p>
-
-        <p>
-            <label>
-                <input type="checkbox" value="colored-comment-icons">
-                Разноцветные облачка у комментариев (оранжевые у вас, тёмно-серые у автора треда, голубые у ваших
-                френдов, светло-серые у ваших читателей).
-            </label>
-        </p>
-
-        <p>
-            <label>
-                <input type="checkbox" value="comment-icons-click">
-                При клике на облачко в поле комментария вставляется @логин или ^^^ при клике с Ctrl/Cmd.
-            </label>
-        </p>
-
-        <p>
-            <label>
-                <input type="checkbox" value="at-links">
-                "@логины" в тексте становятся ссылками, стрелки "^^^"/"↑↑↑" подсвечиваются, при наведении на них мышки
-                подсвечиваются соответствующие комментарии.
-            </label>
-        </p>
-
-
-        <p>
-            <label>
-                <input type="checkbox" value="userpics-in-comments">
+                <input type="checkbox" value="userpics-in-comments" id="userpics-in-comments">
                 Облачко рядом с комментарием заменяется на юзерпик автора.
             </label>
         </p>
 
         <p>
             <label>
-                <input type="checkbox" value="comment-counters">
+                <input type="checkbox" value="colored-comment-icons" id="colored-comment-icons">
+                Разноцветные облачка у комментариев &mdash; оранжевые у вас, тёмно-серые у автора треда, голубые у ваших
+                френдов, светло-серые у ваших читателей. Если включены юзерпики комментаторов (предыдущий флажок), то
+                они подчёркиваются соответствующими цветами.
+            </label>
+        </p>
+
+        <p>
+            <label>
+                <input type="checkbox" value="bottom-comment-link" id="bottom-comment-link">
+                Ссылка 'Add comment' под комментариями к посту.
+            </label>
+        </p>
+
+        <p>
+            <label>
+                <input type="checkbox" value="comment-icons-click" id="comment-icons-click">
+                При клике на облачко в поле комментария вставляется @логин или ^^^ при клике с Ctrl/Cmd.
+            </label>
+        </p>
+
+        <p>
+            <label>
+                <input type="checkbox" value="at-links" id="at-links">
+                "@логины" в тексте становятся ссылками, стрелки "^^^"/"↑↑↑" подсвечиваются, при наведении на них мышки
+                подсвечиваются соответствующие комментарии.
+            </label>
+        </p>
+
+        <p>
+            <label>
+                <input type="checkbox" value="comment-counters" id="comment-counters">
                 При наведении мыши на комментарий показывается его порядковый номер в посте.
             </label>
         </p>
 
         <p>
             <label>
-                <input type="checkbox" value="hide-repeated-comments-icons">
+                <input type="checkbox" value="hide-repeated-comments-icons" id="hide-repeated-comments-icons">
                 У последовательных комментариев одного автора скрывается иконка/юзерпик комментария.
             </label>
         </p>
@@ -148,14 +147,14 @@
 
         <p>
             <label>
-                <input type="checkbox" value="direct-style">
+                <input type="checkbox" value="direct-style" id="direct-style">
                 Сообщения-директы выделяются серым фоном.
             </label>
         </p>
 
         <p>
             <label>
-                <input type="checkbox" value="where-this-post-from">
+                <input type="checkbox" value="where-this-post-from" id="where-this-post-from">
                 В общей ленте постов показывается, чей комментарий или лайк принесли в ленту этот пост (если пост не от
                 френда), а также:
             </label>
@@ -163,19 +162,19 @@
 
         <p class="shift">
             <label>
-                <input type="checkbox" value="hide-aliens">
+                <input type="checkbox" value="hide-aliens" id="hide-aliens" data-enabled-if="where-this-post-from">
                 Можно скрыть все посты от не-френдов.
             </label>
         </p>
 
         <p class="shift">
             <label>
-                <input type="checkbox" value="hide">
+                <input type="checkbox" value="hide" id="hide" data-enabled-if="where-this-post-from">
                 Можно скрывать от определённых пользователей посты:
             </label><br>
-            <textarea class="form-control" id="ban-list-posts"></textarea>
+            <textarea class="form-control" id="ban-list-posts" data-enabled-if="where-this-post-from"></textarea>
             <br>и комментарии:<br>
-            <textarea class="form-control" id="ban-list-comms"></textarea>
+            <textarea class="form-control" id="ban-list-comms" data-enabled-if="where-this-post-from"></textarea>
         </p>
 
 
@@ -183,21 +182,21 @@
 
         <p>
             <label>
-                <input type="checkbox" value="new-lines">
+                <input type="checkbox" value="new-lines" id="new-lines">
                 В текстах постов и комментариев можно использовать переводы строк (вводятся через <kbd>Shift+Enter</kbd>).
             </label>
         </p>
 
         <p>
             <label>
-                <input type="checkbox" value="fold-texts">
+                <input type="checkbox" value="fold-texts" id="fold-texts">
                 Слишком длинные посты и комментарии сворачиваются под кнопку «Read more...».
             </label>
         </p>
 
         <p>
             <label>
-                <input type="checkbox" value="emoji">
+                <input type="checkbox" value="emoji" id="emoji">
                 В постах и комментариях показываются emoji (вводятся в формате `:emoji:` или как unicode-символы).
             </label>
         </p>
@@ -207,29 +206,28 @@
 
         <p>
             <label>
-                <input type="checkbox" value="fix-names">
+                <input type="checkbox" value="fix-names" id="fix-names">
                 Юзернеймы заменяются на логины пользователей.
             </label>
         </p>
 
-        <p>
+        <p class="shift">
             <label>
-                <input type="checkbox" value="show-usernames">
-                После юзернейма в скобках показывается логин пользователя (действует только если не установлена
-                предыдущая галочка).
+                <input type="checkbox" value="show-usernames" id="show-usernames" data-disabled-if="fix-names">
+                После юзернейма в скобках показывается логин пользователя.
             </label>
         </p>
 
-        <p>
+        <p class="shift">
             <label>
-                <input type="checkbox" value="not-you">
+                <input type="checkbox" value="not-you" id="not-you" data-disabled-if="fix-names">
                 Ссылка на собственный профиль показывается как скриннейм/юзернейм, а не как <em>You</em>.
             </label>
         </p>
 
         <p>
             <label>
-                <input type="checkbox" value="user-info">
+                <input type="checkbox" value="user-info" id="user-info">
                 При наведении мыши на пользователя показывается окошко с краткой информацией о нём
                 и возможностью подписаться/отписаться, захайдить/расхайдить, забанить/разбанить.
             </label>
@@ -239,14 +237,14 @@
 
         <p>
             <label>
-                <input type="checkbox" value="confirm-delete">
+                <input type="checkbox" value="confirm-delete" id="confirm-delete">
                 Перед удалением поста или комментария запрашивается подтверждение.
             </label>
         </p>
 
         <p>
             <label>
-                <input type="checkbox" value="show-group-admins">
+                <input type="checkbox" value="show-group-admins" id="show-group-admins">
                 В списке подписчиков группы на иконке администратора рисуется коронка, в списках подписок и подписчиков
                 текущего пользователя отмечаются взаимные френды.
             </label>
@@ -254,7 +252,7 @@
 
         <p>
             <label>
-                <input type="checkbox" value="datetime">
+                <input type="checkbox" value="datetime" id="datetime">
                 Для постов и комментариев старше суток выводится не относительное, а абсолютное время.
             </label>
         </p>

@@ -2,6 +2,7 @@ import Settings  from "./settings.js";
 import Messenger from "./utils/message-rpc.js";
 import docLoaded from "./utils/doc-loaded.js";
 import forSelect from "./utils/for-select.js";
+import Cell      from "./utils/cell.js";
 
 const parentWindow = (window.parent === window) ? window.opener : window.parent;
 
@@ -56,6 +57,24 @@ docLoaded.then(() => {
 
         document.getElementById("ban-list-posts").value = settings.banPosts.join(", ");
         document.getElementById("ban-list-comms").value = settings.banComms.join(", ");
+
+        // Взаимосвязь между флагами
+        forSelect(sPage, "[data-disabled-if]", node => {
+            var k = node.dataset["disabledIf"],
+                c = document.getElementById(k);
+            if (c) {
+                Cell.fromInput(c).onValue(checked => node.disabled = checked);
+            }
+        });
+
+        forSelect(sPage, "[data-enabled-if]", node => {
+            var k = node.dataset["enabledIf"],
+                c = document.getElementById(k);
+            if (c) {
+                Cell.fromInput(c).onValue(checked => node.disabled = !checked);
+            }
+        });
+
         sPage.classList.remove("hidden");
         sPage.previousElementSibling.classList.add("hidden");
     });
