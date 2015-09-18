@@ -6,8 +6,8 @@ module.exports = function (node) {
 
     forSelect(node, ".general-attachments .attachment:not(.be-fe-with-preview)", (node) => {
         var link = node.querySelector(".p-attachment-url");
-        var text = link.querySelector("span").textContent;
-        var fileName = /(.*?)\s+\(.*?\)$/.exec(text)[1];
+        var text = link.title;
+        var fileName = /(.*)\s+\(.*?\)$/.exec(text)[1];
         var fileExt = /\.([^.]+)$/.exec(fileName)[1];
 
         if (!link.download) {
