@@ -38,7 +38,8 @@ export const flagNames = [
     "docs-preview",
     "hide-repeated-comments-icons",
     "datetime",
-    "show-usernames"
+    "show-usernames",
+    "page-titles"
 ];
 
 // Настройки, выключенные по умолчанию
