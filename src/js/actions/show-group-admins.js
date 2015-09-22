@@ -1,10 +1,10 @@
-var forSelect = require("../utils/for-select");
-var api = require("../utils/api");
-var promPlus = require("../utils/promise-tools");
-var h = require("../utils/html");
-var IAm = require("../utils/i-am");
+import forSelect from "../utils/for-select.js";
+import * as api from "../utils/api.js";
+import * as promPlus from "../utils/promise-tools";
+import h from "../utils/html.js";
+import IAm from "../utils/i-am.js";
 
-module.exports = function (node) {
+export default function (node) {
     node = node || document.body;
 
     var m = /^\/([a-z0-9-]+)\/(subscriptions|subscribers)$/.exec(location.pathname);

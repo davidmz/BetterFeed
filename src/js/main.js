@@ -1,4 +1,4 @@
-import userId from "./utils/current-user-id.js";
+import { userId } from "./utils/current-user-id.js";
 import Settings, { flagNames } from "./settings.js";
 import Messenger from "./utils/message-rpc.js";
 
@@ -50,7 +50,9 @@ if (!/^\/(attachments|files)\//.test(location.pathname)) {
         console.error("Can not start BetterFeed: MutationObserver & Promise not supported");
     } else if (userId === null) {
         console.error("Can not start BetterFeed: user not logged in");
-    } else if (!("__BetterFeed" in window)) {
+    } else if ("__BetterFeed" in window) {
+        console.warn("BetterFeed already started");
+    } else {
         window.__BetterFeed = {};
         start();
     }

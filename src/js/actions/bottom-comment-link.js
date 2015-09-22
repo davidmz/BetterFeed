@@ -1,8 +1,8 @@
-var forSelect = require("../utils/for-select");
-var h = require("../utils/html");
-var closestParent = require("../utils/closest-parent");
+import forSelect from "../utils/for-select.js";
+import h from "../utils/html.js";
+import closestParent from "../utils/closest-parent.js";
 
-module.exports = function (node) {
+export default function (node) {
     node = node || document.body;
 
     forSelect(node, ".p-timeline-post-comment-action:not(.be-fe-copied)", function (node) {
@@ -23,5 +23,5 @@ module.exports = function (node) {
         );
         post.querySelector(".comments").appendChild(cont);
     });
-};
+}
 

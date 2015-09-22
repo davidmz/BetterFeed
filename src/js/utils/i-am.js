@@ -1,48 +1,51 @@
-var api = require("./api");
-var uPics = require("./userpics");
+import * as api from './api.js';
+import * as uPics from './userpics.js';
 
-function IAm() {
-    this.me = null;
-    this.myID = null;
-    this.myScreenName = null;
-    this.friends = [];
-    this.readers = [];
-    this.banIds = [];
+export default class IAm {
+    constructor() {
+        this.me = null;
+        this.myID = null;
+        this.myScreenName = null;
+        this.friends = [];
+        this.readers = [];
+        this.banIds = [];
+    }
+
+    whoIs(username) {
+        var flags = 0;
+        if (username === this.me) flags |= IAm.ME;
+        if (this.friends.indexOf(username) !== -1) flags |= IAm.FRIEND;
+        if (this.readers.indexOf(username) !== -1) flags |= IAm.READER;
+        return flags;
+    }
+
+    isBanned(userId) {
+        return (this.banIds.indexOf(userId) !== -1);
+    }
+
+    subscribed(username) {
+        if (this.friends.indexOf(username) === -1) this.friends.push(username);
+    }
+
+    unsubscribed(username) {
+        var p = this.friends.indexOf(username);
+        if (p !== -1) this.friends.splice(p, 1);
+    }
+
+    blocked(userId) {
+        if (this.banIds.indexOf(userId) === -1) this.banIds.push(userId);
+    }
+
+    unblocked(userId) {
+        var p = this.banIds.indexOf(userId);
+        if (p !== -1) this.banIds.splice(p, 1);
+    }
 }
+
 
 IAm.ME = 1 << 0;
 IAm.FRIEND = 1 << 1;
 IAm.READER = 1 << 2;
-
-IAm.prototype.whoIs = function (username) {
-    var flags = 0;
-    if (username === this.me) flags |= IAm.ME;
-    if (this.friends.indexOf(username) !== -1) flags |= IAm.FRIEND;
-    if (this.readers.indexOf(username) !== -1) flags |= IAm.READER;
-    return flags;
-};
-
-IAm.prototype.isBanned = function (userId) {
-    return (this.banIds.indexOf(userId) !== -1);
-};
-
-IAm.prototype.subscribed = function (username) {
-    if (this.friends.indexOf(username) === -1) this.friends.push(username);
-};
-
-IAm.prototype.unsubscribed = function (username) {
-    var p = this.friends.indexOf(username);
-    if (p !== -1) this.friends.splice(p, 1);
-};
-
-IAm.prototype.blocked = function (userId) {
-    if (this.banIds.indexOf(userId) === -1) this.banIds.push(userId);
-};
-
-IAm.prototype.unblocked = function (userId) {
-    var p = this.banIds.indexOf(userId);
-    if (p !== -1) this.banIds.splice(p, 1);
-};
 
 IAm.ready = null;
 
@@ -71,4 +74,3 @@ IAm.update = () => {
 
 IAm.update();
 
-module.exports = IAm;

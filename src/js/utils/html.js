@@ -1,4 +1,4 @@
-var isArray = require("./is-array");
+import isArray from "./is-array.js";
 
 /**
  * h("tag.class", {attr: val}, child)
@@ -15,7 +15,7 @@ var isArray = require("./is-array");
  * @param {Node|string|Array} [children]
  * @return {HTMLElement}
  */
-module.exports = function (tagName, attrs, children) {
+export default function h(tagName, attrs, children) {
     var i, k;
     var tagParts = tagName.split(".");
     var tn = tagParts.shift() || "div";

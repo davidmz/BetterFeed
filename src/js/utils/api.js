@@ -1,9 +1,11 @@
-function get(path) {
+import { authToken } from './current-user-id.js';
+
+export function get(path) {
     return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', path);
         xhr.responseType = 'json';
-        xhr.setRequestHeader('X-Authentication-Token', localStorage["authToken"]);
+        xhr.setRequestHeader('X-Authentication-Token', authToken);
         xhr.onload = function () {
             if (xhr.response && "err" in xhr.response) {
                 reject(xhr.response.err);
@@ -15,12 +17,12 @@ function get(path) {
     });
 }
 
-function put(path, body) {
+export function put(path, body) {
     return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest();
         xhr.open('PUT', path);
         xhr.responseType = 'json';
-        xhr.setRequestHeader('X-Authentication-Token', localStorage["authToken"]);
+        xhr.setRequestHeader('X-Authentication-Token', authToken);
         xhr.onload = function () {
             if (xhr.response && "err" in xhr.response) {
                 reject(xhr.response.err);
@@ -32,12 +34,12 @@ function put(path, body) {
     });
 }
 
-function post(path, body) {
+export function post(path, body) {
     return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest();
         xhr.open('POST', path);
         xhr.responseType = 'json';
-        xhr.setRequestHeader('X-Authentication-Token', localStorage["authToken"]);
+        xhr.setRequestHeader('X-Authentication-Token', authToken);
         xhr.onload = function () {
             if (xhr.response && "err" in xhr.response) {
                 reject(xhr.response.err);
@@ -48,9 +50,3 @@ function post(path, body) {
         xhr.send(body);
     });
 }
-
-module.exports = {
-    get: get,
-    put: put,
-    post: post
-};

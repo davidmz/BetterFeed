@@ -1,39 +1,40 @@
-var isArray = require("./is-array");
+import isArray from "./is-array.js";
 
-var BanList = function (name) {
-    this.name = name;
-};
+export default class {
 
-BanList.prototype.get = function () {
-    var list;
-    try {
-        list = JSON.parse(localStorage[this.name]);
-    } catch (e) {
-        list = [];
+    constructor(name) {
+        this.name = name;
     }
-    if (!isArray(list)) list = [];
-    return list;
-};
 
-BanList.prototype.set = function (list) {
-    localStorage[this.name] = JSON.stringify(list);
-};
+    get() {
+        var list;
+        try {
+            list = JSON.parse(localStorage[this.name]);
+        } catch (e) {
+            list = [];
+        }
+        if (!isArray(list)) list = [];
+        return list;
+    }
 
-BanList.prototype.add = function (user) {
-    var list = this.get();
-    if (list.indexOf(user) === -1) list.push(user);
-    this.set(list);
-};
+    set(list) {
+        localStorage[this.name] = JSON.stringify(list);
+    }
 
-BanList.prototype.remove = function (user) {
-    var list = this.get();
-    var p = list.indexOf(user);
-    if (p !== -1) list.splice(p, 1);
-    this.set(list);
-};
+    add(user) {
+        var list = this.get();
+        if (list.indexOf(user) === -1) list.push(user);
+        this.set(list);
+    }
 
-BanList.prototype.contains = function (user) {
-    return (this.get().indexOf(user) !== -1);
-};
+    remove(user) {
+        var list = this.get();
+        var p = list.indexOf(user);
+        if (p !== -1) list.splice(p, 1);
+        this.set(list);
+    }
 
-module.exports = BanList;
+    contains(user) {
+        return (this.get().indexOf(user) !== -1);
+    }
+}

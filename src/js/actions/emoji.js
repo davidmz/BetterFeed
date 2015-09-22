@@ -1,7 +1,7 @@
-var forSelect = require("../utils/for-select");
-var imgLoaded = require("../utils/img-loaded");
-var h = require("../utils/html");
-var bfRoot = require("../utils/bf-root");
+import forSelect from "../utils/for-select";
+import h from "../utils/html";
+import imgLoaded from "../utils/img-loaded.js";
+import bfRoot from "../utils/bf-root.js";
 require('../../less/emoji.less');
 
 
@@ -16,7 +16,7 @@ var basicEmoRoot = bfRoot + "/images/emoji/basic",
         "grandma": "older_woman"
     };
 
-module.exports = function (node) {
+export default function (node) {
     node = node || document.body;
 
     forSelect(node, ".comment-text, .post-body .text", function (node) {

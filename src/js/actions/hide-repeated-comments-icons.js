@@ -1,8 +1,8 @@
-var forSelect = require("../utils/for-select");
-var closestParent = require("../utils/closest-parent");
+import forSelect from "../utils/for-select.js";
+import closestParent from "../utils/closest-parent.js";
 require("../../less/hide-next-comments.less");
 
-module.exports = function (node) {
+export default function (node) {
     node = node || document.body;
 
     var c;

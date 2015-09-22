@@ -1,7 +1,7 @@
-var forSelect = require("../utils/for-select");
-var h = require("../utils/html");
+import forSelect from "../utils/for-select.js";
+import h from "../utils/html.js";
 
-module.exports = function (node) {
+export default function (node) {
     node = node || document.body;
 
     forSelect(node, ".p-comment-delete, .p-post-destroy, .p-timeline-post-destroy-action", function (origLink) {
@@ -39,4 +39,4 @@ module.exports = function (node) {
             $(origLink).click();
         });
     });
-};
+}

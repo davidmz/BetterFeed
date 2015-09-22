@@ -1,7 +1,7 @@
-var forSelect = require("../utils/for-select");
+import forSelect from "../utils/for-select.js";
 require('../../less/comment-counters.less');
 
-module.exports = function (node) {
+export default function (node) {
     node = node || document.body;
 
     forSelect(node, ".more-comments", function (node) {

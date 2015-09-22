@@ -1,6 +1,6 @@
 require('../../less/userpics-in-comments.less');
-import forSelect from "../utils/for-select";
-import uPics from "../utils/userpics";
+import forSelect from "../utils/for-select.js";
+import * as uPics from "../utils/userpics.js";
 import matches from "../utils/matches.js";
 
 var myLogin = null;

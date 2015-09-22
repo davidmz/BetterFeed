@@ -1,4 +1,4 @@
-module.exports = function (img) {
+export default function (img) {
     return new Promise(function (resolve, reject) {
         if (!img) return;
         if (img.complete) {
@@ -7,4 +7,4 @@ module.exports = function (img) {
             img.addEventListener("load", resolve);
         }
     });
-};
+}

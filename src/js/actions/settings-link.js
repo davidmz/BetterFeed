@@ -1,6 +1,6 @@
-var h = require("../utils/html");
-var bfRoot = require("../utils/bf-root");
-var forSelect = require("../utils/for-select");
+import h from "../utils/html.js";
+import forSelect from "../utils/for-select.js";
+import bfRoot from "../utils/bf-root.js";
 require('../../less/lightbox.less');
 
 /** @type {Element} */
@@ -39,7 +39,7 @@ function showSettings() {
     lightBox.classList.remove("hidden");
 }
 
-module.exports = function (node) {
+export default function (node) {
     if (!startVersion) return;
 
     node = node || document.body;
@@ -77,5 +77,5 @@ module.exports = function (node) {
     );
 
     link.addEventListener("click", () => showSettings());
-};
+}
 

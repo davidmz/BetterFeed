@@ -1,5 +1,5 @@
-var h = require("../utils/html");
-var closestParent = require("../utils/closest-parent");
+import h from "../utils/html.js";
+import closestParent from "../utils/closest-parent.js";
 
 class Preloader {
     constructor() {
@@ -31,7 +31,7 @@ class Preloader {
 }
 
 
-class SlideShow {
+export default class SlideShow {
 
     constructor() {
         this.imageStab = "https://cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif";
@@ -159,4 +159,3 @@ class SlideShow {
 }
 
 
-module.exports = SlideShow;

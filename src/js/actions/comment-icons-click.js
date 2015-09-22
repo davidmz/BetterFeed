@@ -1,11 +1,11 @@
 import closestParent from "../utils/closest-parent";
 import matches from "../utils/matches.js";
 
-module.exports = function (node) {
+export default function (node) {
     if (node === undefined) {
         document.body.addEventListener("click", quoteEventHandler, false);
     }
-};
+}
 
 var quoteEventHandler = function (e) {
     if (!matches(e.target, ".comment .date") && !(e.target.parentNode && matches(e.target.parentNode, ".comment .date")) || e.button != 0) return;

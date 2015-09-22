@@ -1,3 +1,5 @@
-module.exports = Array.isArray || function (arr) {
-    return Object.prototype.toString.call(arr) == '[object Array]';
-};
+var isArray = Array.isArray || function (arr) {
+        return Object.prototype.toString.call(arr) == '[object Array]';
+    };
+
+export default isArray;

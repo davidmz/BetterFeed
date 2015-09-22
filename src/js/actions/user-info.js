@@ -1,9 +1,9 @@
-var forSelect = require("../utils/for-select");
-var h = require("../utils/html");
-var closestParent = require("../utils/closest-parent");
-var api = require("../utils/api");
-var promPlus = require("../utils/promise-tools");
-var IAm = require("../utils/i-am");
+import forSelect from "../utils/for-select.js";
+import h from "../utils/html.js";
+import closestParent from "../utils/closest-parent.js";
+import * as api from "../utils/api.js";
+import * as promPlus from "../utils/promise-tools";
+import IAm from "../utils/i-am.js";
 import { arrHas } from "../utils/array-set.js";
 import Hider from "../utils/hide-tools.js";
 

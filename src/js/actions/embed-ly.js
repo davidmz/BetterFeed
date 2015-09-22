@@ -1,8 +1,8 @@
-var forSelect = require("../utils/for-select");
-var h = require("../utils/html");
+import forSelect from "../utils/for-select.js";
+import h from "../utils/html.js";
 var css = require("../../less/embeds.less");
 
-module.exports = function (node) {
+export default function (node) {
     if (!node) {
         (function (w, d) {
             var id = 'embedly-platform', n = 'script';
@@ -146,5 +146,5 @@ module.exports = function (node) {
             return true;
         });
     });
-};
+}
 

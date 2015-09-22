@@ -1,12 +1,12 @@
-var forSelect = require("../utils/for-select");
-var h = require("../utils/html");
+import forSelect from "../utils/for-select.js";
+import h from "../utils/html.js";
 require('../../less/new-lines.less');
 
 var replaceTextNode = function (node, re, str) {
     if (node && node.nodeType == Node.TEXT_NODE) node.nodeValue = node.nodeValue.replace(re, str);
 };
 
-module.exports = function (node) {
+export default function (node) {
     if (node === undefined) {
         document.addEventListener("keydown", function (e) {
             if (e.keyCode === 13 && e.target.tagName == "TEXTAREA" && e.target.classList.contains("ember-text-area")) {
@@ -71,5 +71,5 @@ module.exports = function (node) {
 
         node.appendChild(fr);
     });
-};
+}
 

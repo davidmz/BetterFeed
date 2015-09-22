@@ -1,7 +1,7 @@
+import SlideShow from "../utils/slideshow.js";
+import forSelect from "../utils/for-select.js";
+import closestParent from "../utils/closest-parent.js";
 require('../../less/lightbox.less');
-var SlideShow = require("../utils/slideshow");
-var forSelect = require("../utils/for-select");
-var closestParent = require("../utils/closest-parent");
 
 // инициализация
 var slideShow = new SlideShow();

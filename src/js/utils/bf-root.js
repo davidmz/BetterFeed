@@ -4,4 +4,4 @@ if (document.currentScript) {
     myRoot = pr.slice(0, pr.length - 2).join("/");
 }
 
-module.exports = myRoot;
+export default myRoot;

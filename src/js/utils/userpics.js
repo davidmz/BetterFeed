@@ -1,5 +1,5 @@
-var api = require("./api");
-var promPlus = require("./promise-tools");
+import * as api from './api.js';
+import * as promPlus from './promise-tools.js';
 
 var defaultPic = "https://freefeed.net/img/default-userpic-48.png";
 var picRegistry = {};
@@ -11,14 +11,13 @@ function picLoad(username) {
     });
 }
 
-module.exports = {
-    getPic: function (username) {
-        if (!(username in picRegistry)) {
-            picRegistry[username] = picLoad(username);
-        }
-        return picRegistry[username];
-    },
-    setPic: function (username, pic) {
-        picRegistry[username] = promPlus.resolve((pic && pic !== "") ? pic : defaultPic);
+export function getPic(username) {
+    if (!(username in picRegistry)) {
+        picRegistry[username] = picLoad(username);
     }
-};
+    return picRegistry[username];
+}
+
+export function setPic(username, pic) {
+    picRegistry[username] = promPlus.resolve((pic && pic !== "") ? pic : defaultPic);
+}

@@ -1,8 +1,8 @@
-var forSelect = require("../utils/for-select");
-var h = require("../utils/html");
-var IAm = require("../utils/i-am");
+import forSelect from "../utils/for-select.js";
+import h from "../utils/html.js";
+import IAm from "../utils/i-am.js";
 
-module.exports = function (node) {
+export default function (node) {
     node = node || document.body;
 
     var friendsLink = node.querySelector(".sidebar a[href$='/subscriptions']");
@@ -18,6 +18,6 @@ module.exports = function (node) {
 
         boxBody.appendChild(h("h3", "Blocked users"));
     });
-};
+}
 
 

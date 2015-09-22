@@ -3,7 +3,7 @@
  * @param {Array<Promise>} promises
  * @return Promise
  */
-function promiseAll(promises) {
+export function all(promises) {
     var nRemains = promises.length;
     var results = new Array(promises.length);
     return new Promise(function (resolve, reject) {
@@ -22,11 +22,7 @@ function promiseAll(promises) {
     });
 }
 
-function promiseResolve(value) {
+export function resolve(value) {
     return new Promise(function (resolve, reject) { resolve(value); });
 }
 
-module.exports = {
-    all: promiseAll,
-    resolve: promiseResolve
-};

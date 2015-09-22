@@ -1,6 +1,6 @@
-var forSelect = require("../utils/for-select");
+import forSelect from "../utils/for-select.js";
 
-module.exports = function (node) {
+export default function (node) {
     node = node || document.body;
 
     forSelect(node, "time", (node) => {

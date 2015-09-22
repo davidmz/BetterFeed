@@ -1,7 +1,7 @@
-var forSelect = require("../utils/for-select");
-var h = require("../utils/html");
+import forSelect from "../utils/for-select.js";
+import h from "../utils/html.js";
 
-module.exports = function (node) {
+export default function (node) {
     node = node || document.body;
 
     forSelect(node, ".general-attachments .attachment:not(.be-fe-with-preview)", (node) => {
@@ -52,4 +52,4 @@ module.exports = function (node) {
             v.src = link.href;
         }
     });
-};
+}

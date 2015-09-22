@@ -1,10 +1,10 @@
-var forSelect = require("../utils/for-select");
-var closestParent = require("../utils/closest-parent");
-var IAm = require("../utils/i-am");
+import forSelect from "../utils/for-select.js";
+import closestParent from "../utils/closest-parent.js";
+import IAm from "../utils/i-am.js";
 
 var myLogin = null;
 
-module.exports = function (node) {
+export default function (node) {
     node = node || document.body;
 
     if (!myLogin) {
@@ -45,5 +45,5 @@ module.exports = function (node) {
         node.classList.add("be-fe-comment-from-u-" + author);
         node.dataset["author"] = author;
     });
-};
+}
 
