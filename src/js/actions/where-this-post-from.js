@@ -1,7 +1,7 @@
-import IAm from "../utils/i-am";
-import api from "../utils/api";
-import forSelect from "../utils/for-select";
-import h from "../utils/html";
+import IAm from "../utils/i-am.js";
+import * as api from "../utils/api.js";
+import forSelect from "../utils/for-select.js";
+import h from "../utils/html.js";
 
 /**
  *
