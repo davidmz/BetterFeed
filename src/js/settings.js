@@ -39,7 +39,7 @@ export const flagNames = [
     "hide-repeated-comments-icons",
     "datetime",
     "show-usernames",
-    "page-titles"
+    "ani-favicon"
 ];
 
 // Настройки, выключенные по умолчанию
