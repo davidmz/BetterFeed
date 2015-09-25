@@ -63,12 +63,14 @@ function transitionState(inTrans) {
 }
 
 function tick(t) {
-    if (!inTransition || !ctx) return;
+    if (!inTransition) return;
 
-    ctx.clearRect(0, 0, FrameSize, FrameSize);
-    ctx.drawImage(framesImage, 0, frame * FrameSize, FrameSize, FrameSize, 0, 0, FrameSize, FrameSize);
-    linkEl.setAttribute("href", canvas.toDataURL());
+    if (ctx) {
+        ctx.clearRect(0, 0, FrameSize, FrameSize);
+        ctx.drawImage(framesImage, 0, frame * FrameSize, FrameSize, FrameSize, 0, 0, FrameSize, FrameSize);
+        linkEl.setAttribute("href", canvas.toDataURL());
+        frame = (frame + 1) % NFrames;
+    }
 
-    frame = (frame + 1) % NFrames;
     setTimeout(tick, 120);
 }
