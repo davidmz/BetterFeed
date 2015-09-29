@@ -38,8 +38,7 @@ export const flagNames = [
     "docs-preview",
     "hide-repeated-comments-icons",
     "datetime",
-    "show-usernames",
-    "ani-favicon"
+    "show-usernames"
 ];
 
 // Настройки, выключенные по умолчанию

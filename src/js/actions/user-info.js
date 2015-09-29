@@ -65,7 +65,7 @@ function showInfoWin(username, wrapper, reloadAlert) {
             if (role & IAm.ME) {
                 roleText = "You";
             } else if (role & IAm.FRIEND) {
-                roleText = isUser ? "Your friend" : "Group (you in)";
+                roleText = isUser ? "Your friend" : "Group (you\u2019re in)";
             } else if (role & IAm.READER) {
                 roleText = "Your reader";
             } else {
