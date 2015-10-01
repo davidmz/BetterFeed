@@ -22,15 +22,35 @@ export default function (node) {
 
     node = node || document.body;
 
-    forSelect(node, ".post-body", function (node) {
+    forSelect(node, ".body", body => {
+        var node = body.parentNode;
+        if (!node.classList.contains("post-body")) return;
+
         if (node.querySelector(":scope > .attachments")) {
             return;
         }
 
-        forSelect(node, ".text a").some(function (link) {
-            if (!/^https?:\/\//.test(link.getAttribute("href"))) return false;
-            var bodyNext = node.querySelector(":scope > .body").nextSibling;
-            var url = link.href;
+        forSelect(body, ".text a").some(link => {
+            var url = link.getAttribute("href");
+
+            if (!/^https?:\/\//.test(url)) {
+                return false;
+            }
+
+            if (/^https:\/\/(m\.)?freefeed\.net\//.test(url)) {
+                return false;
+            }
+
+            // Проверяем, нет ли прямо перед ссылкой восклицательного знака
+            var prevTextEl = link.previousSibling;
+            if (prevTextEl !== null) {
+                let prevText = prevTextEl.nodeValue;
+                if (prevText.length > 0 && prevText.charAt(prevText.length - 1) === "!") {
+                    return false;
+                }
+            }
+
+            var bodyNext = body.nextSibling;
             var embed, m;
             if ((m = /^https:\/\/instagram\.com\/p\/([^\/]+)/.exec(url)) !== null) {
                 // https://instagram.com/developer/embedding/?hl=ru#oembed
