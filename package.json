@@ -23,6 +23,7 @@
     "build": "node build.js"
   },
   "dependencies": {
-    "babel": "^5.8.23"
+    "babel": "^5.8.23",
+    "latest-promise": "^1.1.0"
   }
 }

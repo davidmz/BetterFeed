@@ -2,6 +2,7 @@ export default class Cell {
 
     constructor(value) {
         this._value = value;
+        this._empty = (value === undefined);
         this._listeners = new Set();
     }
 
@@ -9,12 +10,13 @@ export default class Cell {
 
     set value(v) {
         this._value = v;
+        this._empty = false;
         this._listeners.forEach(l => l(v));
     }
 
     onValue(lst) {
         this._listeners.add(lst);
-        lst(this.value);
+        if (!this._empty) lst(this.value);
         return this;
     }
 
@@ -50,6 +52,23 @@ export default class Cell {
     map(foo) { return this.derive((c, v) => c.value = foo(v)); }
 
     filter(foo) { return this.derive((c, v) => foo(v) && (c.value = v)); }
+
+    /**
+     * For cell with Promise's values
+     * @return {Cell}
+     */
+    latestPromise() {
+        var lastProm = null;
+        return this.derive((c, v) => {
+            var prom = v;
+            lastProm = prom;
+            prom.then(res => {
+                if (prom === lastProm) {
+                    c.value = res;
+                }
+            });
+        });
+    }
 
     distinct() {
         var val;
