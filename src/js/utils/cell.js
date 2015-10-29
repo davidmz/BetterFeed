@@ -2,7 +2,6 @@ export default class Cell {
 
     constructor(value) {
         this._value = value;
-        this._empty = (value === undefined);
         this._listeners = new Set();
     }
 
@@ -10,13 +9,12 @@ export default class Cell {
 
     set value(v) {
         this._value = v;
-        this._empty = false;
         this._listeners.forEach(l => l(v));
     }
 
     onValue(lst) {
         this._listeners.add(lst);
-        if (!this._empty) lst(this.value);
+        lst(this.value);
         return this;
     }
 

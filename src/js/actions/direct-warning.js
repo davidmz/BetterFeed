@@ -47,6 +47,9 @@ export default function (node, settings) {
         .map(names => promPlus.all([IAm.ready, ...names.map(n => getUserInfo(n))]))
         .latestPromise()
         .onValue(infos => {
+            if (infos === undefined) { // initial value
+                return;
+            }
             const iAm = infos.shift();
             var feeds = [],
                 users = [];
