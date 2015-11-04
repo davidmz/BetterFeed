@@ -8,8 +8,8 @@ export default function (node) {
     forSelect(node, ".comment-text, .post-body > .body > .text", function (node) {
         var c = node.firstChild;
         while (c) {
-            if (c.nodeType == Node.TEXT_NODE && /\B@([a-z0-9_]+)/i.test(c.nodeValue)) {
-                var re = /\B@([a-z0-9_]+)/ig,
+            if (c.nodeType == Node.TEXT_NODE && /\B@([a-z0-9]+(?:-[a-z0-9]+)*)\b/i.test(c.nodeValue)) {
+                var re = /\B@([a-z0-9]+(?:-[a-z0-9]+)*)\b/ig,
                     str = c.nodeValue,
                     fr = document.createDocumentFragment(),
                     m, ptr = 0;
