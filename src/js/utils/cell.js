@@ -57,14 +57,13 @@ export default class Cell {
      */
     latestPromise() {
         var lastProm = null;
-        return this.derive((c, v) => {
-            var prom = v;
+        return this.derive(async (c, v) => {
+            let prom = v;
             lastProm = prom;
-            prom.then(res => {
-                if (prom === lastProm) {
-                    c.value = res;
-                }
-            });
+            let res = await prom;
+            if (prom === lastProm) {
+                c.value = res;
+            }
         });
     }
 

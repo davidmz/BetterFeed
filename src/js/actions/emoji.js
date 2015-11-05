@@ -91,7 +91,7 @@ function surPairs(text) {
 
 function isGeo(uni) { return (uni >= 0x1F1E6 && uni <= 0x1F1FF);}
 
-function emoCheck(node, emo, alt, unicode) {
+async function emoCheck(node, emo, alt, unicode) {
     var code = (emo in aliases) ? aliases[emo] : emo;
     var dir = (customEmoList.indexOf(code) !== -1) ? customEmoRoot : basicEmoRoot;
     if (unicode) {
@@ -101,10 +101,9 @@ function emoCheck(node, emo, alt, unicode) {
     if (!unicode) {
         img.title = ":" + emo + ":";
     }
-    imgLoaded(img).then(function () {
-        node.parentNode.insertBefore(h("span.be-fe-emo-wrap", img), node);
-        node.parentNode.removeChild(node);
-    });
+    await imgLoaded(img);
+    node.parentNode.insertBefore(h("span.be-fe-emo-wrap", img), node);
+    node.parentNode.removeChild(node);
 }
 
 function hexInt(n) {

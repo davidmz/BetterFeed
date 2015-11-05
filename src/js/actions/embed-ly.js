@@ -124,18 +124,16 @@ export default function (node) {
 
             } else if ((m = /^https?:\/\/coub\.com\/view\/([^\/?#]+)/.exec(url)) !== null) {
                 let id = m[1];
-                embed = new Promise((resolve) => {
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('GET', `https://davidmz.me/oembed/coub/oembed.json?url=${encodeURIComponent(url)}`);
-                    xhr.responseType = 'json';
-                    xhr.onload = function () {
-                        var width = parseInt(xhr.response.width);
-                        var height = parseInt(xhr.response.height);
+                embed = fetch(`https://davidmz.me/oembed/coub/oembed.json?url=${encodeURIComponent(url)}`)
+                    .then(resp => resp.json())
+                    .then(j => {
+                        var width = parseInt(j.width);
+                        var height = parseInt(j.height);
                         if (width > 450) {
                             height = Math.round(height * 450 / width);
                             width = 450;
                         }
-                        resolve(
+                        return Promise.resolve(
                             h("div",
                                 h("iframe", {
                                     src: `https://coub.com/embed/${id}?muted=false&autostart=false&originalSize=false&hideTopBar=false&startWithHD=true`,
@@ -148,9 +146,7 @@ export default function (node) {
                                 )
                             )
                         );
-                    };
-                    xhr.send();
-                });
+                    });
 
             } else {
                 embed = h("a.embedly-card", {href: link.href, "data-card-width": "60%"});

@@ -1,20 +1,15 @@
 import { authToken } from './current-user-id.js';
 
 export function get(path) {
-    return new Promise(function (resolve, reject) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', path);
-        xhr.responseType = 'json';
-        xhr.setRequestHeader('X-Authentication-Token', authToken);
-        xhr.onload = function () {
-            if (xhr.response && "err" in xhr.response) {
-                reject(xhr.response.err);
+    return fetch(path, {headers: {'X-Authentication-Token': authToken}})
+        .then(resp => resp.json())
+        .then(data => {
+            if (data && "err" in data) {
+                return Promise.reject(data.err);
             } else {
-                resolve(xhr.response);
+                return Promise.resolve(data);
             }
-        };
-        xhr.send();
-    });
+        });
 }
 
 export function put(path, body) {

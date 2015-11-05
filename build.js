@@ -4,7 +4,7 @@ var fs = require('fs');
 var head = fs.readFileSync("./src/user-js-head.txt", "utf8");
 
 webpack({
-    entry: './src/js/main.js',
+    entry: ['babel/polyfill', 'whatwg-fetch', './src/js/main.js'],
     output: {
         path: './build',
         filename: 'better-feed.min.js'
@@ -16,12 +16,13 @@ webpack({
         ]
     },
     plugins: [
-        new webpack.optimize.UglifyJsPlugin({})
+        new webpack.optimize.UglifyJsPlugin({})//,
+        //new webpack.ProvidePlugin({'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'})
     ]
 }, function (err, stats) { if (err !== null) console.log(err);});
 
 webpack({
-    entry: './src/js/options.js',
+    entry: ['babel/polyfill', './src/js/options.js'],
     output: {
         path: './build',
         filename: 'options.min.js'

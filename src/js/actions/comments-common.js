@@ -14,7 +14,7 @@ export default function (node) {
         }
     }
 
-    forSelect(node, ".comment:not(.be-fe-comment-from)", function (node) {
+    forSelect(node, ".comment:not(.be-fe-comment-from)", async (node) => {
         var postBody = closestParent(node, ".post-body");
         if (!postBody) return;
 
@@ -28,22 +28,21 @@ export default function (node) {
             return;
         }
         var author = authorLink.getAttribute("href").substr(1);
-        IAm.ready.then(function (iAm) {
-            var type = iAm.whoIs(author);
-            if (type & IAm.ME) {
-                node.classList.add("be-fe-comment-from-me");
-            } else if (type & IAm.FRIEND) {
-                node.classList.add("be-fe-comment-from-friend");
-            } else if (type & IAm.READER) {
-                node.classList.add("be-fe-comment-from-reader");
-            }
-        });
         if (author == postAuthor) {
             node.classList.add("be-fe-comment-from-post-author");
         }
         node.classList.add("be-fe-comment-from");
         node.classList.add("be-fe-comment-from-u-" + author);
         node.dataset["author"] = author;
+
+        var type = (await IAm.ready).whoIs(author);
+        if (type & IAm.ME) {
+            node.classList.add("be-fe-comment-from-me");
+        } else if (type & IAm.FRIEND) {
+            node.classList.add("be-fe-comment-from-friend");
+        } else if (type & IAm.READER) {
+            node.classList.add("be-fe-comment-from-reader");
+        }
     });
 }
 

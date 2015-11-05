@@ -17,7 +17,7 @@ export default function (node, settings) {
     var useScreenNames = !settings.flag("fix-names");
     var useScreenNamesAndLogins = (useScreenNames && settings.flag("show-usernames"));
 
-    forSelect(node, ".timeline-post-container:not(.be-fe-where-from)", node => {
+    forSelect(node, ".timeline-post-container:not(.be-fe-where-from)", async (node) => {
         node.classList.add("be-fe-where-from");
 
         // автор поста
@@ -42,66 +42,66 @@ export default function (node, settings) {
 
         node.dataset["postAuthor"] = postAuthor;
 
-        IAm.ready.then(iAm => {
-            if (iAm.whoIs(postAuthor) & (IAm.ME | IAm.FRIEND)) return;
+        var iAm = await IAm.ready;
 
-            // пост в мои группы?
-            if (postTargets.some(function (u) { return !!(iAm.whoIs(u) & IAm.FRIEND); })) {
-                return;
+        if (iAm.whoIs(postAuthor) & (IAm.ME | IAm.FRIEND)) return;
+
+        // пост в мои группы?
+        if (postTargets.some(function (u) { return !!(iAm.whoIs(u) & IAm.FRIEND); })) {
+            return;
+        }
+
+        node.classList.add("be-fe-post-from-alien");
+
+        // пытаемся выяснить, почему мы это видим
+        var postInfo = await api.get('/v1/posts/' + postId + '?maxLikes=all');
+        var names = {};
+        var users = postInfo.users
+            .map(uu => {
+                names[uu.username] = useScreenNames ? uu.screenName : uu.username;
+                return uu.username;
+            })
+            .filter(u => !!(iAm.whoIs(u) & (IAm.ME | IAm.FRIEND)))
+            .filter((v, i, a) => a.indexOf(v) === i) // http://stackoverflow.com/questions/1960473/unique-values-in-an-array#answer-14438954
+            ;
+
+        if (users.length > 0) {
+            var links = [];
+            if (users.length < 5) {
+                // просто показываем всех
+                users.forEach((u, i) => {
+                    if (i > 0) {
+                        if (i == users.length - 1) {
+                            links.push(" and ");
+                        } else {
+                            links.push(", ");
+                        }
+                    }
+                    let ht = [names[u]];
+                    if (useScreenNamesAndLogins && names[u] !== u) {
+                        ht.push(h("$", " ", h("span.be-fe-username", "(", u, ")")))
+                    }
+                    links.push(h("a.be-fe-nameFixed", {href: "/" + u}, ht));
+                });
+            } else {
+                users.slice(0, 3).forEach((u, i) => {
+                    if (i > 0) {
+                        links.push(", ");
+                    }
+                    let ht = [names[u]];
+                    if (useScreenNamesAndLogins && names[u] !== u) {
+                        ht.push(h("$", " ", h("span.be-fe-username", "(", u, ")")))
+                    }
+                    links.push(h("a.be-fe-nameFixed", {href: "/" + u}, ht));
+                });
+                links.push(" and " + (users.length - 3) + " other");
             }
 
-            node.classList.add("be-fe-post-from-alien");
+            node.querySelector(".title > div").appendChild(h("span.be-fe-from-whom", " via ", links));
+        } else {
+            node.querySelector(".title > div").appendChild(h("span.be-fe-from-whom", " via somebody"));
+        }
 
-            // пытаемся выяснить, почему мы это видим
-            api.get('/v1/posts/' + postId + '?maxLikes=all').then(postInfo => {
-                var names = {};
-                var users = postInfo.users
-                        .map(uu => {
-                            names[uu.username] = useScreenNames ? uu.screenName : uu.username;
-                            return uu.username;
-                        })
-                        .filter(u => !!(iAm.whoIs(u) & (IAm.ME | IAm.FRIEND)))
-                        .filter((v, i, a) => a.indexOf(v) === i) // http://stackoverflow.com/questions/1960473/unique-values-in-an-array#answer-14438954
-                    ;
-
-                if (users.length > 0) {
-                    var links = [];
-                    if (users.length < 5) {
-                        // просто показываем всех
-                        users.forEach((u, i) => {
-                            if (i > 0) {
-                                if (i == users.length - 1) {
-                                    links.push(" and ");
-                                } else {
-                                    links.push(", ");
-                                }
-                            }
-                            let ht = [names[u]];
-                            if (useScreenNamesAndLogins && names[u] !== u) {
-                                ht.push(h("$", " ", h("span.be-fe-username", "(", u, ")")))
-                            }
-                            links.push(h("a.be-fe-nameFixed", {href: "/" + u}, ht));
-                        });
-                    } else {
-                        users.slice(0, 3).forEach((u, i) => {
-                            if (i > 0) {
-                                links.push(", ");
-                            }
-                            let ht = [names[u]];
-                            if (useScreenNamesAndLogins && names[u] !== u) {
-                                ht.push(h("$", " ", h("span.be-fe-username", "(", u, ")")))
-                            }
-                            links.push(h("a.be-fe-nameFixed", {href: "/" + u}, ht));
-                        });
-                        links.push(" and " + (users.length - 3) + " other");
-                    }
-
-                    node.querySelector(".title > div").appendChild(h("span.be-fe-from-whom", " via ", links));
-                } else {
-                    node.querySelector(".title > div").appendChild(h("span.be-fe-from-whom", " via somebody"));
-                }
-            });
-        });
     });
 };
 

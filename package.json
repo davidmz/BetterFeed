@@ -6,7 +6,7 @@
   "license": "MIT",
   "homepage": "https://github.com/davidmz/BetterFeed",
   "devDependencies": {
-    "babel-loader": "^5.3.1",
+    "babel-loader": "^5.3.2",
     "browserify": "latest",
     "css-loader": "latest",
     "gulp": "latest",
@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "babel": "^5.8.23",
-    "latest-promise": "^1.1.0"
+    "latest-promise": "^1.1.0",
+    "whatwg-fetch": "^0.10.1"
   }
 }

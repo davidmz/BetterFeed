@@ -2,7 +2,6 @@ import forSelect from "../utils/for-select.js";
 import h from "../utils/html.js";
 import closestParent from "../utils/closest-parent.js";
 import * as api from "../utils/api.js";
-import * as promPlus from "../utils/promise-tools";
 import IAm from "../utils/i-am.js";
 import { arrHas } from "../utils/array-set.js";
 import Hider from "../utils/hide-tools.js";
@@ -43,90 +42,86 @@ function wrapLink(el) {
     showInfoWin(el.getAttribute("href").substr(1), wrapper);
 }
 
-function showInfoWin(username, wrapper, reloadAlert) {
+async function showInfoWin(username, wrapper, reloadAlert) {
     reloadAlert = !!reloadAlert;
-    promPlus
-        .all([api.get("/v1/users/" + username), IAm.ready])
-        .then(function (resp) {
-            var inf = resp[0].users,
-                iAm = resp[1];
-            if (!inf.id) {
-                return;
+
+    var [{users: inf}, iAm] = await Promise.all([api.get("/v1/users/" + username), IAm.ready]);
+
+    if (!inf.id) return;
+
+    if (!inf.profilePictureLargeUrl || inf.profilePictureLargeUrl === "") {
+        inf.profilePictureLargeUrl = defaultPic;
+    }
+
+    var isUser = (inf.type === "user"); // or "group"
+    var isPrivate = (inf.isPrivate === "1");
+
+    var role = iAm.whoIs(inf.username),
+        roleText;
+    if (role & IAm.ME) {
+        roleText = "You";
+    } else if (role & IAm.FRIEND) {
+        roleText = isUser ? "Your friend" : "Group (you\u2019re in)";
+    } else if (role & IAm.READER) {
+        roleText = "Your reader";
+    } else {
+        roleText = isUser ? "Stranger" : "Group";
+    }
+
+    if ((role & IAm.FRIEND) && (role & IAm.READER)) {
+        roleText = "Your mutual friend";
+    }
+
+    if (!isUser && inf.administrators.indexOf(iAm.myID) !== -1) {
+        roleText = "Your group";
+    }
+
+    var actions = [];
+    if (!(role & IAm.ME)) {
+        if (isUser) {
+            actions.push(h("span", h("a.a-subs", (role & IAm.FRIEND) ? "Unsubscribe" : (isPrivate ? "Request subs. " : "Subscribe"))));
+        } else {
+            actions.push(h("span", h("a.a-subs", (role & IAm.FRIEND) ? "Leave group" : "Join group")));
+        }
+        if (canHide) {
+            var postsBanned = arrHas(settings.banPosts, inf.username);
+            actions.push(h("span", h("a.a-hide-posts", postsBanned ? "Show posts" : "Hide posts")));
+            if (isUser) {
+                var commsBanned = arrHas(settings.banComms, inf.username);
+                var userBlocked = iAm.isBanned(inf.id);
+                actions.push(h("span", h("a.a-hide-comms", commsBanned ? "Show comms." : "Hide comms.")));
+                actions.push(h("span", h("a.a-block-user", userBlocked ? "Unblock" : "Block")));
             }
-            if (!inf.profilePictureLargeUrl || inf.profilePictureLargeUrl === "") {
-                inf.profilePictureLargeUrl = defaultPic;
-            }
+        }
+    }
 
-            var isUser = (inf.type === "user"); // or "group"
-            var isPrivate = (inf.isPrivate === "1");
+    var reloadMsg = reloadAlert ? h(".be-fe-userinfo-alert", h("i.fa.fa-refresh"), " Reload page to apply!") : null;
 
-            var role = iAm.whoIs(inf.username),
-                roleText;
-            if (role & IAm.ME) {
-                roleText = "You";
-            } else if (role & IAm.FRIEND) {
-                roleText = isUser ? "Your friend" : "Group (you\u2019re in)";
-            } else if (role & IAm.READER) {
-                roleText = "Your reader";
-            } else {
-                roleText = isUser ? "Stranger" : "Group";
-            }
-
-            if ((role & IAm.FRIEND) && (role & IAm.READER)) {
-                roleText = "Your mutual friend";
-            }
-
-            if (!isUser && inf.administrators.indexOf(iAm.myID) !== -1) {
-                roleText = "Your group";
-            }
-
-            var actions = [];
-            if (!(role & IAm.ME)) {
-                if (isUser) {
-                    actions.push(h("span", h("a.a-subs", (role & IAm.FRIEND) ? "Unsubscribe" : (isPrivate ? "Request subs. " : "Subscribe"))));
-                } else {
-                    actions.push(h("span", h("a.a-subs", (role & IAm.FRIEND) ? "Leave group" : "Join group")));
-                }
-                if (canHide) {
-                    var postsBanned = arrHas(settings.banPosts, inf.username);
-                    actions.push(h("span", h("a.a-hide-posts", postsBanned ? "Show posts" : "Hide posts")));
-                    if (isUser) {
-                        var commsBanned = arrHas(settings.banComms, inf.username);
-                        var userBlocked = iAm.isBanned(inf.id);
-                        actions.push(h("span", h("a.a-hide-comms", commsBanned ? "Show comms." : "Hide comms.")));
-                        actions.push(h("span", h("a.a-block-user", userBlocked ? "Unblock" : "Block")));
-                    }
-                }
-            }
-
-            var reloadMsg = reloadAlert ? h(".be-fe-userinfo-alert", h("i.fa.fa-refresh"), " Reload page to apply!") : null;
-
-            var infoWin = h(".be-fe-userinfo-win",
-                h("img.be-fe-userinfo-pic", {src: inf.profilePictureLargeUrl}),
-                h(".be-fe-userinfo-info",
-                    h(".be-fe-userinfo-screenName", h("a.be-fe-nameFixed", {href: "/" + inf.username}, inf.screenName)),
-                    h(".be-fe-userinfo-userName",
-                        isPrivate ? [h("i.fa.fa-lock", {title: "Private feed"}), " "] : null,
-                        inf.username
-                    ),
-                    h(".be-fe-userinfo-relation", roleText)
-                ),
-                h(".be-fe-userinfo-actions", {
-                    "data-user-id": inf.id,
-                    "data-username": inf.username,
-                    "data-subscribed": (role & IAm.FRIEND) ? "1" : "",
-                    "data-posts-hidden": postsBanned ? "1" : "",
-                    "data-comms-hidden": commsBanned ? "1" : "",
-                    "data-user-blocked": userBlocked ? "1" : "",
-                    "data-is-private": isPrivate ? "1" : ""
-                }, actions),
-                reloadMsg
-            );
-            var oldWin = wrapper.querySelector(".be-fe-userinfo-win");
-            if (oldWin) oldWin.parentNode.removeChild(oldWin);
-            wrapper.appendChild(infoWin);
-        });
-}
+    var infoWin = h(".be-fe-userinfo-win",
+        h("img.be-fe-userinfo-pic", {src: inf.profilePictureLargeUrl}),
+        h(".be-fe-userinfo-info",
+            h(".be-fe-userinfo-screenName", h("a.be-fe-nameFixed", {href: "/" + inf.username}, inf.screenName)),
+            h(".be-fe-userinfo-userName",
+                isPrivate ? [h("i.fa.fa-lock", {title: "Private feed"}), " "] : null,
+                inf.username
+            ),
+            h(".be-fe-userinfo-relation", roleText)
+        ),
+        h(".be-fe-userinfo-actions", {
+            "data-user-id": inf.id,
+            "data-username": inf.username,
+            "data-subscribed": (role & IAm.FRIEND) ? "1" : "",
+            "data-posts-hidden": postsBanned ? "1" : "",
+            "data-comms-hidden": commsBanned ? "1" : "",
+            "data-user-blocked": userBlocked ? "1" : "",
+            "data-is-private": isPrivate ? "1" : ""
+        }, actions),
+        reloadMsg
+    );
+    var oldWin = wrapper.querySelector(".be-fe-userinfo-win");
+    if (oldWin) oldWin.parentNode.removeChild(oldWin);
+    wrapper.appendChild(infoWin);
+};
 
 function unWrapLink(el) {
     var w = closestParent(el, "." + wrapClass, true);
@@ -142,7 +137,7 @@ function unWrapLink(el) {
     }
 }
 
-function linkClick(e) {
+async function linkClick(e) {
     if (e.target.nodeName !== "A") return;
     var link = e.target;
     var act = closestParent(link, ".be-fe-userinfo-actions");
@@ -153,17 +148,16 @@ function linkClick(e) {
 
     if (link.classList.contains("a-subs")) {
         if (act.dataset["subscribed"]) {
-            api.post(`/v1/users/${username}/unsubscribe`).then(() => {
-                IAm.ready.then((iAm) => iAm.unsubscribed(username));
-                showInfoWin(username, wrapper);
-            });
+            await api.post(`/v1/users/${username}/unsubscribe`);
+            (await IAm.ready).unsubscribed(username);
+            showInfoWin(username, wrapper);
         } else if (act.dataset["isPrivate"]) {
-            api.post(`/v1/users/${username}/sendRequest/`).then(() => alert("Request was sent."));
+            await api.post(`/v1/users/${username}/sendRequest/`);
+            alert("Request was sent.");
         } else {
-            api.post(`/v1/users/${username}/subscribe`).then(() => {
-                IAm.ready.then((iAm) => iAm.subscribed(username));
-                showInfoWin(username, wrapper);
-            });
+            await api.post(`/v1/users/${username}/subscribe`);
+            (await IAm.ready).subscribed(username);
+            showInfoWin(username, wrapper);
         }
     } else if (link.classList.contains("a-hide-posts")) {
         if (act.dataset["postsHidden"]) {
@@ -181,17 +175,14 @@ function linkClick(e) {
         showInfoWin(username, wrapper);
     } else if (link.classList.contains("a-block-user")) {
         if (act.dataset["userBlocked"]) {
-            api.post(`/v1/users/${username}/unban`).then(() => {
-                IAm.ready.then((iAm) => iAm.unblocked(userId));
-                showInfoWin(username, wrapper, true);
-            });
+            await api.post(`/v1/users/${username}/unban`);
+            (await IAm.ready).unblocked(username);
+            showInfoWin(username, wrapper, true);
         } else {
-            api.post(`/v1/users/${username}/ban`).then(() => {
-                IAm.ready.then((iAm) => iAm.blocked(userId));
-                showInfoWin(username, wrapper, true);
-            });
+            await api.post(`/v1/users/${username}/ban`);
+            (await IAm.ready).blocked(username);
+            showInfoWin(username, wrapper, true);
         }
-        showInfoWin(username, wrapper);
     }
 
 }
