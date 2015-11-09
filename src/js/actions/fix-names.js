@@ -18,14 +18,14 @@ export default function (node, settings) {
     if (!myLogin) {
         var loggedLink = node.querySelector(".logged-user .author a");
         if (loggedLink) {
-            myLogin = loggedLink.getAttribute("href").substr(1);
+            myLogin = loginFromPath(loggedLink.getAttribute("href"));
         }
     }
 
     forSelect(node, ".post-body > .title a:not(.be-fe-nameFixed), .p-comment-body .author a:not(.be-fe-nameFixed), .p-timeline-user-like > a:not(.be-fe-nameFixed)", node => {
         if (!node.hasAttribute("href")) return;
         node.classList.add("be-fe-nameFixed");
-        var login = node.getAttribute("href").substr(1);
+        var login = loginFromPath(node.getAttribute("href"));
         var name = node.textContent;
         var h;
         if (showLoginOnly) {
@@ -46,7 +46,7 @@ export default function (node, settings) {
     forSelect(node, ".p-timeline-subscription-user, .p-timeline-sunsctiption-group, .p-user-subscriber", node => {
         forSelect(node, "a[href]:not(.be-fe-nameFixed)", (node) => {
             node.classList.add("be-fe-nameFixed");
-            var login = node.getAttribute("href").substr(1);
+            var login = loginFromPath(node.getAttribute("href"));
             var name = "";
             var c = node.firstChild;
             while (c) {
@@ -70,3 +70,8 @@ export default function (node, settings) {
     });
 
 };
+
+function loginFromPath(path) {
+    let m = /^\/([a-z0-9]+(?:-[a-z0-9]+)*)/.exec(path);
+    return m ? m[1] : "";
+}
