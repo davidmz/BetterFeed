@@ -13,6 +13,7 @@ const atLinkRe = /^@([a-z0-9]+(?:-[a-z0-9]+)*)\b/i,
 const textsLoaded = async function () {
     try {
         let {comments, users} = await fetch(`/v1/posts/${threadID}?maxComments=all`).then(r => r.json());
+        if (!comments) return;
         let id2username = new Map();
         allTexts.clear();
         users.forEach(u => id2username.set(u.id, u.username));
@@ -90,8 +91,8 @@ export default function (node) {
 async function setMyDescription(text) {
     let {me, myID} = await IAm.ready;
     text = text.replace(/^\s+|\s+$/, '');
-    let commentIDs = (await fetch(`/v1/posts/${threadID}?maxComments=all`).then(r => r.json()))
-        .comments
+
+    let commentIDs = ((await fetch(`/v1/posts/${threadID}?maxComments=all`).then(r => r.json())).comments || [])
         .filter(({body, createdBy}) => (createdBy == myID && body.charAt(0) !== "@"))
         .map(({id}) => id);
 
@@ -112,8 +113,7 @@ async function setGroupDescription(groupName, text) {
 
     await checkAdmin(me, groupName);
 
-    let commentIDs = (await fetch(`/v1/posts/${threadID}?maxComments=all`).then(r => r.json()))
-        .comments
+    let commentIDs = ((await fetch(`/v1/posts/${threadID}?maxComments=all`).then(r => r.json())).comments || [])
         .filter(({body, createdBy}) => (createdBy == myID && body.indexOf(`@${groupName} `) == 0))
         .map(({id}) => id);
 
