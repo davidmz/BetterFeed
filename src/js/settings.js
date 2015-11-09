@@ -39,7 +39,8 @@ export const flagNames = [
     "hide-repeated-comments-icons",
     "datetime",
     "show-usernames",
-    "direct-warning"
+    "direct-warning",
+    "user-self-description"
 ];
 
 // Настройки, выключенные по умолчанию

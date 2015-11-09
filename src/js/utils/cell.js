@@ -25,10 +25,11 @@ export default class Cell {
 
     /**
      * @param {function(Cell, *)} foo
+     * @param {*} [initial]
      * @return {Cell}
      */
-    derive(foo) {
-        var c = new Cell();
+    derive(foo, initial) {
+        var c = new Cell(initial);
         this.onValue(v => foo(c, v));
         return c;
     }
@@ -53,9 +54,10 @@ export default class Cell {
 
     /**
      * For cell with Promise's values
+     * @param {*} [initial]
      * @return {Cell}
      */
-    latestPromise() {
+    latestPromise(initial) {
         var lastProm = null;
         return this.derive(async (c, v) => {
             let prom = v;
@@ -64,7 +66,7 @@ export default class Cell {
             if (prom === lastProm) {
                 c.value = res;
             }
-        });
+        }, initial);
     }
 
     distinct() {
@@ -95,6 +97,12 @@ export default class Cell {
         var cell = new Cell(getVal());
         events.forEach(event => input.addEventListener(event, () => cell.value = getVal()));
         return cell;
+    }
+
+    static ticker(timeout) {
+        let ticker = new Cell(true);
+        setInterval(() => ticker.value = true, timeout);
+        return ticker;
     }
 
 }

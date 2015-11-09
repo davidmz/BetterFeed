@@ -39,7 +39,7 @@ export default function (node, settings) {
     // видим ли селектор?
     const selVisible = new Cell(selParent.style.display !== "none");
     var observer = new MutationObserver(() => selVisible.value = selParent.style.display !== "none");
-    observer.observe(selParent, {attributes: true, attributeFilter: ['style']});
+    observer.observe(selParent, {childList: true, attributes: true, attributeFilter: ['style']});
 
     Cell
         .combine(selValues, selVisible.distinct())
