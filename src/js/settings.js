@@ -40,7 +40,8 @@ export const flagNames = [
     "datetime",
     "show-usernames",
     "direct-warning",
-    "user-self-description"
+    "user-self-description",
+    "switch-accounts"
 ];
 
 // Настройки, выключенные по умолчанию
