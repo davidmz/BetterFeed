@@ -142,12 +142,17 @@ function addAccountClicked(el) {
 }
 
 async function removeAccount(el) {
+    let {me} = await IAm.ready;
     let username = closestParent(el, `.${CSS_PREFIX}account`).dataset['username'];
-    if (username === (await IAm.ready).me) return;
+    if (username === me) return;
     if (!confirm("Are you sure?")) return;
 
     let list = (await readAccList()).filter(a => a.username !== username);
-    localStorage[ACC_LIST_KEY] = JSON.stringify(list);
+    if (list.length == 1 && list[0].username === me) {
+        localStorage.removeItem(ACC_LIST_KEY);
+    } else {
+        localStorage[ACC_LIST_KEY] = JSON.stringify(list);
+    }
     lBox.content = await genHtml();
 }
 
