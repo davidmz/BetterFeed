@@ -1,4 +1,5 @@
-import isArray from "./is-array.js";
+import isArray from "./is-array";
+import { isSafeHTML } from "./html-tpl";
 
 /**
  * h("tag.class", {attr: val}, child)
@@ -30,7 +31,7 @@ export default function h(tagName, attrs, children) {
     }
 
     var chStart = 1;
-    if (arguments.length > 1 && typeof attrs === "object" && !(attrs instanceof Node) && !isArray(attrs)) {
+    if (arguments.length > 1 && typeof attrs === "object" && !(attrs instanceof Node) && !isArray(attrs) && !isSafeHTML(attrs)) {
         for (k in attrs) if (attrs.hasOwnProperty(k)) el.setAttribute(k, attrs[k]);
         chStart = 2;
     }
@@ -50,6 +51,7 @@ function append(el, it) {
         it.forEach(append.bind(null, el));
     } else if (typeof it === "string") {
         el.appendChild(document.createTextNode(it));
+    } else if (isSafeHTML(it)) {
+        el.insertAdjacentHTML('beforeEnd', it.toString())
     }
-
 }

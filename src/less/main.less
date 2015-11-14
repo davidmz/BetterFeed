@@ -493,11 +493,74 @@ body.transition-active:before {
 .be-fe-switch-acc {
     color:      #ccc;
     cursor:     pointer;
-    border:     1px solid #eee;
     text-align: center;
 
     &:hover {
         background-color: #eee;
         color:            #000;
+    }
+}
+
+.be-fe-switch-account-box {
+    width:            360px;
+    height:           auto;
+    cursor:           auto;
+    border:           1px solid #000;
+    box-shadow:       1px 1px 10px rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+    padding:          1em;
+}
+
+.be-fe-switch-dlg-header {
+    font-size: 120%;
+}
+
+.be-fe-switch-dlg-accounts {
+    margin: 1em 0;
+}
+
+.be-fe-switch-dlg-account {
+    cursor:      pointer;
+    font-weight: bold;
+    border:      1px solid #ddd;
+    margin:      0.5em 0;
+    position:    relative;
+
+    &:hover,
+    &.-current {
+        background-color: #eee;
+    }
+
+    &.-current {
+        cursor: not-allowed;
+        .be-fe-switch-dlg-del {
+            display: none;
+        }
+    }
+}
+
+.be-fe-switch-dlg-upic {
+    width:        50px;
+    height:       50px;
+    margin-right: 1em;
+    border-right: 1px solid #ddd;
+}
+
+.be-fe-switch-dlg-new-form {
+    display: none;
+}
+
+.be-fe-switch-dlg-del {
+    position:    absolute;
+    right:       0;
+    top:         50%;
+    width:       20px;
+    height:      20px;
+    line-height: 20px;
+    text-align:  center;
+    margin-top:  -10px;
+
+    &:hover {
+        color: #c00;
     }
 }

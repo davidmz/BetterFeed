@@ -1,7 +1,7 @@
 import * as api from './api.js';
 import * as promPlus from './promise-tools.js';
 
-var defaultPic = "https://freefeed.net/img/default-userpic-48.png";
+export var defaultPic = "https://freefeed.net/img/default-userpic-48.png";
 var picRegistry = {};
 
 function picLoad(username) {

@@ -1,8 +1,8 @@
 export var userId = null;
 export var authToken = null;
 export var siteDomain = 'freefeed.net';
+export var cookieName = 'freefeed_authToken';
 
-let cookieName = 'freefeed_authToken';
 if (location.hostname === 'micropeppa.freefeed.net') {
     cookieName = 'micropeppa_authToken';
     siteDomain = 'micropeppa.freefeed.net';
