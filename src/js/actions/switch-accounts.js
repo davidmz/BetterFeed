@@ -66,10 +66,10 @@ var clickHandlers = [
 
 function init() {
     document.body.addEventListener("click", e => {
-        e.preventDefault();
         clickHandlers.some(h => {
             let t = closestParent(e.target, h.selector, true);
             if (t) {
+                e.preventDefault();
                 h.handler(t);
                 return true;
             }
