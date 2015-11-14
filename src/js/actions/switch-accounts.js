@@ -180,11 +180,7 @@ async function accountClicked(el) {
 
 async function readAccList() {
     try {
-        let list = JSON.parse(localStorage[ACC_LIST_KEY]);
-        if (!list) { //noinspection ExceptionCaughtLocallyJS
-            throw new Error("Empty list");
-        }
-        return list;
+        return JSON.parse(localStorage[ACC_LIST_KEY]);
     } catch (_) {
         return [{username: (await IAm.ready).me, token: authToken}];
     }
