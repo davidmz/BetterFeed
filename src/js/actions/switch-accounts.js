@@ -173,14 +173,18 @@ async function accountClicked(el) {
         lBox.hide();
         var d = new Date();
         d.setTime(d.getTime() + (365 * 24 * 60 * 60 * 1000));
-        document.cookie = `${cookieName}=${encodeURIComponent(token)}; path=/; expires=${d.toUTCString()}`;
+        document.cookie = `${cookieName}=${encodeURIComponent(token)}; path=/; domain=.freefeed.net; expires=${d.toUTCString()}`;
         location.reload();
     }
 }
 
 async function readAccList() {
     try {
-        return JSON.parse(localStorage[ACC_LIST_KEY]);
+        let list = JSON.parse(localStorage[ACC_LIST_KEY]);
+        if (!list) { //noinspection ExceptionCaughtLocallyJS
+            throw new Error("Empty list");
+        }
+        return list;
     } catch (_) {
         return [{username: (await IAm.ready).me, token: authToken}];
     }
