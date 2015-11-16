@@ -8,7 +8,8 @@ export default function (node) {
         var link = node.querySelector(".p-attachment-url");
         var text = link.title;
         var fileName = /(.*)\s+\(.*?\)$/.exec(text)[1];
-        var fileExt = /\.([^.]+)$/.exec(fileName)[1];
+        let pfn = /\.([^.]+)$/.exec(fileName);
+        var fileExt = pfn ? pfn[1] : '';
 
         if (!link.download) {
             link.download = fileName;
