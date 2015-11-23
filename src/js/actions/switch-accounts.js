@@ -3,7 +3,6 @@ import closestParent from "../utils/closest-parent";
 import h from "../utils/html";
 import { html, isSafeHTML } from "../utils/html-tpl";
 import IAm from "../utils/i-am";
-import * as api from "../utils/api";
 import { siteDomain, cookieName, authToken } from '../utils/current-user-id';
 import { defaultPic, getPic } from '../utils/userpics';
 require('../../less/lightbox.less');
@@ -123,7 +122,7 @@ async function genHtml() {
         h(
             `.${CSS_PREFIX}accounts`,
             (await readAccList()).map(
-                ({username, current}) => {
+                ({username}) => {
                     let userPic = h(`img.${CSS_PREFIX}upic`, {src: defaultPic});
                     getPic(username).then(pic => userPic.src = pic);
                     let deleter = h(`.${CSS_PREFIX}del`, {title: "Remove from list"}, h("i.fa.fa-times-circle"));

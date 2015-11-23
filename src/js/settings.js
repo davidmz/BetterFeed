@@ -41,7 +41,8 @@ export const flagNames = [
     "show-usernames",
     "direct-warning",
     "user-self-description",
-    "switch-accounts"
+    "switch-accounts",
+    "new-directs-track"
 ];
 
 // Настройки, выключенные по умолчанию
@@ -58,6 +59,7 @@ export default class Settings {
             this.banPosts = sData.banPosts;
             this.banComms = sData.banComms;
             this.hideAlienPosts = sData.hideAlienPosts;
+            this.directs = sData.directs;
 
         } else {
 
@@ -69,6 +71,7 @@ export default class Settings {
                 this.banPosts = safeJSONParse(localStorage["be-fe.banList"], []);
                 this.banComms = safeJSONParse(localStorage["be-fe.banListComms"], []);
                 this.hideAlienPosts = (localStorage["be-fe.hide-alien-posts"] === "1");
+                this.directs = null; // initial value = null, else array
                 this.save();
 
             } else {
@@ -79,7 +82,8 @@ export default class Settings {
                 this.flags = s.hasOwnProperty("flags") ? s.flags : {};
                 this.banPosts = s.hasOwnProperty("banPosts") ? s.banPosts : [];
                 this.banComms = s.hasOwnProperty("banComms") ? s.banComms : [];
-                this.hideAlienPosts = s.hasOwnProperty("banComms") ? !!s.hideAlienPosts : false;
+                this.hideAlienPosts = s.hasOwnProperty("hideAlienPosts") ? !!s.hideAlienPosts : false;
+                this.directs = s.hasOwnProperty("directs") ? s.directs : null; // initial value = null, else array
 
             }
         }
@@ -117,7 +121,8 @@ export default class Settings {
             flags: this.flags,
             banPosts: this.banPosts,
             banComms: this.banComms,
-            hideAlienPosts: this.hideAlienPosts
+            hideAlienPosts: this.hideAlienPosts,
+            directs: this.directs
         };
         localStorage[LS_KEY] = JSON.stringify(s);
     }

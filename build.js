@@ -19,7 +19,12 @@ webpack({
         new webpack.optimize.UglifyJsPlugin({})//,
         //new webpack.ProvidePlugin({'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'})
     ]
-}, function (err, stats) { if (err !== null) console.log(err);});
+}, function (err, stats) {
+    if (err !== null) console.log(err);
+    var jStats = stats.toJson();
+    if (jStats.errors.length > 0) jStats.errors.forEach(function (m) { console.log("ERR", m); });
+    if (jStats.warnings.length > 0) jStats.warnings.forEach(function (m) { console.log("WARN", m); });
+});
 
 webpack({
     entry: ['babel/polyfill', './src/js/options.js'],

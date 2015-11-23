@@ -9,7 +9,11 @@ export default class Cell {
 
     set value(v) {
         this._value = v;
-        this._listeners.forEach(l => l(v));
+        this.poke();
+    }
+
+    poke() {
+        this._listeners.forEach(l => l(this._value));
     }
 
     onValue(lst) {
