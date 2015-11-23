@@ -43,6 +43,7 @@ export default function (node) {
                     if (match === "^W") {
                         continue;
                     }
+                    match = match.replace('W', '');
                     fr.appendChild(document.createTextNode(str.substr(ptr, off - ptr)));
                     ptr = off + match.length;
                     var a = fr.appendChild(h("span.be-fe-ups", match));
