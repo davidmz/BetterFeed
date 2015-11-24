@@ -27,9 +27,8 @@ export default function (node, settings) {
         var postAuthor = authorLink.getAttribute("href").substr(1);
         node.classList.add("be-fe-post-from-u-" + postAuthor);
 
-        var pp = node.querySelector("a.datetime").getAttribute("href").match(/^\/.+?\/([\w-]+)/);
-        if (!pp) return; // удивительный случай, когда у поста нет ID в HTML
-        var postId = pp[1];
+        var postId = node.dataset.postId;
+        if (!postId) return; // удивительный случай, когда у поста нет ID в HTML
 
         var postTargets = [];
         forSelect(node, ".title a", a => {
@@ -105,20 +104,3 @@ export default function (node, settings) {
     });
 };
 
-
-function getPostInfo(postId) {
-    return new Promise((resolve, reject) => {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/v1/posts/' + postId + '?maxLikes=all');
-        xhr.responseType = 'json';
-        xhr.setRequestHeader('X-Authentication-Token', localStorage["authToken"]);
-        xhr.onload = () => {
-            if ("err" in xhr.response) {
-                reject(xhr.response.err);
-                return;
-            }
-            resolve(xhr.response);
-        };
-        xhr.send();
-    });
-}
