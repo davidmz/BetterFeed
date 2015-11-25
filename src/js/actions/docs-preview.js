@@ -1,5 +1,6 @@
-import forSelect from "../utils/for-select.js";
-import h from "../utils/html.js";
+import forSelect from "../utils/for-select";
+import h from "../utils/html";
+import compensateScroll from "../utils/compensate-scroll";
 
 export default function (node) {
     node = node || document.body;
@@ -20,16 +21,17 @@ export default function (node) {
         }
 
         if (["txt", "doc", "docx", "xls", "xlsx", "pdf", "ppt"].indexOf(fileExt.toLowerCase()) !== -1) {
-            node.classList.add("be-fe-with-preview");
-            node.insertBefore(
+            let att = attachWrap(
                 h(".be-fe-doc-view-wrapper",
                     h("iframe.be-fe-doc-view-frame", {
                         frameborder: "0",
                         src: `https://docs.google.com/gview?url=${encodeURIComponent(link.href)}&embedded=true`
                     })
-                ),
-                node.firstChild
+                )
             );
+            node.classList.add("be-fe-with-preview");
+            node.insertBefore(att, node.firstChild);
+            compensateScroll(att);
         }
 
         if (fileExt === "mp4") {
@@ -47,10 +49,15 @@ export default function (node) {
                 v.controls = true;
                 v.loop = true;
 
+                let att = attachWrap(v);
+
                 node.classList.add("be-fe-with-preview");
-                node.insertBefore(h(".be-fe-video-view-wrapper", v), node.firstChild);
+                node.insertBefore(h(".be-fe-video-view-wrapper", att), node.firstChild);
+                compensateScroll(att);
             });
             v.src = link.href;
         }
     });
 }
+
+function attachWrap(el) { return h(".be-fe-attach-preview", h("", el));}

@@ -583,3 +583,14 @@ body.transition-active:before {
         color: #eb1478;
     }
 }
+
+.be-fe-attach-preview {
+    height:   0;
+    overflow: hidden;
+    opacity:  0;
+
+    &.-expanded {
+        opacity:    1;
+        transition: opacity 0.5s;
+    }
+}

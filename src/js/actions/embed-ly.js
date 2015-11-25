@@ -1,5 +1,8 @@
-import forSelect from "../utils/for-select.js";
-import h from "../utils/html.js";
+import forSelect from "../utils/for-select";
+import h from "../utils/html";
+import imgLoaded from "../utils/img-loaded";
+import closestParent from "../utils/closest-parent";
+import compensateScroll from "../utils/compensate-scroll";
 var css = require("../../less/embeds.less");
 
 export default function (node) {
@@ -7,7 +10,7 @@ export default function (node) {
         (function (w, d) {
             var id = 'embedly-platform', n = 'script';
             if (!d.getElementById(id)) {
-                w.embedly = w.embedly || function () {(w.embedly.q = w.embedly.q || []).push(arguments);};
+                w.embedly = w.embedly || function () { (w.embedly.q = w.embedly.q || []).push(arguments); };
                 var e = d.createElement(n);
                 e.id = id;
                 e.async = 1;
@@ -17,7 +20,8 @@ export default function (node) {
             }
         })(window, document);
 
-        embedly('on', 'card.rendered', function (iframe) { iframe.style.margin = "10px 0"; });
+        embedly('on', 'card.rendered', iframe => iframe.style.margin = "10px 0");
+        embedly('on', 'card.resize', iframe => compensateScroll(closestParent(iframe, ".be-fe-embeds")));
     }
 
     node = node || document.body;
@@ -50,26 +54,35 @@ export default function (node) {
                 }
             }
 
-            var bodyNext = body.nextSibling;
-            var embed, m;
-            if ((m = /^https:\/\/instagram\.com\/p\/([^\/]+)/.exec(url)) !== null) {
+            var bodyNext = body.nextSibling,
+                m,
+                embedNode, // = Promise.reject(),
+                afterMount = el => compensateScroll(el);
+
+            if ((m = /^https:\/\/(?:www\.)?instagram\.com\/p\/([^\/]+)/.exec(url)) !== null) {
                 // https://instagram.com/developer/embedding/?hl=ru#oembed
                 let id = m[1],
-                    cssClass = css["instagram"];
-                embed = h(`.${cssClass}`,
-                    h("a.light-box-thumbnail", {
-                            href: url,
-                            target: "_blank",
-                            "data-image-src": `https://instagram.com/p/${id}/media/?size=l`
-                        },
-                        h(`img.${cssClass}-image`, {src: `https://instagram.com/p/${id}/media/?size=m`})
-                    ),
-                    h(`.be-fe-embed-byline`,
-                        h("i.fa.fa-instagram.fa-lg"),
-                        " ",
-                        h("a", {href: url, target: "_blank"}, "View on INSTAGRAM")
+                    cssClass = css["instagram"],
+                    image = h(`img.${cssClass}-image`, {src: `https://instagram.com/p/${id}/media/?size=m`});
+                embedNode = Promise.resolve(
+                    embedWrap(
+                        h(`.${cssClass}`,
+                            h("a.light-box-thumbnail", {
+                                    href: url,
+                                    target: "_blank",
+                                    "data-image-src": `https://instagram.com/p/${id}/media/?size=l`
+                                },
+                                image
+                            ),
+                            h(`.be-fe-embed-byline`,
+                                h("i.fa.fa-instagram.fa-lg"),
+                                " ",
+                                h("a", {href: url, target: "_blank"}, "View on INSTAGRAM")
+                            )
+                        )
                     )
                 );
+                afterMount = el => imgLoaded(image).then(() => compensateScroll(el));
             } else if (
                 (m = /^https?:\/\/(?:www\.)?youtube\.com\/watch\?(?:v|.*?&v)=([a-zA-Z0-9_-]+)/.exec(url)) !== null ||
                 (m = /^https?:\/\/(?:www\.)?youtube\.com\/v\/([a-zA-Z0-9_-]+)/.exec(url)) !== null ||
@@ -77,34 +90,43 @@ export default function (node) {
             ) {
                 let id = m[1],
                     cssClass = css["youtube"];
-                embed = h(".be-fe-embed-video-cont",
-                    h(`.be-fe-embed-video-wrapper`,
-                        h(`iframe`, {
-                            src: `https://www.youtube.com/embed/${id}?rel=0&hd=1&fs=1`,
-                            frameborder: "0",
-                            allowfullscreen: ""
-                        })
-                    ),
-                    h(`.be-fe-embed-byline`,
-                        h("i.fa.fa-youtube-play.fa-lg"),
-                        " ",
-                        h("a", {href: url, target: "_blank"}, "View on YOUTUBE")
+                embedNode = Promise.resolve(
+                    embedWrap(
+                        h(".be-fe-embed-video-cont",
+                            h(`.be-fe-embed-video-wrapper`,
+                                h(`iframe`, {
+                                    src: `https://www.youtube.com/embed/${id}?rel=0&hd=1&fs=1`,
+                                    frameborder: "0",
+                                    allowfullscreen: ""
+                                })
+                            ),
+                            h(`.be-fe-embed-byline`,
+                                h("i.fa.fa-youtube-play.fa-lg"),
+                                " ",
+                                h("a", {href: url, target: "_blank"}, "View on YOUTUBE")
+                            )
+                        )
                     )
                 );
+
             } else if ((m = /^https:\/\/vimeo\.com\/(\d+)/.exec(url)) !== null) {
                 let id = m[1];
-                embed = h(".be-fe-embed-video-cont",
-                    h(`.be-fe-embed-video-wrapper`,
-                        h(`iframe`, {
-                            src: `https://player.vimeo.com/video/${id}`,
-                            frameborder: "0",
-                            allowfullscreen: ""
-                        })
-                    ),
-                    h(`.be-fe-embed-byline`,
-                        h("i.fa.fa-vimeo-square.fa-lg"),
-                        " ",
-                        h("a", {href: url, target: "_blank"}, "View on VIMEO")
+                embedNode = Promise.resolve(
+                    embedWrap(
+                        h(".be-fe-embed-video-cont",
+                            h(`.be-fe-embed-video-wrapper`,
+                                h(`iframe`, {
+                                    src: `https://player.vimeo.com/video/${id}`,
+                                    frameborder: "0",
+                                    allowfullscreen: ""
+                                })
+                            ),
+                            h(`.be-fe-embed-byline`,
+                                h("i.fa.fa-vimeo-square.fa-lg"),
+                                " ",
+                                h("a", {href: url, target: "_blank"}, "View on VIMEO")
+                            )
+                        )
                     )
                 );
             } else if ((m = /^https:\/\/docs\.google\.com\/(document|spreadsheets|presentation|drawings)\/d\/([^\/]+)/.exec(url)) !== null) {
@@ -113,18 +135,20 @@ export default function (node) {
                 var img = h("img.be-fe-gdoc");
                 img.onerror = function () { img.style.display = "none"; };
                 img.src = "https://drive.google.com/thumbnail?id=" + docId + "&sz=w590-h236-p";
-                embed = h("a", {href: url, target: "_blank"}, img);
+                embedNode = Promise.resolve(embedWrap(h("a", {href: url, target: "_blank"}, img)));
+                afterMount = el => imgLoaded(img).then(() => compensateScroll(el));
 
             } else if ((m = /^https:\/\/itunes\.apple\.com\/app\/id(\d+)/.exec(url)) !== null) {
-                embed = h(`iframe`, {
+                let iframe = h(`iframe`, {
                     src: `https://widgets.itunes.apple.com/widget.html?c=us&brc=FFFFFF&blc=FFFFFF&trc=FFFFFF&tlc=FFFFFF&d=&t=&m=software&e=software,iPadSoftware&w=325&h=300&ids=${m[1]}&wt=discovery&partnerId=&affiliate_id=&at=&ct=`,
                     frameborder: "0"
                 });
-                embed.style.cssText = "overflow-x:hidden;overflow-y:hidden;width:325px;height: 300px;border:0px";
+                iframe.style.cssText = "overflow-x:hidden;overflow-y:hidden;width:325px;height: 300px;border:0px";
+                embedNode = Promise.resolve(embedWrap(iframe));
 
             } else if ((m = /^https?:\/\/coub\.com\/view\/([^\/?#]+)/.exec(url)) !== null) {
                 let id = m[1];
-                embed = fetch(`https://davidmz.me/oembed/coub/oembed.json?url=${encodeURIComponent(url)}`)
+                embedNode = fetch(`https://davidmz.me/oembed/coub/oembed.json?url=${encodeURIComponent(url)}`)
                     .then(resp => resp.json())
                     .then(j => {
                         var width = parseInt(j.width);
@@ -133,7 +157,7 @@ export default function (node) {
                             height = Math.round(height * 450 / width);
                             width = 450;
                         }
-                        return Promise.resolve(
+                        return embedWrap(
                             h("div",
                                 h("iframe", {
                                     src: `https://coub.com/embed/${id}?muted=false&autostart=false&originalSize=false&hideTopBar=false&startWithHD=true`,
@@ -149,18 +173,21 @@ export default function (node) {
                     });
 
             } else {
-                embed = h("a.embedly-card", {href: link.href, "data-card-width": "60%"});
+                embedNode = Promise.resolve(embedWrap(h("a.embedly-card", {
+                    href: link.href,
+                    "data-card-width": "60%"
+                })));
             }
 
-            if ("then" in embed) {
-                embed.then(el => {
-                    node.insertBefore(h(".be-fe-embeds", el), bodyNext);
-                });
-            } else {
-                node.insertBefore(h(".be-fe-embeds", embed), bodyNext);
-            }
+            embedNode.then(el => {
+                node.insertBefore(el, bodyNext);
+                afterMount(el);
+            }).catch(x => console.log(x));
+
             return true;
         });
     });
 }
+
+function embedWrap(el) { return h(".be-fe-embeds", h("", el));}
 

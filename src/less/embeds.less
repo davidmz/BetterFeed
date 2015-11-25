@@ -1,5 +1,16 @@
 .be-fe-embeds {
-    margin-bottom: 1em;
+    height:   0;
+    overflow: hidden;
+    opacity:  0;
+
+    &.-expanded {
+        opacity:    1;
+        transition: opacity 0.5s;
+    }
+
+    & > div {
+        padding-bottom: 1em;
+    }
 }
 
 .be-fe-embed-byline { margin-top: 0.5em; }
