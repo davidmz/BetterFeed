@@ -2,7 +2,6 @@ import forSelect from "../utils/for-select";
 import h from "../utils/html";
 import * as api from "../utils/api";
 import { authToken } from '../utils/current-user-id';
-import Cell from "../utils/cell";
 import WS from "../utils/ws";
 
 const MAX_POSTS_COUNT = 100;
@@ -11,8 +10,7 @@ var settings = null,
     initiateSettings,
     settingsInitiated = new Promise(resolve => initiateSettings = resolve),
     viewedPosts = null,
-    actualPosts = new Map(),
-    postsChanged = new Cell();
+    actualPosts = new Map();
 
 export default function (node, pSettings) {
     if (!settings) {
@@ -25,42 +23,13 @@ export default function (node, pSettings) {
 
     if (!node) {
         init();
-
-        postsChanged
-            .map(() => {
-                let hasNew = false,
-                    hasUpdated = false;
-                actualPosts.forEach((upd, id) => {
-                    if (!viewedPosts.has(id)) {
-                        hasNew = true;
-                    } else if (viewedPosts.get(id) < upd) {
-                        hasUpdated = true;
-                    }
-                });
-                return [hasNew, hasUpdated];
-            })
-            .onValue(([hasNew, hasUpdated]) => {
-                let el = document.body.querySelector(".be-fe-directs-notify");
-                if (!el) return;
-                if (hasNew) {
-                    el.classList.remove("hide");
-                    el.classList.add("-with-new");
-                    el.setAttribute("title", "New post(s)");
-                } else if (hasUpdated) {
-                    el.classList.remove("hide");
-                    el.classList.remove("-with-new");
-                    el.setAttribute("title", "New comment(s)");
-                } else {
-                    el.classList.add("hide");
-                }
-            });
     }
 
     node = node || document.body;
 
     forSelect(node, ".sidebar .p-direct-messages", node => {
         node.appendChild(h("i.fa.fa-envelope.be-fe-directs-notify.hide"));
-        postsChanged.poke();
+        updateIndicator();
     });
 
     forSelect(node, ".direct-post", async node => {
@@ -69,10 +38,36 @@ export default function (node, pSettings) {
         await settingsInitiated;
         let {posts: {id, updatedAt}} = await api.get('/v1/posts/' + postId + '?maxLikes=0&maxComments=0');
         viewedPosts.set(id, parseInt(updatedAt));
-        postsChanged.poke();
+        updateIndicator();
         settings.directs = map2list(viewedPosts);
         settings.save();
     });
+}
+
+function updateIndicator() {
+    if (settings.directs === null) return;
+    let el = document.body.querySelector(".be-fe-directs-notify");
+    if (!el) return;
+    let hasNew = false,
+        hasUpdated = false;
+    actualPosts.forEach((upd, id) => {
+        if (!viewedPosts.has(id)) {
+            hasNew = true;
+        } else if (viewedPosts.get(id) < upd) {
+            hasUpdated = true;
+        }
+    });
+    if (hasNew) {
+        el.classList.remove("hide");
+        el.classList.add("-with-new");
+        el.setAttribute("title", "New post(s)");
+    } else if (hasUpdated) {
+        el.classList.remove("hide");
+        el.classList.remove("-with-new");
+        el.setAttribute("title", "New comment(s)");
+    } else {
+        el.classList.add("hide");
+    }
 }
 
 function newPost(postId, updatedAt) {
@@ -81,7 +76,7 @@ function newPost(postId, updatedAt) {
         if (!document.getElementById(`post-${postId}`)) {
             // пост не на странице
             actualPosts.set(postId, updatedAt);
-            postsChanged.poke();
+            updateIndicator();
         }
     }, 200);
 }
@@ -89,7 +84,7 @@ function newPost(postId, updatedAt) {
 function delPost(postId) {
     viewedPosts.delete(postId);
     actualPosts.delete(postId);
-    postsChanged.poke();
+    updateIndicator();
     settings.directs = map2list(viewedPosts);
     settings.save();
 }
@@ -101,10 +96,10 @@ function init() {
         socket.send("42" + JSON.stringify(["subscribe", {timeline: [id]}]));
         if (settings.directs === null) {
             posts.forEach(p => viewedPosts.set(p.id, parseInt(p.updatedAt)));
-            postsChanged.poke();
             settings.directs = map2list(viewedPosts);
             settings.save();
             initiateSettings();
+            updateIndicator();
         } else {
             posts.forEach(p => newPost(p.id, parseInt(p.updatedAt)));
         }
