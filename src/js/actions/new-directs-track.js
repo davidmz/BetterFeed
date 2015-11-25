@@ -77,6 +77,10 @@ function newPost(postId, updatedAt) {
             // пост не на странице
             actualPosts.set(postId, updatedAt);
             updateIndicator();
+        } else {
+            if (!viewedPosts.has(postId) || viewedPosts.get(postId) < updatedAt) {
+                viewedPosts.set(postId, updatedAt);
+            }
         }
     }, 200);
 }
