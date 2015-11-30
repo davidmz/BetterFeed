@@ -138,7 +138,7 @@ export default function (node) {
                 embedNode = Promise.resolve(embedWrap(h("a", {href: url, target: "_blank"}, img)));
                 afterMount = el => imgLoaded(img).then(() => compensateScroll(el));
 
-            } else if ((m = /^https:\/\/itunes\.apple\.com\/app\/id(\d+)/.exec(url)) !== null) {
+            } else if ((m = /^https:\/\/itunes\.apple\.com\/(?:[a-z]{2}\/)?app\/id(\d+)/.exec(url)) !== null) {
                 let iframe = h(`iframe`, {
                     src: `https://widgets.itunes.apple.com/widget.html?c=us&brc=FFFFFF&blc=FFFFFF&trc=FFFFFF&tlc=FFFFFF&d=&t=&m=software&e=software,iPadSoftware&w=325&h=300&ids=${m[1]}&wt=discovery&partnerId=&affiliate_id=&at=&ct=`,
                     frameborder: "0"
