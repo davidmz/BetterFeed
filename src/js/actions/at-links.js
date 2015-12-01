@@ -17,7 +17,16 @@ export default function (node) {
                     var match = m[0], login = m[1].toLowerCase(), off = m.index;
                     fr.appendChild(document.createTextNode(str.substr(ptr, off - ptr)));
                     ptr = off + match.length;
-                    var a = fr.appendChild(h("a.be-fe-at-link", {href: "/" + login}, match));
+                    let existingLink = document.querySelector(`a[href="/${login}"]:not(.be-fe-at-link-regular)`);
+                    let a;
+                    if (existingLink) {
+                        a = existingLink.cloneNode(false);
+                        a.className = "be-fe-at-link";
+                        a.appendChild(document.createTextNode(match));
+                    } else {
+                        a = h("a.be-fe-at-link.be-fe-at-link-regular", {href: "/" + login}, match);
+                    }
+                    fr.appendChild(a);
                     hlOver(a, ".be-fe-comment-from-u-" + login);
                 }
                 var lastCh = fr.appendChild(document.createTextNode(str.substr(ptr)));
