@@ -42,7 +42,8 @@ export const flagNames = [
     "direct-warning",
     "user-self-description",
     "switch-accounts",
-    "new-directs-track"
+    "new-directs-track",
+    "send-to-icons"
 ];
 
 // Настройки, выключенные по умолчанию

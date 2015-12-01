@@ -5,6 +5,7 @@ import h from "../utils/html";
 import Cell from "../utils/cell";
 import { authToken, siteDomain } from '../utils/current-user-id';
 import escapeHTML from '../utils/escape-html';
+import userInfo from "../utils/user-info";
 
 const atLinkRe = /^@([a-z0-9]+(?:-[a-z0-9]+)*)\b/i,
     threadID = (siteDomain == 'micropeppa.freefeed.net') ? "7a9cbbed-d9cb-4eca-aee4-b3dfeb0eac38" : "21284afb-6ffd-4b96-a4c3-a8663155627e",
@@ -37,7 +38,7 @@ const textsLoaded = async function () {
 }();
 
 async function checkAdmin(userName, groupName) {
-    let {admins, users:{type}} = await api.get(`/v1/users/${groupName}`);
+    let {admins, users:{type}} = await userInfo(groupName);
     if (!admins) throw new Error(`account ${groupName} not found`);
     if (type !== "group") throw new Error(`${groupName} is not group`);
     if (!admins.some(adm => adm.username == userName)) throw new Error(`${userName} not an admin of ${groupName}`);

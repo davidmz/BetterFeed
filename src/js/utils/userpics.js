@@ -1,14 +1,12 @@
-import * as api from './api.js';
-import * as promPlus from './promise-tools.js';
+import userInfo from "../utils/user-info";
 
 export var defaultPic = "https://freefeed.net/img/default-userpic-48.png";
 var picRegistry = {};
 
-function picLoad(username) {
-    return api.get("/v1/users/" + username).then(function (inf) {
-        var p = inf.users.profilePictureMediumUrl;
-        return (p && p !== "") ? p : defaultPic;
-    });
+async function picLoad(username) {
+    let inf = await userInfo(username);
+    let p = inf.users.profilePictureMediumUrl;
+    return (p && p !== "") ? p : defaultPic;
 }
 
 export function getPic(username) {
@@ -19,5 +17,5 @@ export function getPic(username) {
 }
 
 export function setPic(username, pic) {
-    picRegistry[username] = promPlus.resolve((pic && pic !== "") ? pic : defaultPic);
+    picRegistry[username] = Promise.resolve((pic && pic !== "") ? pic : defaultPic);
 }

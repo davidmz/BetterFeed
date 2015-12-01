@@ -2,6 +2,7 @@ import forSelect from "../utils/for-select.js";
 import * as api from "../utils/api.js";
 import h from "../utils/html.js";
 import IAm from "../utils/i-am.js";
+import userInfo from "../utils/user-info";
 
 export default async function (node) {
     node = node || document.body;
@@ -42,7 +43,7 @@ function decorateMutualFriends(iAm, node, chClass) {
 }
 
 async function decorateGroupAdmins(userName, node) {
-    var [{users: inf}, {subscribers: subscr}]  = await Promise.all([api.get(`/v1/users/${userName}`), api.get(`/v1/users/${userName}/subscribers`)]);
+    var [{users: inf}, {subscribers: subscr}]  = await Promise.all([userInfo(userName), api.get(`/v1/users/${userName}/subscribers`)]);
 
     if (!inf.id || inf.type !== "group") return;
 

@@ -5,6 +5,7 @@ import * as api from "../utils/api.js";
 import IAm from "../utils/i-am.js";
 import { arrHas } from "../utils/array-set.js";
 import Hider from "../utils/hide-tools.js";
+import userInfo from "../utils/user-info";
 
 const timeToShow = 1000,
     timeToHide = 500,
@@ -45,7 +46,7 @@ function wrapLink(el) {
 async function showInfoWin(username, wrapper, reloadAlert) {
     reloadAlert = !!reloadAlert;
 
-    var [{users: inf}, iAm] = await Promise.all([api.get("/v1/users/" + username), IAm.ready]);
+    var [{users: inf}, iAm] = await Promise.all([userInfo(username), IAm.ready]);
 
     if (!inf.id) return;
 

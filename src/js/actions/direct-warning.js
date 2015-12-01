@@ -1,16 +1,15 @@
+import forSelect from "../utils/for-select.js";
 import closestParent from "../utils/closest-parent.js";
 import h from "../utils/html.js";
 import IAm from "../utils/i-am.js";
-import * as api from "../utils/api.js";
-import * as promPlus from "../utils/promise-tools";
 import Cell from "../utils/cell.js";
+import userInfo from "../utils/user-info";
 
 /**
  *
  * @param {HTMLElement|null} node
- * @param {Settings} settings
  */
-export default function (node, settings) {
+export default function (node) {
     node = node || document.body;
 
     const sel = node.querySelector("select.p-sendto-select");
@@ -44,7 +43,7 @@ export default function (node, settings) {
     Cell
         .combine(selValues, selVisible.distinct())
         .map(([vals, vis]) => vis ? vals : [])
-        .map(names => promPlus.all([IAm.ready, ...names.map(n => getUserInfo(n))]))
+        .map(names => Promise.all([IAm.ready, ...names.map(n => userInfo(n))]))
         .latestPromise()
         .onValue(infos => {
             if (infos === undefined) { // initial value
@@ -71,14 +70,6 @@ export default function (node, settings) {
                 warnDiv.classList.add("hidden");
             }
         });
-}
-
-var userInfos = new Map();
-function getUserInfo(name) {
-    if (!userInfos.has(name)) {
-        userInfos.set(name, api.get(`/v1/users/${name}`));
-    }
-    return userInfos.get(name);
 }
 
 function getSelected(sel) {
