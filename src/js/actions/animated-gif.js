@@ -1,18 +1,18 @@
 import forSelect from "../utils/for-select";
+import imgLoaded from "../utils/img-loaded";
 
 export default function (node, settings) {
     node = node || document.body;
 
-    forSelect(node, "img.p-attachment-thumbnail[src$='.gif'][src*='/attachments/']:not(.be-fe-gif)", img => {
+    forSelect(node, "img.p-attachment-thumbnail[src$='.gif'][src*='/attachments/']:not(.be-fe-gif)", async img => {
         img.classList.add("be-fe-gif");
-        isAnimatedGif(img.src).then(() => {
+        try {
+            await Promise.all([isAnimatedGif(img.src), imgLoaded(img)]);
             img.parentNode.classList.add("be-fe-gif-ani");
-            if (img.complete) {
-                drawImage(img);
-            } else {
-                img.addEventListener("load", () => drawImage(img));
-            }
-        }, () => {});
+            drawImage(img);
+        } catch (e) {
+            // not an animated GIF
+        }
     });
 };
 
@@ -31,7 +31,8 @@ function drawImage(img) {
     img2.src = img.src;
 }
 
-// https://gist.github.com/lakenen/3012623
+// https://gist.github.com/marckubischta/261ad8427a214022890b
+// (was https://gist.github.com/lakenen/3012623)
 function isAnimatedGif(src) {
     return new Promise((resolve, reject) => {
         var request = new XMLHttpRequest();
@@ -51,17 +52,21 @@ function isAnimatedGif(src) {
             //ported from php http://www.php.net/manual/en/function.imagecreatefromgif.php#104473
             //an animated gif contains multiple "frames", with each frame having a
             //header made up of:
-            // * a static 4-byte sequence (\x00\x21\xF9\x04)
-            // * 4 variable bytes
+            // * a static 3-byte sequence (\x00\x21\xF9
+            // * one byte indicating the length of the header (usually \x04)
+            // * variable length header (usually 4 bytes)
             // * a static 2-byte sequence (\x00\x2C) (some variants may use \x00\x21 ?)
-            // We read through the file til we reach the end of the file, or we've found
-            // at least 2 frame headers
-            for (i = 0, len = length - 9; i < len && frames < 2; i++) {
-                if (arr[i] === 0x00 && arr[i + 1] === 0x21 &&
-                    arr[i + 2] === 0xF9 && arr[i + 3] === 0x04 &&
-                    arr[i + 8] === 0x00 &&
-                    (arr[i + 9] === 0x2C || arr[i + 9] === 0x21)) {
-                    frames++;
+            // We read through the file as long as we haven't reached the end of the file
+            // and we haven't yet found at least 2 frame headers
+            for (i = 0, len = length - 3; i < len && frames < 2; ++i) {
+                if (/* arr[i] === 0x00 && */ arr[i + 1] === 0x21 && arr[i + 2] === 0xF9) {
+                    let blockLength = arr[i + 3],
+                        afterBlock = i + 4 + blockLength;
+                    if (afterBlock + 1 < length &&
+                        arr[afterBlock] === 0x00 &&
+                        (arr[afterBlock + 1] === 0x2C || arr[afterBlock + 1] === 0x21)) {
+                        frames++;
+                    }
                 }
             }
 
