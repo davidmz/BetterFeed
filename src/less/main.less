@@ -614,3 +614,32 @@ body.transition-active:before {
     margin-right: 0 !important;
 }
 
+.be-fe-gifv {
+    position: relative;
+    display:  inline-block;
+
+    &::after {
+        content:          "▶ GIFV";
+        position:         absolute;
+        bottom:           3px;
+        right:            4px;
+        background-color: #069;
+        color:            #eee;
+        font-weight:      bold;
+        padding:          0.1em 0.4em;
+        border-radius:    3px;
+        font-size:        11px;
+    }
+
+    &.-playing::after {
+        display: none;
+    }
+
+    video {
+        width:     100%;
+        max-width: 450px;
+        height:    auto;
+        cursor:    pointer;
+        float:     left;
+    }
+}
