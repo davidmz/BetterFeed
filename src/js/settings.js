@@ -14,6 +14,7 @@ import { arrHas } from "./utils/array-set.js";
 const LS_KEY = "bfSettings";
 
 export const flagNames = [
+    "alt-text-proc",
     "fix-names",
     "lightboxed-images",
     "bottom-comment-link",

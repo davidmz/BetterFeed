@@ -37,7 +37,7 @@ export default function (node) {
         forSelect(body, ".text a").some(link => {
             var url = link.getAttribute("href");
 
-            if (!/^https?:\/\//.test(url) || !/^https?:\/\//.test(link.textContent)) {
+            if (!link.classList.contains("be-fe-url-with-proto") && !(/^https?:\/\//.test(url) && /^https?:\/\//.test(link.textContent))) {
                 return false;
             }
 

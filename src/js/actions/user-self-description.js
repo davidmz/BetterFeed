@@ -6,6 +6,7 @@ import Cell from "../utils/cell";
 import { authToken, siteDomain } from '../utils/current-user-id';
 import escapeHTML from '../utils/escape-html';
 import userInfo from "../utils/user-info";
+import linkify from "../utils/linkify";
 
 const atLinkRe = /^@([a-z0-9]+(?:-[a-z0-9]+)*)\b/i,
     threadID = (siteDomain == 'micropeppa.freefeed.net') ? "7a9cbbed-d9cb-4eca-aee4-b3dfeb0eac38" : "21284afb-6ffd-4b96-a4c3-a8663155627e",
@@ -13,7 +14,7 @@ const atLinkRe = /^@([a-z0-9]+(?:-[a-z0-9]+)*)\b/i,
 
 const textsLoaded = async function () {
     try {
-        let {comments, users} = await fetch(`/v1/posts/${threadID}?maxComments=all`).then(r => r.json());
+        let {comments, users} = await api.get(`/v1/posts/${threadID}?maxComments=all`);
         if (!comments) return;
         let id2username = new Map();
         allTexts.clear();
@@ -93,7 +94,7 @@ async function setMyDescription(text) {
     let {me, myID} = await IAm.ready;
     text = text.replace(/^\s+|\s+$/, '');
 
-    let commentIDs = ((await fetch(`/v1/posts/${threadID}?maxComments=all`).then(r => r.json())).comments || [])
+    let commentIDs = ((await api.get(`/v1/posts/${threadID}?maxComments=all`)).comments || [])
         .filter(({body, createdBy}) => (createdBy == myID && body.charAt(0) !== "@"))
         .map(({id}) => id);
 
@@ -114,7 +115,7 @@ async function setGroupDescription(groupName, text) {
 
     await checkAdmin(me, groupName);
 
-    let commentIDs = ((await fetch(`/v1/posts/${threadID}?maxComments=all`).then(r => r.json())).comments || [])
+    let commentIDs = ((await api.get(`/v1/posts/${threadID}?maxComments=all`)).comments || [])
         .filter(({body, createdBy}) => (createdBy == myID && body.indexOf(`@${groupName} `) == 0))
         .map(({id}) => id);
 
@@ -153,7 +154,7 @@ async function init() {
                 descCont.appendChild(descDiv);
             }
 
-            descDiv.innerHTML = formatText(text);
+            descDiv.innerHTML = breakToLines(linkify(text));
             linkify(descDiv);
         });
 }
@@ -165,54 +166,11 @@ function getLocationLogin() {
     return (p.length > 1) ? p[1] : null;
 }
 
-function formatText(text) {
+function breakToLines(text) {
     text = text.replace(/^\s+|\s+$/, '');
     return text.split(/\n{2,}/)
-        .map(text => text.split(/\n/).map(escapeHTML).join("<br>"))
+        .map(text => text.split(/\n/).join("<br>"))
         .map(html => `<p>${html}</p>`)
         .join('');
 }
 
-// from https://github.com/pepyatka/pepyatka-html/blob/development/public/js/libs/plugins/jquery.anchorlinks.js
-function linkify(element) {
-    $(element).linkify({
-        format: function (value, type) {
-            var url = value;
-            var shorten = false;
-
-            // shorten url if it's nested more than 2 levels, e.g. http://google.com/ab/cd
-            var index = url.indexOf('://') > 0 ? 4 : 2;
-            if (url.split('/').length > index &&
-                    // does not shorten already tiny urls, like /a/b/
-                !(url.split('/')[index].length == 1 && url.split('/').length == 5)) {
-                url = url.split('/').slice(0, index).join('/');
-                shorten = true;
-            }
-
-            // shorten url after ? symbol e.g. http://google.com/a?123
-            if (url.split('?').length > 1 && url.split('?')[1].length > 2) {
-                url = url.split('?')[0];
-                shorten = true;
-            }
-
-            // shorten url after # symbol e.g. http://google.com/a#123
-            if (url.split('#').length > 1 && url.split('#')[1].length > 2) {
-                url = url.split('#')[0];
-                shorten = true;
-            }
-
-            // shorten url if it's longer than 7 symbols e.g. http://google.com/12345678
-            if (url.split('/').length == 4 &&
-                url.split('/')[3].length > 7) {
-                url = url.split('/').slice(0, 3).join('/') + '/' + url.split('/')[3].slice(0, 7);
-                shorten = true;
-            }
-
-            if (shorten) {
-                url = url + "\u2026";
-            }
-
-            return url;
-        }
-    });
-}

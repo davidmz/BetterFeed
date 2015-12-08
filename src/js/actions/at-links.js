@@ -2,41 +2,47 @@ import forSelect from "../utils/for-select.js";
 import h from "../utils/html.js";
 import closestParent from "../utils/closest-parent.js";
 
-export default function (node) {
+export default function (node, settings) {
     node = node || document.body;
 
-    forSelect(node, ".comment-text, .post-body > .body > .text", function (node) {
-        var c = node.firstChild;
-        while (c) {
-            if (c.nodeType == Node.TEXT_NODE && /\B@([a-z0-9]+(?:-[a-z0-9]+)*)\b/i.test(c.nodeValue)) {
-                var re = /\B@([a-z0-9]+(?:-[a-z0-9]+)*)\b/ig,
-                    str = c.nodeValue,
-                    fr = document.createDocumentFragment(),
-                    m, ptr = 0;
-                while ((m = re.exec(str)) !== null) {
-                    var match = m[0], login = m[1].toLowerCase(), off = m.index;
-                    fr.appendChild(document.createTextNode(str.substr(ptr, off - ptr)));
-                    ptr = off + match.length;
-                    let existingLink = document.querySelector(`a[href="/${login}"]:not(.be-fe-at-link-regular)`);
-                    let a;
-                    if (existingLink) {
-                        a = existingLink.cloneNode(false);
-                        a.className = "be-fe-at-link";
-                        a.appendChild(document.createTextNode(match));
-                    } else {
-                        a = h("a.be-fe-at-link.be-fe-at-link-regular", {href: "/" + login}, match);
+    if (settings.flag("alt-text-proc")) {
+        forSelect(node, ".be-fe-at-link", node => {
+            hlOver(node, ".be-fe-comment-from-u-" + node.dataset["username"]);
+        });
+    } else {
+        forSelect(node, ".comment-text, .post-body > .body > .text", function (node) {
+            var c = node.firstChild;
+            while (c) {
+                if (c.nodeType == Node.TEXT_NODE && /\B@([a-z0-9]+(?:-[a-z0-9]+)*)\b/i.test(c.nodeValue)) {
+                    var re = /\B@([a-z0-9]+(?:-[a-z0-9]+)*)\b/ig,
+                        str = c.nodeValue,
+                        fr = document.createDocumentFragment(),
+                        m, ptr = 0;
+                    while ((m = re.exec(str)) !== null) {
+                        var match = m[0], login = m[1].toLowerCase(), off = m.index;
+                        fr.appendChild(document.createTextNode(str.substr(ptr, off - ptr)));
+                        ptr = off + match.length;
+                        let existingLink = document.querySelector(`a[href="/${login}"]:not(.be-fe-at-link-regular)`);
+                        let a;
+                        if (existingLink) {
+                            a = existingLink.cloneNode(false);
+                            a.className = "be-fe-at-link";
+                            a.appendChild(document.createTextNode(match));
+                        } else {
+                            a = h("a.be-fe-at-link.be-fe-at-link-regular", {href: "/" + login}, match);
+                        }
+                        fr.appendChild(a);
+                        hlOver(a, ".be-fe-comment-from-u-" + login);
                     }
-                    fr.appendChild(a);
-                    hlOver(a, ".be-fe-comment-from-u-" + login);
+                    var lastCh = fr.appendChild(document.createTextNode(str.substr(ptr)));
+                    node.insertBefore(fr, c);
+                    node.removeChild(c);
+                    c = lastCh;
                 }
-                var lastCh = fr.appendChild(document.createTextNode(str.substr(ptr)));
-                node.insertBefore(fr, c);
-                node.removeChild(c);
-                c = lastCh;
+                c = c.nextSibling;
             }
-            c = c.nextSibling;
-        }
-    });
+        });
+    }
 
     // ссылки с ^^^
     forSelect(node, ".comment-text", function (node) {
