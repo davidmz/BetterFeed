@@ -44,85 +44,89 @@ function wrapLink(el) {
 }
 
 async function showInfoWin(username, wrapper, reloadAlert) {
-    reloadAlert = !!reloadAlert;
+    try {
+        reloadAlert = !!reloadAlert;
 
-    var [{users: inf}, iAm] = await Promise.all([userInfo(username), IAm.ready]);
+        var [{users: inf}, iAm] = await Promise.all([userInfo(username), IAm.ready]);
 
-    if (!inf.id) return;
+        if (!inf.id) return;
 
-    if (!inf.profilePictureLargeUrl || inf.profilePictureLargeUrl === "") {
-        inf.profilePictureLargeUrl = defaultPic;
-    }
-
-    var isUser = (inf.type === "user"); // or "group"
-    var isPrivate = (inf.isPrivate === "1");
-
-    var role = iAm.whoIs(inf.username),
-        roleText;
-    if (role & IAm.ME) {
-        roleText = "You";
-    } else if (role & IAm.FRIEND) {
-        roleText = isUser ? "Your friend" : "Group (you\u2019re in)";
-    } else if (role & IAm.READER) {
-        roleText = "Your reader";
-    } else {
-        roleText = isUser ? "Stranger" : "Group";
-    }
-
-    if ((role & IAm.FRIEND) && (role & IAm.READER)) {
-        roleText = "Your mutual friend";
-    }
-
-    if (!isUser && inf.administrators.indexOf(iAm.myID) !== -1) {
-        roleText = "Your group";
-    }
-
-    var actions = [];
-    if (!(role & IAm.ME)) {
-        if (isUser) {
-            actions.push(h("span", h("a.a-subs", (role & IAm.FRIEND) ? "Unsubscribe" : (isPrivate ? "Request subs. " : "Subscribe"))));
-        } else {
-            actions.push(h("span", h("a.a-subs", (role & IAm.FRIEND) ? "Leave group" : "Join group")));
+        if (!inf.profilePictureLargeUrl || inf.profilePictureLargeUrl === "") {
+            inf.profilePictureLargeUrl = defaultPic;
         }
-        if (canHide) {
-            var postsBanned = arrHas(settings.banPosts, inf.username);
-            actions.push(h("span", h("a.a-hide-posts", postsBanned ? "Show posts" : "Hide posts")));
+
+        var isUser = (inf.type === "user"); // or "group"
+        var isPrivate = (inf.isPrivate === "1");
+
+        var role = iAm.whoIs(inf.username),
+            roleText;
+        if (role & IAm.ME) {
+            roleText = "You";
+        } else if (role & IAm.FRIEND) {
+            roleText = isUser ? "Your friend" : "Group (you\u2019re in)";
+        } else if (role & IAm.READER) {
+            roleText = "Your reader";
+        } else {
+            roleText = isUser ? "Stranger" : "Group";
+        }
+
+        if ((role & IAm.FRIEND) && (role & IAm.READER)) {
+            roleText = "Your mutual friend";
+        }
+
+        if (!isUser && inf.administrators.indexOf(iAm.myID) !== -1) {
+            roleText = "Your group";
+        }
+
+        var actions = [];
+        if (!(role & IAm.ME)) {
             if (isUser) {
-                var commsBanned = arrHas(settings.banComms, inf.username);
-                var userBlocked = iAm.isBanned(inf.id);
-                actions.push(h("span", h("a.a-hide-comms", commsBanned ? "Show comms." : "Hide comms.")));
-                actions.push(h("span", h("a.a-block-user", userBlocked ? "Unblock" : "Block")));
+                actions.push(h("span", h("a.a-subs", (role & IAm.FRIEND) ? "Unsubscribe" : (isPrivate ? "Request subs. " : "Subscribe"))));
+            } else {
+                actions.push(h("span", h("a.a-subs", (role & IAm.FRIEND) ? "Leave group" : "Join group")));
+            }
+            if (canHide) {
+                var postsBanned = arrHas(settings.banPosts, inf.username);
+                actions.push(h("span", h("a.a-hide-posts", postsBanned ? "Show posts" : "Hide posts")));
+                if (isUser) {
+                    var commsBanned = arrHas(settings.banComms, inf.username);
+                    var userBlocked = iAm.isBanned(inf.id);
+                    actions.push(h("span", h("a.a-hide-comms", commsBanned ? "Show comms." : "Hide comms.")));
+                    actions.push(h("span", h("a.a-block-user", userBlocked ? "Unblock" : "Block")));
+                }
             }
         }
-    }
 
-    var reloadMsg = reloadAlert ? h(".be-fe-userinfo-alert", h("i.fa.fa-refresh"), " Reload page to apply!") : null;
+        var reloadMsg = reloadAlert ? h(".be-fe-userinfo-alert", h("i.fa.fa-refresh"), " Reload page to apply!") : null;
 
-    var infoWin = h(".be-fe-userinfo-win",
-        h("img.be-fe-userinfo-pic", {src: inf.profilePictureLargeUrl}),
-        h(".be-fe-userinfo-info",
-            h(".be-fe-userinfo-screenName", h("a.be-fe-nameFixed", {href: "/" + inf.username}, inf.screenName)),
-            h(".be-fe-userinfo-userName",
-                isPrivate ? [h("i.fa.fa-lock", {title: "Private feed"}), " "] : null,
-                inf.username
+        var infoWin = h(".be-fe-userinfo-win",
+            h("img.be-fe-userinfo-pic", {src: inf.profilePictureLargeUrl}),
+            h(".be-fe-userinfo-info",
+                h(".be-fe-userinfo-screenName", h("a.be-fe-nameFixed", {href: "/" + inf.username}, inf.screenName)),
+                h(".be-fe-userinfo-userName",
+                    isPrivate ? [h("i.fa.fa-lock", {title: "Private feed"}), " "] : null,
+                    inf.username
+                ),
+                h(".be-fe-userinfo-relation", roleText)
             ),
-            h(".be-fe-userinfo-relation", roleText)
-        ),
-        h(".be-fe-userinfo-actions", {
-            "data-user-id": inf.id,
-            "data-username": inf.username,
-            "data-subscribed": (role & IAm.FRIEND) ? "1" : "",
-            "data-posts-hidden": postsBanned ? "1" : "",
-            "data-comms-hidden": commsBanned ? "1" : "",
-            "data-user-blocked": userBlocked ? "1" : "",
-            "data-is-private": isPrivate ? "1" : ""
-        }, actions),
-        reloadMsg
-    );
-    var oldWin = wrapper.querySelector(".be-fe-userinfo-win");
-    if (oldWin) oldWin.parentNode.removeChild(oldWin);
-    wrapper.appendChild(infoWin);
-};
+            h(".be-fe-userinfo-actions", {
+                "data-user-id": inf.id,
+                "data-username": inf.username,
+                "data-subscribed": (role & IAm.FRIEND) ? "1" : "",
+                "data-posts-hidden": postsBanned ? "1" : "",
+                "data-comms-hidden": commsBanned ? "1" : "",
+                "data-user-blocked": userBlocked ? "1" : "",
+                "data-is-private": isPrivate ? "1" : ""
+            }, actions),
+            reloadMsg
+        );
+        var oldWin = wrapper.querySelector(".be-fe-userinfo-win");
+        if (oldWin) oldWin.parentNode.removeChild(oldWin);
+        wrapper.appendChild(infoWin);
+    } catch (e) {
+        console.error("Can not show info win:", e);
+    }
+}
 
 function unWrapLink(el) {
     var w = closestParent(el, "." + wrapClass, true);
