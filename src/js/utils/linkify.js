@@ -12,16 +12,16 @@ export default function (text) {
         .parse(text)
         .map(it => {
             if (it.type === "link") {
-                let bText = linkingBeauty(it.text);
-                let title = (bText !== it.text) ? it.text : "";
+                let [proto, bText] = linkingBeauty(it.text);
+                let title = (proto + bText !== it.text) ? it.text : "";
                 let className = /^https?:\/\//i.test(it.text) ? "be-fe-url-with-proto" : "";
-                return html`<a href="${it.url}" target="_blank" class="${className}" title="${title}">${bText}</a>`;
+                return html`<a href="${it.url}" target="_blank" class="${className}" title="${title}"><span class="be-fe-link-proto">${proto}</span>${bText}</a>`;
             } else if (it.type === "atLink") {
                 return html`<a href="/${it.username}" class="be-fe-at-link be-fe-at-link-regular" data-username="${it.username}">${it.text}</a>`;
             } else if (it.type === "localLink") {
-                let bText = linkingBeauty(it.text);
-                let title = (bText !== it.text) ? it.text : "";
-                return html`<a href="${it.uri}" title="${title}">${linkingBeauty(it.text)}</a>`;
+                let [proto, bText] = linkingBeauty(it.text);
+                let title = (proto + bText !== it.text) ? it.text : "";
+                return html`<a href="${it.uri}" title="${title}"><span class="be-fe-link-proto">${proto}</span>${bText}</a>`;
             } else if (it.type === "email") {
                 return html`<a href="mailto:${it.address}" target="_blank">${it.text}</a>`;
             } else {
@@ -31,17 +31,16 @@ export default function (text) {
         .join("").replace(/ title=""/g, "");
 }
 
-function linkingBeauty(href) {
+function linkingBeauty(url) {
     const MAX_LENGTH = 50;
-
-    href = href.replace(/^https?:\/\//i, '');
-    if (href.length <= MAX_LENGTH) return href;
+    let [, proto, href] = /^(https?:\/\/)(.*)/i.exec(url);
+    if (href.length <= MAX_LENGTH) return [proto, href];
 
     let [, host, path, query, hash] = /^([^\/]+)(?:\/([^#?]*))?(?:\?([^#]*))?(?:#(.*))?/i.exec(href);
 
     if (hash) {
         href = buildHref(host, path, query) + "#…";
-        if (href.length <= MAX_LENGTH) return href;
+        if (href.length <= MAX_LENGTH) return [proto, href];
     }
 
     if (query) {
@@ -52,7 +51,7 @@ function linkingBeauty(href) {
             if (href.length <= MAX_LENGTH) return href;
         }
         href = buildHref(host, path) + "?…";
-        if (href.length <= MAX_LENGTH) return href;
+        if (href.length <= MAX_LENGTH) return [proto, href];
     }
 
     if (path) {
@@ -60,12 +59,12 @@ function linkingBeauty(href) {
         while (parts.length > 1) {
             parts.pop();
             href = buildHref(host, parts.join("/")) + "/…";
-            if (href.length <= MAX_LENGTH) return href;
+            if (href.length <= MAX_LENGTH) return [proto, href];
         }
         href = buildHref(host) + "/…";
     }
 
-    return href;
+    return [proto, href];
 }
 
 function buildHref(host, path = "", query = "", hash = "") {
