@@ -48,7 +48,7 @@ function linkingBeauty(url) {
         while (parts.length > 1) {
             parts.pop();
             href = buildHref(host, path, parts.join("&")) + "&…";
-            if (href.length <= MAX_LENGTH) return href;
+            if (href.length <= MAX_LENGTH) return [proto, href];
         }
         href = buildHref(host, path) + "?…";
         if (href.length <= MAX_LENGTH) return [proto, href];
