@@ -11,7 +11,12 @@ function plainText(elem) {
         if (c.nodeType == Node.TEXT_NODE) {
             parts.push(c.nodeValue);
         } else if (c.nodeType == Node.ELEMENT_NODE && c.nodeName == "A") {
-            parts.push(c.getAttribute("href"));
+            let text = c.textContent,
+                href = c.getAttribute("href");
+            if (!/^https?:\/\//i.test(text)) {
+                href = href.replace(/^https?:\/\//i, '');
+            }
+            parts.push(href);
         }
         c = c.nextSibling;
     }
