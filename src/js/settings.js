@@ -44,7 +44,8 @@ export const flagNames = [
     "user-self-description",
     "switch-accounts",
     "new-directs-track",
-    "send-to-icons"
+    "send-to-icons",
+    "bg-image"
 ];
 
 // Настройки, выключенные по умолчанию
@@ -62,6 +63,7 @@ export default class Settings {
             this.banComms = sData.banComms;
             this.hideAlienPosts = sData.hideAlienPosts;
             this.directs = sData.directs;
+            this.bgImage = sData.bgImage;
 
         } else {
 
@@ -74,6 +76,7 @@ export default class Settings {
                 this.banComms = safeJSONParse(localStorage["be-fe.banListComms"], []);
                 this.hideAlienPosts = (localStorage["be-fe.hide-alien-posts"] === "1");
                 this.directs = null; // initial value = null, else array
+                this.bgImage = "";
                 this.save();
 
             } else {
@@ -86,6 +89,7 @@ export default class Settings {
                 this.banComms = s.hasOwnProperty("banComms") ? s.banComms : [];
                 this.hideAlienPosts = s.hasOwnProperty("hideAlienPosts") ? !!s.hideAlienPosts : false;
                 this.directs = s.hasOwnProperty("directs") ? s.directs : null; // initial value = null, else array
+                this.bgImage = s.hasOwnProperty("bgImage") ? s.bgImage : "";
 
             }
         }
@@ -124,7 +128,8 @@ export default class Settings {
             banPosts: this.banPosts,
             banComms: this.banComms,
             hideAlienPosts: this.hideAlienPosts,
-            directs: this.directs
+            directs: this.directs,
+            bgImage: this.bgImage
         };
         localStorage[LS_KEY] = JSON.stringify(s);
     }

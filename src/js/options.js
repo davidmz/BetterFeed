@@ -48,6 +48,8 @@ docLoaded.then(() => {
         if (banList === null) banList = [];
         settings.banComms = banList;
 
+        settings.bgImage = document.getElementById("bg-image").value.replace(/^\s+|\s+$/, '');
+
         msg.send(parentWindow, parentOrigin, "saveSettings", settings).then(() => btn.disabled = false);
     });
 
@@ -57,6 +59,13 @@ docLoaded.then(() => {
 
         document.getElementById("ban-list-posts").value = settings.banPosts.join(", ");
         document.getElementById("ban-list-comms").value = settings.banComms.join(", ");
+        document.getElementById("bg-image").value = settings.bgImage;
+
+        let picker = document.createElement("input");
+        picker.type = "color";
+        document.getElementById("bg-image-picker").addEventListener("click", () => {
+            picker.click();
+        });
 
         // Взаимосвязь между флагами
         forSelect(sPage, "[data-disabled-if]", node => {

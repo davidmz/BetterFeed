@@ -651,3 +651,13 @@ body.transition-active:before {
     opacity:     0;
     line-height: 0;
 }
+
+.be-fe-with-bg {
+    background-size:       cover;
+    background-attachment: fixed;
+
+    .ember-application > .ember-view > .container {
+        background-color: white;
+        box-shadow:       0 0 60px rgba(0, 0, 0, 0.1);
+    }
+}
