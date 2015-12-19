@@ -13,6 +13,7 @@ function start() {
     msg.on("saveSettings", v => {
         var s = new Settings(undefined, v);
         s.save();
+        location.reload(true);
     });
     msg.on("checkUpdates", checkUpdates);
 
@@ -79,7 +80,9 @@ function checkUpdates() {
                 localStorage['be-fe-version'] = newVersion;
                 localStorage['be-fe-next-update'] = now + 24 * 3600 * 1000;
                 if (newVersion != oldVersion) {
-                    alert(`Доступна новая версия: ${newVersion}. Она будет установлена после перезагрузки страницы.`);
+                    if (confirm(`Доступна новая версия: ${newVersion}. Она будет установлена после перезагрузки страницы.\n\nПерезагрузить страницу сейчас?`)) {
+                        location.reload(true);
+                    }
                 } else {
                     alert(`У вас установлена последняя версия (${newVersion})`);
                 }

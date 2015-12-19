@@ -12,11 +12,11 @@ if (!parentWindow || !/[?&]origin=([^&]+)/.exec(location.search)) {
 
 const parentOrigin = decodeURIComponent(/[?&]origin=([^&]+)/.exec(location.search)[1]);
 
-
 docLoaded.then(() => {
     const
         ver = location.pathname.match(/BetterFeed\/([^\/]+)/),
         sPage = document.querySelector(".content.settings"),
+        saveButton = document.getElementById("save-settings"),
         checkBoxes = forSelect(sPage, "input[type='checkbox']"),
         msg = new Messenger();
 
@@ -34,10 +34,7 @@ docLoaded.then(() => {
         msg.send(parentWindow, parentOrigin, "checkUpdates").then(() => btn.disabled = false);
     });
 
-    document.getElementById("save-settings").addEventListener("click", (e) => {
-        var btn = e.target;
-        btn.disabled = true;
-
+    saveButton.addEventListener("click", (e) => {
         checkBoxes.forEach(box => settings.setFlag(box.value, box.checked));
 
         var banList = document.getElementById("ban-list-posts").value.toLowerCase().match(/\w+/g);
@@ -50,8 +47,18 @@ docLoaded.then(() => {
 
         settings.bgImage = document.getElementById("bg-image").value.replace(/^\s+|\s+$/, '');
 
-        msg.send(parentWindow, parentOrigin, "saveSettings", settings).then(() => btn.disabled = false);
+        msg.send(parentWindow, parentOrigin, "saveSettings", settings);
     });
+
+    let isChanged = new Cell(false);
+    let initialState = new Map;
+    let currentState = () => {
+        let state = new Map;
+        forSelect(sPage, "input, textarea", inp => {
+            state.set(inp.id, (inp.type === "checkbox") ? inp.checked : inp.value);
+        });
+        return state;
+    };
 
     msg.send(parentWindow, parentOrigin, "getSettings").then(sData => {
         settings = new Settings(undefined, sData);
@@ -60,12 +67,6 @@ docLoaded.then(() => {
         document.getElementById("ban-list-posts").value = settings.banPosts.join(", ");
         document.getElementById("ban-list-comms").value = settings.banComms.join(", ");
         document.getElementById("bg-image").value = settings.bgImage;
-
-        let picker = document.createElement("input");
-        picker.type = "color";
-        document.getElementById("bg-image-picker").addEventListener("click", () => {
-            picker.click();
-        });
 
         // Взаимосвязь между флагами
         forSelect(sPage, "[data-disabled-if]", node => {
@@ -84,10 +85,23 @@ docLoaded.then(() => {
             }
         });
 
+        initialState = currentState();
+
         sPage.classList.remove("hidden");
         sPage.previousElementSibling.classList.add("hidden");
     });
 
+
+    let changeHandler = () => {
+        let st = currentState(), changed = false;
+        st.forEach((v, k) => changed = changed || (v !== initialState.get(k)));
+        isChanged.value = changed;
+    };
+
+    sPage.addEventListener("input", changeHandler);
+    sPage.addEventListener("change", changeHandler);
+
+    isChanged.distinct().onValue(s => saveButton.disabled = !s);
 });
 
 

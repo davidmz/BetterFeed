@@ -302,8 +302,8 @@
         </p>
 
         <p>
-            URL фонового изображения или CSS-значение фонового цвета (<a id="bg-image-picker">выбрать цвет</a>):
-            <input type="text" class="form-control" id="bg-image" placeholder="#abcdef или http://…" >
+            URL фонового изображения или CSS-значение фонового цвета:
+            <input type="text" class="form-control" id="bg-image" placeholder="#abcdef или http://…">
         </p>
 
     </div>
@@ -312,7 +312,7 @@
 <footer class="navbar-fixed-bottom">
     <div class="container">
         <p>
-            <button id="save-settings" class="btn btn-default">
+            <button id="save-settings" class="btn btn-default" disabled>
                 Сохранить настройки
             </button>
             <button id="check-updates" class="btn btn-default pull-right">
@@ -321,7 +321,8 @@
             </button>
         </p>
         <p class="help-block">
-            Обновите вкладки с FreeFeed-ом, чтобы изменения вступили в силу.
+            <i class="fa fa-exclamation-triangle"></i>
+            После сохранения настроек страница будет перезагружена.
         </p>
     </div>
 </footer>
