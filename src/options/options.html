@@ -26,6 +26,17 @@
             background:  white;
             background:  linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 30px);
         }
+
+        #import-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        #import-input {
+            position: absolute;
+            top:      -1000px;
+            left:     -1000px;
+        }
     </style>
     <script src="../../build/options.min.js"></script>
 </head>
@@ -48,7 +59,18 @@
 
 <div class="container">
 
-    <h2>Настройки</h2>
+    <h2>
+        Настройки
+        <span class="btn-group btn-group-sm" style="float: right;">
+            <label class="btn btn-default" id="import-btn">
+                <i class="fa fa-folder-open-o"></i> Импорт
+                <input type="file" id="import-input">
+            </label>
+            <a type="button" class="btn btn-default" id="export-btn" download="betterfeed-settings.json">
+                <i class="fa fa-floppy-o"></i> Экспорт
+            </a>
+        </span>
+    </h2>
 
     <div class="content loading">
         <p>Загрузка&hellip;</p>
@@ -313,7 +335,7 @@
     <div class="container">
         <p>
             <button id="save-settings" class="btn btn-default" disabled>
-                Сохранить настройки
+                Сохранить изменения
             </button>
             <button id="check-updates" class="btn btn-default pull-right">
                 <span class="glyphicon glyphicon-refresh"></span>

@@ -133,6 +133,22 @@ export default class Settings {
         };
         localStorage[LS_KEY] = JSON.stringify(s);
     }
+
+    exportData() {
+        return {
+            flags: this.flags,
+            banPosts: this.banPosts,
+            banComms: this.banComms,
+            bgImage: this.bgImage
+        };
+    }
+
+    importData(o) {
+        this.flags = o.flags;
+        this.banPosts = o.banPosts;
+        this.banComms = o.banComms;
+        this.bgImage = o.bgImage;
+    }
 }
 
 function safeJSONParse(j, def) {

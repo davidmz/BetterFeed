@@ -3,6 +3,7 @@ import Messenger from "./utils/message-rpc.js";
 import docLoaded from "./utils/doc-loaded.js";
 import forSelect from "./utils/for-select.js";
 import Cell      from "./utils/cell.js";
+import {Base64}  from "js-base64";
 
 const parentWindow = (window.parent === window) ? window.opener : window.parent;
 
@@ -34,7 +35,7 @@ docLoaded.then(() => {
         msg.send(parentWindow, parentOrigin, "checkUpdates").then(() => btn.disabled = false);
     });
 
-    saveButton.addEventListener("click", (e) => {
+    saveButton.addEventListener("click", () => {
         checkBoxes.forEach(box => settings.setFlag(box.value, box.checked));
 
         var banList = document.getElementById("ban-list-posts").value.toLowerCase().match(/\w+/g);
@@ -60,13 +61,47 @@ docLoaded.then(() => {
         return state;
     };
 
-    msg.send(parentWindow, parentOrigin, "getSettings").then(sData => {
-        settings = new Settings(undefined, sData);
-        checkBoxes.forEach(box => box.checked = settings.flag(box.value));
+    document.getElementById("export-btn").addEventListener("click", ({target: a}) => {
+        let str = JSON.stringify(settings.exportData());
+        a.href = 'data:application/json;base64,' + Base64.encode(str);
+    });
 
+    let importInput = document.getElementById("import-input");
+    importInput.addEventListener("change", () => {
+        if (importInput.files.length == 0) return;
+        let file = importInput.files[0];
+        if (file.size > 100000) {
+            alert("Файл слишком велик");
+            importInput.value = "";
+            return;
+        }
+        importInput.value = "";
+
+        let reader = new FileReader();
+        reader.onload = () => {
+            try {
+                let o = JSON.parse(reader.result);
+                if (confirm("Применить загруженные настройки и перезагрузить страницу?")) {
+                    settings.importData(o);
+                    msg.send(parentWindow, parentOrigin, "saveSettings", settings);
+                }
+            } catch (e) {
+                alert("Некорректный формат файла");
+            }
+        };
+        reader.readAsText(file);
+    });
+
+    let updateInputs = () => {
+        checkBoxes.forEach(box => box.checked = settings.flag(box.value));
         document.getElementById("ban-list-posts").value = settings.banPosts.join(", ");
         document.getElementById("ban-list-comms").value = settings.banComms.join(", ");
         document.getElementById("bg-image").value = settings.bgImage;
+    };
+
+    msg.send(parentWindow, parentOrigin, "getSettings").then(sData => {
+        settings = new Settings(undefined, sData);
+        updateInputs();
 
         // Взаимосвязь между флагами
         forSelect(sPage, "[data-disabled-if]", node => {
