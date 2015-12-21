@@ -45,7 +45,8 @@ export const flagNames = [
     "switch-accounts",
     "new-directs-track",
     "send-to-icons",
-    "bg-image"
+    "bg-image",
+    "para-to-comments"
 ];
 
 // Настройки, выключенные по умолчанию

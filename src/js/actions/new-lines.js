@@ -14,6 +14,10 @@ export default function (node) {
                     var ta = e.target, t = ta.value, ss = ta.selectionStart;
                     ta.value = t.substr(0, ss) + "\n" + t.substr(ta.selectionEnd);
                     ta.setSelectionRange(ss + 1, ss + 1);
+
+                    var evt = document.createEvent('Event');
+                    evt.initEvent('autosize:update', true, false);
+                    ta.dispatchEvent(evt);
                 }
             }
         }, true);

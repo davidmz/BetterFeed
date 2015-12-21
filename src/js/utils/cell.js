@@ -56,6 +56,24 @@ export default class Cell {
 
     filter(foo) { return this.derive((c, v) => foo(v) && (c.value = v)); }
 
+    throttle(duration) {
+        let val = undefined,
+            timer = null;
+
+        return this.derive((c, v) => {
+            val = v;
+            if (!timer) {
+                timer = setTimeout(() => {
+                    if (val !== undefined) {
+                        c.value = this.value;
+                        val = undefined;
+                    }
+                    timer = null;
+                }, duration);
+            }
+        }, this.value);
+    }
+
     /**
      * For cell with Promise's values
      * @param {*} [initial]
