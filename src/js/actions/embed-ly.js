@@ -129,6 +129,19 @@ export default function (node) {
                         )
                     )
                 );
+
+            } else if ((m = /^https:\/\/clyp\.it\/(\w+)/.exec(url)) !== null) {
+                let id = m[1];
+                embedNode = Promise.resolve(
+                    embedWrap(
+                        h(`iframe`, {
+                            src: `https://clyp.it/${id}/widget`,
+                            frameborder: "0",
+                            style: "width: 100%; max-width: 450px; height: 160px;"
+                        })
+                    )
+                );
+
             } else if ((m = /^https:\/\/docs\.google\.com\/(document|spreadsheets|presentation|drawings)\/d\/([^\/]+)/.exec(url)) !== null) {
                 // var docType = m[1];
                 var docId = m[2];
