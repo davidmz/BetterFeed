@@ -16,6 +16,14 @@ function plainText(elem) {
             if (!/^https?:\/\//i.test(text)) {
                 href = href.replace(/^https?:\/\//i, '');
             }
+            if (text.charAt(text.length - 1) === "\u2026") {
+                text = text.substr(0, text.length - 1);
+            }
+
+            if (href.substr(0, text.length).toLowerCase() === text.toLowerCase()) {
+                href = text + href.substr(text.length + 1);
+            }
+
             parts.push(href);
         }
         c = c.nextSibling;
