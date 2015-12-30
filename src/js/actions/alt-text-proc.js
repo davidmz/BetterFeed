@@ -21,7 +21,7 @@ function plainText(elem) {
             }
 
             if (href.substr(0, text.length).toLowerCase() === text.toLowerCase()) {
-                href = text + href.substr(text.length + 1);
+                href = text + href.substr(text.length);
             }
 
             parts.push(href);
