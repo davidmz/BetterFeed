@@ -46,7 +46,8 @@ export const flagNames = [
     "new-directs-track",
     "send-to-icons",
     "bg-image",
-    "para-to-comments"
+    "para-to-comments",
+    "block-list"
 ];
 
 // Настройки, выключенные по умолчанию
