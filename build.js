@@ -12,7 +12,7 @@ webpack({
     module: {
         loaders: [
             {test: /\.less$/, loader: 'style-loader!css-loader!less-loader'},
-            {test: /\.js$/, exclude: /(node_modules|bower_components)/, loader: 'babel'}
+            {test: /\.js$/, exclude: /(node_modules|bower_components)/, loader: 'babel?cacheDirectory'}
         ]
     },
     plugins: [
@@ -34,7 +34,7 @@ webpack({
     },
     module: {
         loaders: [
-            {test: /\.js$/, exclude: /(node_modules|bower_components)/, loader: 'babel'}
+            {test: /\.js$/, exclude: /(node_modules|bower_components)/, loader: 'babel?cacheDirectory'}
         ]
     },
     plugins: [

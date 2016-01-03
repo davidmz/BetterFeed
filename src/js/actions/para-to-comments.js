@@ -1,33 +1,17 @@
 import forSelect     from "../utils/for-select";
-import closestParent from "../utils/closest-parent";
-import matches       from "../utils/matches";
 import * as api      from "../utils/api";
 import h             from "../utils/html";
 import Cell          from "../utils/cell";
+import beforePost    from "../utils/before-post-creation";
 
 var tasks = new Map(),
     checkboxCont = null,
     checkbox = null,
     textArea = null;
 
-export default function (node, settings) {
+export default function (node) {
     if (node === undefined) {
-        document.addEventListener("keydown", function (e) {
-            if (
-                e.keyCode === 13
-                && matches(e.target, ".p-create-post-view > textarea.ember-text-area")
-                && (!settings.flag("new-lines") || !e.shiftKey)
-            ) {
-                onPost(e.target);
-            }
-        }, true);
-
-        document.addEventListener("click", function (e) {
-            if (matches(e.target, ".p-create-post-action")) {
-                let form = closestParent(e.target, ".create-post");
-                onPost(form.querySelector("textarea"));
-            }
-        }, true);
+        beforePost(onPost);
     }
 
     Cell

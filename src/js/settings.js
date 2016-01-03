@@ -47,7 +47,8 @@ export const flagNames = [
     "send-to-icons",
     "bg-image",
     "para-to-comments",
-    "block-list"
+    "block-list",
+    "empty-body"
 ];
 
 // Настройки, выключенные по умолчанию
