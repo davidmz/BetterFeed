@@ -24,6 +24,8 @@ function plainText(elem) {
                 href = text + href.substr(text.length);
             }
 
+            href = href.replace(/^mailto:/, '');
+
             parts.push(href);
         }
         c = c.nextSibling;
