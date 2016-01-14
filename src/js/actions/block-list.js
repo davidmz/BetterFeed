@@ -27,7 +27,15 @@ export default async function (node, settings) {
     ul.style.marginBottom = "6em";
 
     try {
-        let entries = await fetch(`https://davidmz.me/frfrfr/uinfo/usernamesByIDs/${iAm.banIds.join(",")}`)
+        let postBody = iAm.banIds.map(id => `id=${encodeURIComponent(id)}`).join("&");
+        let entries = await fetch(
+            "https://davidmz.me/frfrfr/uinfo/usernamesByIDs",
+            {
+                method: "POST",
+                body: postBody,
+                headers: new Headers({"Content-Type": "application/x-www-form-urlencoded"})
+            }
+        )
             .then(resp => resp.json())
             .then(resp => {
                 if (resp.status !== "ok") {
