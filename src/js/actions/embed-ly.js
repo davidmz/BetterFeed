@@ -141,8 +141,7 @@ export default function (node) {
                         })
                     )
                 );
-
-            } else if ((m = /^https:\/\/docs\.google\.com\/(document|spreadsheets|presentation|drawings)\/d\/([^\/]+)/.exec(url)) !== null) {
+            } else if ((m = /^https:\/\/(?:docs\.google\.com\/(document|spreadsheets|presentation|drawings)|drive\.google\.com\/file)\/d\/([^\/]+)/.exec(url)) !== null) {
                 // var docType = m[1];
                 var docId = m[2];
                 var img = h("img.be-fe-gdoc");
