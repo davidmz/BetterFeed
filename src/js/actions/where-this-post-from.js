@@ -55,17 +55,33 @@ export default function (node, settings) {
         // пытаемся выяснить, почему мы это видим
         var postInfo = await api.get('/v1/posts/' + postId + '?maxLikes=all');
         var names = {};
+        var withMe = false;
+        var withMyLike = false;
         var users = postInfo.users
             .map(uu => {
                 names[uu.username] = useScreenNames ? uu.screenName : uu.username;
+                if (uu.username === iAm.me) {
+                    withMe = true;
+                    withMyLike = postInfo.posts.likes.some(id => id === uu.id);
+                }
                 return uu.username;
             })
-            .filter(u => !!(iAm.whoIs(u) & (IAm.ME | IAm.FRIEND)))
+            .filter(u => !!(iAm.whoIs(u) & IAm.FRIEND))
             .filter((v, i, a) => a.indexOf(v) === i) // http://stackoverflow.com/questions/1960473/unique-values-in-an-array#answer-14438954
             ;
 
-        if (users.length > 0) {
+        if (users.length > 0 || withMe) {
             var links = [];
+            if (withMe) {
+                links.push(h("em", withMyLike ? "your like" : "your comment"));
+                if (users.length == 0) {
+                    // nope
+                } else if (users.length == 1) {
+                    links.push(" and ");
+                } else {
+                    links.push(", ");
+                }
+            }
             if (users.length < 5) {
                 // просто показываем всех
                 users.forEach((u, i) => {
