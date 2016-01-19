@@ -141,6 +141,54 @@ export default function (node) {
                         })
                     )
                 );
+            } else if (/^https:\/\/soundcloud\.com\/([^\/]+)\/([^\/]+)$/.test(url)) {
+                embedNode = fetch(`https://soundcloud.com/oembed?url=${encodeURIComponent(url)}&format=json`)
+                    .then(resp => {
+                        if (!resp.ok) {
+                            throw new Error("Unsupported soundcloud url");
+                        }
+                        return resp.json()
+                    })
+                    .then(emb => {
+                        let m = /api\.soundcloud\.com%2Ftracks%2F(\d+)/.exec(emb.html || "");
+                        if (m === null) throw new Error("Cannot get track number from soundcloud");
+                        return embedWrap(
+                            h(`iframe`, {
+                                src: "https://w.soundcloud.com/player/?" +
+                                "auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&buying=false" +
+                                "&url=" + encodeURIComponent(`https://api.soundcloud.com/tracks/${m[1]}`),
+                                scrolling: "no",
+                                frameborder: "no",
+                                style: "width: 100%; max-width: 450px; height: 166px;"
+                            })
+                        );
+                    });
+
+            } else if (/^https:\/\/soundcloud\.com\/([^\/]+)$/.test(url)) {
+                embedNode = fetch(`https://soundcloud.com/oembed?url=${encodeURIComponent(url)}&format=json`)
+                    .then(resp => {
+                        if (!resp.ok) {
+                            throw new Error("Unsupported soundcloud url");
+                        }
+                        return resp.json()
+                    })
+                    .then(emb => {
+                        let m = /api\.soundcloud\.com%2Fusers%2F(\d+)/.exec(emb.html || "");
+                        if (m === null) {
+                            throw new Error("Cannot get user number from soundcloud");
+                        }
+                        return embedWrap(
+                            h(`iframe`, {
+                                src: "https://w.soundcloud.com/player/?" +
+                                "auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&buying=false" +
+                                "&url=" + encodeURIComponent(`https://api.soundcloud.com/users/${m[1]}`),
+                                scrolling: "no",
+                                frameborder: "no",
+                                style: "width: 100%; max-width: 450px; height: 400px;"
+                            })
+                        );
+                    });
+
             } else if ((m = /^https:\/\/(?:docs\.google\.com\/(document|spreadsheets|presentation|drawings)|drive\.google\.com\/file)\/d\/([^\/]+)/.exec(url)) !== null) {
                 // var docType = m[1];
                 var docId = m[2];
