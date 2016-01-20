@@ -254,6 +254,27 @@ export default function (node) {
                 embedNode = Promise.resolve(embedWrap(wrapper));
                 afterMount = el => metadataLoaded.then(() => compensateScroll(el));
 
+            } else if ((m = /^https?:\/\/giphy\.com\/gifs\/([^.\/]+)$/.exec(url)) !== null) {
+                let id = m[1];
+                let video = h("video", {muted: "", loop: "", title: "Click to play/pause"},
+                    h("source", {src: `https://media.giphy.com/media/${id}/giphy.mp4`, type: "video/mp4"})
+                );
+                let wrapper = h(".be-fe-gifv", video);
+                video.addEventListener("click", () => {
+                    if (video.paused) {
+                        video.play();
+                        wrapper.classList.add("-playing");
+                    } else {
+                        video.pause();
+                        wrapper.classList.remove("-playing");
+                    }
+                });
+
+                let metadataLoaded = new Promise(resolve => video.addEventListener("loadedmetadata", () => resolve()));
+
+                embedNode = Promise.resolve(embedWrap(wrapper));
+                afterMount = el => metadataLoaded.then(() => compensateScroll(el));
+
             } else {
                 embedNode = Promise.resolve(embedWrap(h("a.embedly-card", {
                     href: link.href,
