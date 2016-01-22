@@ -2,7 +2,7 @@ import {siteDomain} from "../utils/current-user-id";
 import {html, safeHTML} from "../utils/html-tpl";
 import URLFinder from "ff-url-finder";
 
-const MAX_LENGTH = 50;
+const MAX_LENGTH = 40;
 
 var finder = new URLFinder(
     ["ru", "com", "net", "org", "info", "gov", "edu", "рф", "ua"],

@@ -2,7 +2,20 @@ import forSelect from "../utils/for-select";
 import linkify from "../utils/linkify";
 
 export default function (node = document.body) {
-    forSelect(node, ".comment-text, .post-body > .body > .text", node => node.innerHTML = linkify(plainText(node)));
+    forSelect(node, ".comment-text, .post-body > .body > .text", node => {
+        node.innerHTML = linkify(plainText(node));
+        forSelect(node, "a[href^='https://t.co/']", async (node) => {
+            try {
+                let j = await fetch(`https://davidmz.me/frfrfr/uinfo/unsokr?url=${encodeURIComponent(node.href)}`)
+                    .then(resp => resp.json());
+                if (j.status == "ok") {
+                    node.insertAdjacentHTML('afterend', linkify(j.data));
+                    node.parentNode.removeChild(node);
+                }
+            } catch (e) {
+            }
+        });
+    });
 }
 
 function plainText(elem) {
