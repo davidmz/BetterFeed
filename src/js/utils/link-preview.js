@@ -210,14 +210,80 @@ function embedLink(url) {
             })
             .catch(() => Promise.resolve(h("a.embedly-card", {href: url, "data-card-width": "60%"})));
 
+    } else if ((m = /^https:\/\/music\.yandex\.ru\/(?:album\/(\d+)(?:\/track\/(\d+))|artist\/(\d+))?$/.exec(url)) !== null) {
+        let [, alId, trackId, artistId] = m;
+        if (artistId) {
+            return Promise.resolve(h(`iframe`, {
+                src: `https://music.yandex.ru/iframe/#artist/${artistId}`,
+                scrolling: "no",
+                frameborder: "no",
+                style: "border:none;width:100%;height:400px;"
+            }));
+        } else if (trackId) {
+            return Promise.resolve(h(`iframe`, {
+                src: `https://music.yandex.ru/iframe/#track/${trackId}/${alId}`,
+                scrolling: "no",
+                frameborder: "no",
+                style: "border:none;width:100%;height:100px;"
+            }));
+        } else {
+            return Promise.resolve(h(`iframe`, {
+                src: `https://music.yandex.ru/iframe/#album/${alId}`,
+                scrolling: "no",
+                frameborder: "no",
+                style: "border:none;width:100%;height:420px;"
+            }));
+        }
+
+    } else if (/^https:\/\/maps\.yandex\.ru\//.exec(url) !== null) {
+        //    https://maps.yandex.ru/2/saint-petersburg/?
+        let [, qs] = /^[^?#]*(?:\?([^#]*))?/.exec(url);
+        if (qs) {
+            let q = parseQueryString(qs),
+                pPoint = getQueryParam(q, "panorama[point]"),
+                pDir = getQueryParam(q, "panorama[direction]"),
+                pSpan = getQueryParam(q, "panorama[span]");
+
+            if (pPoint !== null && pDir !== null && pSpan !== null) {
+                let scriptSrc = "//panoramas.api-maps.yandex.ru/embed/1.x/?lang=ru&l=stv";
+                scriptSrc += "&ll=" + encodeURIComponent(pPoint);
+                scriptSrc += "&ost=" + encodeURIComponent(`dir:${pDir}~span:${pSpan}`);
+                return Promise.resolve(
+                    h("", {style: "width: 100%; height: 320px;"},
+                        h("script", {src: scriptSrc})
+                    )
+                );
+            }
+        }
+        return Promise.resolve(h("a.embedly-card", {href: url, "data-card-width": "60%"}));
+
     } else {
         return Promise.resolve(h("a.embedly-card", {href: url, "data-card-width": "60%"}));
     }
 }
 
+export default embedLink;
 
 function videoMetadataLoaded(video) {
     return new Promise(resolve => video.addEventListener("loadedmetadata", () => resolve()));
 }
 
-export default embedLink;
+function parseQueryString(qs) {
+    return qs.split("&").map(p => {
+        let x = p.split("=");
+        if (x.length <= 2) x.push("");
+        return x.map(decodeURIComponent);
+    });
+}
+
+function getQueryParam(qs, name) {
+    let val = null;
+    qs.some(([k, v]) => {
+        if (k == name) {
+            val = v;
+            return true;
+        }
+        return false;
+    });
+    return val;
+}
