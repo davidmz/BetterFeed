@@ -6,7 +6,7 @@ var replaceTextNode = function (node, re, str) {
     if (node && node.nodeType == Node.TEXT_NODE) node.nodeValue = node.nodeValue.replace(re, str);
 };
 
-export default function (node) {
+export default function (node, settings) {
     if (node === undefined) {
         document.addEventListener("keydown", function (e) {
             if (e.keyCode === 13 && e.target.tagName == "TEXTAREA" && e.target.classList.contains("ember-text-area")) {
@@ -70,6 +70,18 @@ export default function (node) {
                 n = d.nextSibling;
                 cnt.appendChild(d);
                 d = n;
+            }
+        } else if (settings.flag("decorate-quotes")) {
+            // мы в посте
+            let p = fr.firstChild;
+            while (p) {
+                if (p.tagName === "P") {
+                    if (p.firstChild && p.firstChild.nodeType === Node.TEXT_NODE && p.firstChild.nodeValue.match(/^>\s+/)) {
+                        p.classList.add("be-fe-quote-para");
+                        p.firstChild.nodeValue = p.firstChild.nodeValue.replace(/^>\s+/, "");
+                    }
+                }
+                p = p.nextSibling;
             }
         }
 

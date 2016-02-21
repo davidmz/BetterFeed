@@ -43,12 +43,13 @@ export const flagNames = [
     "direct-warning",
     "user-self-description",
     "switch-accounts",
-    "new-directs-track",
+    // "new-directs-track",
     "send-to-icons",
     "bg-image",
     "para-to-comments",
     "block-list",
-    "empty-body"
+    "empty-body",
+    "decorate-quotes"
 ];
 
 // Настройки, выключенные по умолчанию

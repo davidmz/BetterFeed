@@ -9,3 +9,31 @@
         }
     }
 }
+
+.be-fe-quote-para {
+    margin-left: .8em !important;
+    font-style:  italic;
+    position:    relative;
+
+    &::before {
+        content:  ">";
+        position: absolute;
+        top:      0;
+        left:     -.8em;
+        color:    #bbb;
+    }
+
+    & + & {
+        margin-top:  -0.66em !important;
+        padding-top: 0.66em;
+
+        &::before {
+            top: 0.66em;
+        }
+    }
+
+}
+
+.timeline-post-container .post-body .text p {
+    margin-bottom: 0.66em;
+}
