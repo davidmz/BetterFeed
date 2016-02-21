@@ -46,6 +46,10 @@ docLoaded.then(() => {
         if (banList === null) banList = [];
         settings.banComms = banList;
 
+        var nsfwList = document.getElementById("nsfw-users").value.toLowerCase().match(/\w+/g);
+        if (nsfwList === null) nsfwList = [];
+        settings.nsfwUsers = nsfwList;
+
         settings.bgImage = document.getElementById("bg-image").value.replace(/^\s+|\s+$/, '');
 
         msg.send(parentWindow, parentOrigin, "saveSettings", settings);
@@ -96,6 +100,7 @@ docLoaded.then(() => {
         checkBoxes.forEach(box => box.checked = settings.flag(box.value));
         document.getElementById("ban-list-posts").value = settings.banPosts.join(", ");
         document.getElementById("ban-list-comms").value = settings.banComms.join(", ");
+        document.getElementById("nsfw-users").value = settings.nsfwUsers.join(", ");
         document.getElementById("bg-image").value = settings.bgImage;
     };
 

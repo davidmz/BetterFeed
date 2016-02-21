@@ -127,6 +127,13 @@
             </label>
         </p>
 
+        <p>
+            <label>
+                <input type="checkbox" value="nsfw" id="nsfw">
+                Не показывать аттачи и превью ссылок для постов, имеющих тег <code>#nsfw</code>.
+            </label>
+        </p>
+
         <h3>Комментарии</h3>
 
         <p>
@@ -213,6 +220,12 @@
             <textarea class="form-control" id="ban-list-posts" data-enabled-if="where-this-post-from"></textarea>
             <br>и комментарии:<br>
             <textarea class="form-control" id="ban-list-comms" data-enabled-if="where-this-post-from"></textarea>
+        </p>
+
+        <p class="shift">
+            Посты от следующих пользователей / групп считать NSFW:
+            <br>
+            <textarea class="form-control" id="nsfw-users" data-enabled-if="where-this-post-from"></textarea>
         </p>
 
 

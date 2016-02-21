@@ -672,3 +672,33 @@ body.transition-active:before {
         vertical-align: text-bottom;
     }
 }
+
+.be-fe-nsfw {
+    & > .attachments { display: none; }
+    & > .be-fe-embeds { position: absolute; left: -10000px; top: -10000px; }
+}
+
+.be-fe-nsfw-stub {
+    width:          100%;
+    height:         2em;
+    background:     #ccc;
+    max-width:      400px;
+    text-align:     center;
+    line-height:    2em;
+    font-weight:    bold;
+    color:          white;
+    letter-spacing: 0.25ex;
+    cursor:         pointer;
+    margin-bottom:  0.5em;
+    border-radius:  4px;
+    display:        none;
+
+    &::before {
+        content: "NSFW";
+    }
+
+    .be-fe-nsfw .attachments + &,
+    .be-fe-nsfw .be-fe-embeds + & {
+        display: block;
+    }
+}

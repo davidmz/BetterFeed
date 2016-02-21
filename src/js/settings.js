@@ -49,7 +49,8 @@ export const flagNames = [
     "para-to-comments",
     "block-list",
     "empty-body",
-    "decorate-quotes"
+    "decorate-quotes",
+    "nsfw"
 ];
 
 // Настройки, выключенные по умолчанию
@@ -65,6 +66,7 @@ export default class Settings {
             this.flags = sData.flags;
             this.banPosts = sData.banPosts;
             this.banComms = sData.banComms;
+            this.nsfwUsers = sData.nsfwUsers;
             this.hideAlienPosts = sData.hideAlienPosts;
             this.directs = sData.directs;
             this.bgImage = sData.bgImage;
@@ -78,6 +80,7 @@ export default class Settings {
                 this.flags = JSON.parse(localStorage["ffc-sac-settings"]);
                 this.banPosts = safeJSONParse(localStorage["be-fe.banList"], []);
                 this.banComms = safeJSONParse(localStorage["be-fe.banListComms"], []);
+                this.nsfwUsers = safeJSONParse(localStorage["be-fe.nsfwUsers"], []);
                 this.hideAlienPosts = (localStorage["be-fe.hide-alien-posts"] === "1");
                 this.directs = null; // initial value = null, else array
                 this.bgImage = "";
@@ -91,6 +94,7 @@ export default class Settings {
                 this.flags = s.hasOwnProperty("flags") ? s.flags : {};
                 this.banPosts = s.hasOwnProperty("banPosts") ? s.banPosts : [];
                 this.banComms = s.hasOwnProperty("banComms") ? s.banComms : [];
+                this.nsfwUsers = s.hasOwnProperty("nsfwUsers") ? s.nsfwUsers : [];
                 this.hideAlienPosts = s.hasOwnProperty("hideAlienPosts") ? !!s.hideAlienPosts : false;
                 this.directs = s.hasOwnProperty("directs") ? s.directs : null; // initial value = null, else array
                 this.bgImage = s.hasOwnProperty("bgImage") ? s.bgImage : "";
@@ -131,6 +135,7 @@ export default class Settings {
             flags: this.flags,
             banPosts: this.banPosts,
             banComms: this.banComms,
+            nsfwUsers: this.nsfwUsers,
             hideAlienPosts: this.hideAlienPosts,
             directs: this.directs,
             bgImage: this.bgImage
@@ -143,6 +148,7 @@ export default class Settings {
             flags: this.flags,
             banPosts: this.banPosts,
             banComms: this.banComms,
+            nsfwUsers: this.nsfwUsers,
             bgImage: this.bgImage
         };
     }
@@ -151,6 +157,7 @@ export default class Settings {
         this.flags = o.flags;
         this.banPosts = o.banPosts;
         this.banComms = o.banComms;
+        this.nsfwUsers = o.nsfwUsers;
         this.bgImage = o.bgImage;
     }
 }
