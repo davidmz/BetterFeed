@@ -10,7 +10,8 @@ import linkify from "../utils/linkify";
 
 const atLinkRe = /^@([a-z0-9]+(?:-[a-z0-9]+)*)\b/i,
     threadID = (siteDomain == 'micropeppa.freefeed.net') ? "7a9cbbed-d9cb-4eca-aee4-b3dfeb0eac38" : "21284afb-6ffd-4b96-a4c3-a8663155627e",
-    allTexts = new Map(); // username => Promise of description
+    allTexts = new Map(), // username => Promise of description
+    groupAdmins = new Map(); // [groupname, username] => true
 
 const textsLoaded = async function () {
     try {
@@ -43,6 +44,7 @@ async function checkAdmin(userName, groupName) {
     if (!admins) throw new Error(`account ${groupName} not found`);
     if (type !== "group") throw new Error(`${groupName} is not group`);
     if (!admins.some(adm => adm.username == userName)) throw new Error(`${userName} not an admin of ${groupName}`);
+    groupAdmins.set([groupName, userName], true);
     return true;
 }
 
@@ -91,47 +93,82 @@ export default function (node) {
 };
 
 async function setMyDescription(text) {
-    let {me, myID} = await IAm.ready;
+    let {myID} = await IAm.ready;
     text = text.replace(/^\s+|\s+$/, '');
+    await api.put(`/v1/users/${myID}`, JSON.stringify({user: {description: text}}));
+    clearLocalMyDescription();
+}
 
-    let commentIDs = ((await api.get(`/v1/posts/${threadID}?maxComments=all`)).comments || [])
+async function clearLocalMyDescription() {
+    let {me, myID} = await IAm.ready;
+    // удаляем все комментарии
+    ((await api.get(`/v1/posts/${threadID}?maxComments=all`)).comments || [])
         .filter(({body, createdBy}) => (createdBy == myID && body.charAt(0) !== "@"))
-        .map(({id}) => id);
+        .map(({id}) => id)
+        .forEach(id => api.del(`/v1/comments/${id}`, null));
 
-    if (text === "") { // удаление
-        commentIDs.forEach(id => api.del(`/v1/comments/${id}`, null));
-    } else if (commentIDs.length > 0) {
-        let lastCommentID = commentIDs[commentIDs.length - 1];
-        api.put(`/v1/comments/${lastCommentID}`, JSON.stringify({comment: {body: text}}));
-    } else {
-        api.post(`/v1/comments`, JSON.stringify({comment: {body: text, postId: threadID}}));
-    }
-    allTexts.set(me, Promise.resolve(text));
+    allTexts.delete(me);
+    userInfo(me, true)
 }
 
 async function setGroupDescription(groupName, text) {
-    let {me, myID} = await IAm.ready;
+    let {me} = await IAm.ready;
     text = text.replace(/^\s+|\s+$/, '');
 
     await checkAdmin(me, groupName);
+    let {users:{id: groupId}} = await userInfo(groupName);
 
-    let commentIDs = ((await api.get(`/v1/posts/${threadID}?maxComments=all`)).comments || [])
-        .filter(({body, createdBy}) => (createdBy == myID && body.indexOf(`@${groupName} `) == 0))
-        .map(({id}) => id);
-
-    if (text === "") { // удаление
-        commentIDs.forEach(id => api.del(`/v1/comments/${id}`, null));
-    } else if (commentIDs.length > 0) {
-        let lastCommentID = commentIDs[commentIDs.length - 1];
-        api.put(`/v1/comments/${lastCommentID}`, JSON.stringify({comment: {body: `@${groupName} ${text}`}}));
-    } else {
-        api.post(`/v1/comments`, JSON.stringify({comment: {body: `@${groupName} ${text}`, postId: threadID}}));
-    }
-    allTexts.set(groupName, Promise.resolve(text));
+    await api.put(`/v1/users/${groupId}`, JSON.stringify({user: {description: text}}));
+    clearLocalGroupDescription(groupName);
 }
+
+async function clearLocalGroupDescription(groupName) {
+    let {myID} = await IAm.ready;
+    // удаляем все комментарии
+    ((await api.get(`/v1/posts/${threadID}?maxComments=all`)).comments || [])
+        .filter(({body, createdBy}) => (createdBy == myID && body.indexOf(`@${groupName} `) == 0))
+        .map(({id}) => id)
+        .forEach(id => api.del(`/v1/comments/${id}`, null));
+
+    allTexts.delete(groupName);
+    userInfo(groupName, true)
+}
+
+async function updateMyStaff() {
+    // Если надо, обновляем своё описание и описания групп
+    let {me} = await IAm.ready;
+    let myGroups = Array.from(groupAdmins.keys()).filter(([, u]) => u === me).map(([g, ]) => g);
+
+    let localDesc = allTexts.get(me);
+    let {users: {description: srvDesc}} = await userInfo(me);
+    if (localDesc) {
+        if (!srvDesc) {
+            let text = await localDesc;
+            setMyDescription(text);
+        } else {
+            clearLocalMyDescription();
+        }
+    }
+
+    myGroups.forEach(async g => {
+        let localDesc = allTexts.get(g);
+        let {users: {description: srvDesc}} = await userInfo(g);
+        if (localDesc) {
+            if (!srvDesc) {
+                let text = await localDesc;
+                setGroupDescription(g, text);
+            } else {
+                clearLocalGroupDescription(g);
+            }
+        }
+    });
+}
+
 
 async function init() {
     await textsLoaded;
+
+    updateMyStaff();
 
     Cell
         .ticker(500)
@@ -159,7 +196,10 @@ async function init() {
         });
 }
 
-function textFor(login) { return allTexts.get(login) || Promise.resolve(""); }
+async function textFor(login) {
+    let {users: {description}} = await userInfo(login);
+    return description || allTexts.get(login) || "";
+}
 
 function getLocationLogin() {
     let p = location.pathname.split("/");
