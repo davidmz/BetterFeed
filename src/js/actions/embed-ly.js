@@ -22,49 +22,57 @@ export default function (node) {
 
         embedly('on', 'card.rendered', iframe => iframe.style.margin = "10px 0");
         embedly('on', 'card.resize', iframe => compensateScroll(closestParent(iframe, ".be-fe-embeds")));
+
+        document.body.addEventListener("befeLinksChanged", e => processBody(e.target));
     }
 
     node = node || document.body;
 
-    forSelect(node, ".body", body => {
-        var node = body.parentNode;
-        if (!node.classList.contains("post-body")) return;
-
-        if (node.querySelector(":scope > .attachments")) {
-            return;
-        }
-
-        forSelect(body, ".text a").some(link => {
-            var url = link.getAttribute("href");
-
-            if (!link.classList.contains("be-fe-url-with-proto") && !(/^https?:\/\//.test(url) && /^https?:\/\//.test(link.textContent))) {
-                return false;
-            }
-
-            if (/^https:\/\/(m\.)?freefeed\.net\//.test(url)) {
-                return false;
-            }
-
-            // Проверяем, нет ли прямо перед ссылкой восклицательного знака
-            var prevTextEl = link.previousSibling;
-            if (prevTextEl !== null) {
-                let prevText = prevTextEl.nodeValue;
-                if (prevText.length > 0 && prevText.charAt(prevText.length - 1) === "!") {
-                    return false;
-                }
-            }
-
-            let bodyNext = body.nextSibling;
-            embedLink(url)
-                .then(el => {
-                    el = h(".be-fe-embeds", h("", el));
-                    node.insertBefore(el, bodyNext);
-                    compensateScroll(el);
-                })
-                .catch(x => console.log(x));
-
-            return true;
-        });
-    });
+    forSelect(node, ".body", processBody);
 }
 
+function processBody(body) {
+    var bodyParent = body.parentNode;
+    if (!bodyParent.classList.contains("post-body")) return;
+
+    if (bodyParent.querySelector(":scope > .attachments")) {
+        return;
+    }
+
+    let oldEmbeds = bodyParent.querySelector(":scope > .be-fe-embeds");
+    if (oldEmbeds) {
+        bodyParent.removeChild(oldEmbeds);
+    }
+
+    forSelect(body, ".text a").some(link => {
+        var url = link.getAttribute("href");
+
+        if (!link.classList.contains("be-fe-url-with-proto") && !(/^https?:\/\//.test(url) && /^https?:\/\//.test(link.textContent))) {
+            return false;
+        }
+
+        if (/^https:\/\/(m\.)?freefeed\.net\//.test(url)) {
+            return false;
+        }
+
+        // Проверяем, нет ли прямо перед ссылкой восклицательного знака
+        var prevTextEl = link.previousSibling;
+        if (prevTextEl !== null) {
+            let prevText = prevTextEl.nodeValue;
+            if (prevText.length > 0 && prevText.charAt(prevText.length - 1) === "!") {
+                return false;
+            }
+        }
+
+        let bodyNext = body.nextSibling;
+        embedLink(url)
+            .then(el => {
+                el = h(".be-fe-embeds", h("", el));
+                bodyParent.insertBefore(el, bodyNext);
+                compensateScroll(el);
+            })
+            .catch(x => console.log(x));
+
+        return true;
+    });
+}
