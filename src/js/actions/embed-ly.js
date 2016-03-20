@@ -39,7 +39,7 @@ function processBody(body) {
         return;
     }
 
-    let oldEmbeds = bodyParent.querySelector(":scope > .be-fe-embeds");
+    let oldEmbeds = bodyParent.querySelector(".be-fe-embeds");
     if (oldEmbeds) {
         bodyParent.removeChild(oldEmbeds);
     }
@@ -64,12 +64,15 @@ function processBody(body) {
             }
         }
 
-        let bodyNext = body.nextSibling;
+        let bodyNext = body.nextSibling,
+            emb = h(".be-fe-embeds");
+        bodyParent.insertBefore(emb, bodyNext);
         embedLink(url)
             .then(el => {
-                el = h(".be-fe-embeds", h("", el));
-                bodyParent.insertBefore(el, bodyNext);
-                compensateScroll(el);
+                emb.appendChild(h("", el));
+                if (emb.parentNode) {
+                    compensateScroll(emb);
+                }
             })
             .catch(x => console.log(x));
 

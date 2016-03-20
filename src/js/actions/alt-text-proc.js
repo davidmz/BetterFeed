@@ -5,21 +5,23 @@ export default function (node = document.body) {
     forSelect(node, ".comment-text, .post-body > .body > .text", node => {
         node.innerHTML = linkify(plainText(node));
         let shortLinks = forSelect(node, "a[href^='https://t.co/'], a[href^='https://goo.gl/']");
-        Promise.all(
-            shortLinks.map(async(node) => {
-                try {
-                    let j = await fetch(`https://davidmz.me/frfrfr/uinfo/unsokr?url=${encodeURIComponent(node.href)}`)
-                        .then(resp => resp.json());
-                    if (j.status == "ok") {
-                        node.insertAdjacentHTML('afterend', linkify(j.data));
-                        node.parentNode.removeChild(node);
+        if (shortLinks.length > 0) {
+            Promise.all(
+                shortLinks.map(async(node) => {
+                    try {
+                        let j = await fetch(`https://davidmz.me/frfrfr/uinfo/unsokr?url=${encodeURIComponent(node.href)}`)
+                            .then(resp => resp.json());
+                        if (j.status == "ok") {
+                            node.insertAdjacentHTML('afterend', linkify(j.data));
+                            node.parentNode.removeChild(node);
+                        }
+                    } catch (e) {
                     }
-                } catch (e) {
-                }
-            })
-        ).then(() => {
-            node.parentNode.dispatchEvent(new Event("befeLinksChanged", {bubbles: true}));
-        });
+                })
+            ).then(() => {
+                node.parentNode.dispatchEvent(new Event("befeLinksChanged", {bubbles: true}));
+            });
+        }
     });
 }
 
