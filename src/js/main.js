@@ -21,7 +21,8 @@ function start() {
         require("./actions/settings-link"),
         require("./actions/posts-common"),
         require("./actions/comments-common"),
-        require("./actions/iam-common")
+        require("./actions/iam-common"),
+        require("./actions/all-groups-link")
     ];
 
     flagNames.forEach(name => {
