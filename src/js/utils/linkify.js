@@ -6,7 +6,7 @@ const MAX_LENGTH = 40;
 
 var finder = new URLFinder(
     ["ru", "com", "net", "org", "info", "gov", "edu", "рф", "ua"],
-    (siteDomain === "freefeed.net") ? ["freefeed.net", "m.freefeed.net"] : ["micropeppa.freefeed.net"]
+    (siteDomain === "freefeed.net") ? ["freefeed.net", "m.freefeed.net", "beta.freefeed.net", "old.freefeed.net"] : ["micropeppa.freefeed.net"]
 );
 
 export default function (text) {
