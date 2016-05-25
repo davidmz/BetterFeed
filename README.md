@@ -2,6 +2,10 @@
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
+Это устаревшая версия BetterFeed-а, она больше не работает на текущей версии фронтенда. Новая версия тут: https://github.com/davidmz/BetterFeed2
+
+------------------
+
 Это браузерный юзерскрипт, который добавляет некоторые удобства к [FreeFeed](https://freefeed.net/)-у.
 
 ## Как установить?
